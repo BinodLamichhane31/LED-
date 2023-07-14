@@ -66,7 +66,7 @@ def sign_in():
                 messagebox.showerror('Registration', 'An error occurred during registration: ' + str(e))
     
                         
-        # Signup GUI   
+        # GUI for signup   
         global signup_frame
         signup_frame = Frame(app, width=900, height=668, bg="sky blue", border=1)
         signup_frame.place(x=451, y=1)
