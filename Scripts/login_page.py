@@ -52,7 +52,6 @@ def sign_in():
 
                 elif len(password)<7 or not re.search('[A-Z]',password) or not re.search('[0-9]',password) or not re.search('[!@#$%]',password):
                     messagebox.showerror('Registration', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
-
                 else:
                     hashed_password = hashlib.sha256(password.encode()).hexdigest()
                     football_collection.insert_one({'fullName':uname,'email':email,'phone':phone,'password':hashed_password})
@@ -67,7 +66,7 @@ def sign_in():
                 messagebox.showerror('Registration', 'An error occurred during registration: ' + str(e))
     
                         
-        # GUI elements of the signup page   
+        # Signup GUI   
         global signup_frame
         signup_frame = Frame(app, width=900, height=668, bg="sky blue", border=1)
         signup_frame.place(x=451, y=1)
