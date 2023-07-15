@@ -4,12 +4,9 @@ from tkinter import messagebox, filedialog
 from base64 import b64encode
 from PIL import Image, ImageTk
 
-
 football_client = MongoClient('mongodb://localhost:27017/')
 football_database = football_client['football_database']
 player_collection = football_database['players']
-
-            
 
 def submit():
     player_data = {
