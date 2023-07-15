@@ -115,6 +115,13 @@ def sign_in():
         log_in_btn.place(x=505,y=535)
 # Function to get the user's data from the database
 def get_login_data(phone):
+    '''
+    Get the login data of user
+    Args:
+        phone: phone number of the user who logged in
+    Return:
+        Data of the user who logged in
+    '''
     global user
     user = football_collection.find_one({'phone':phone})   
     return user
@@ -124,6 +131,10 @@ def login():
     Display the login section.
     '''
     def login_work():
+        '''
+        Authenticates a user with the provided username and password.
+
+        '''
         try:
             phone = phone_n_entry.get()
             psw = password_entry.get()
@@ -148,10 +159,16 @@ def login():
             messagebox.showerror('Login Error', 'An error occurred during login: ' + str(e))
     
     def show_password():
+        '''
+        Shows the entered password.
+        '''
         password_entry.config(show="")
         show_password_button.config(image=hide_img, command=hide_password)
 
     def hide_password():
+        '''
+        Hides the entered password.
+        '''
         password_entry.config(show="*")
         show_password_button.config(image=show_img, command=show_password)
 
@@ -201,7 +218,13 @@ def login():
 
 # Function for about us
 def about_us():
+    '''
+    Shows about the software decelopement team.
+    '''
     def back():
+        '''
+        Destroys the about_frame and gets back to login section.
+        '''
         about_frame.destroy()
     about_frame = Frame(app, width=700, height=600, bg="sky blue", border=1, relief='raised')
     about_frame.place(x=550, y=30)
@@ -209,6 +232,9 @@ def about_us():
     back_btn.place(x=675,y=0)
 
 def create_login_gui():
+    '''
+    Create the login GUI
+    '''
     # Creating the main window of the application
     global app, right_frame, left_frame
     app = Tk()
