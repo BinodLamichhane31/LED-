@@ -7,6 +7,7 @@ from base64 import *
 import io,webbrowser
 import pandas as pd
 import hashlib
+from ButtonCreation import *
 
 try:
     # Connecting to the database
@@ -27,49 +28,7 @@ try:
     user_data = football_collection.find_one({"phone":phone})
 except Exception as e:
     messagebox.showerror('System Error',"There is an error in the system.\nYou may face some problems while using app.\nWe will try to fix it asap.")
-    
-def create_button_with_icon(frame, image_path, text, x, y,cmd):
-    """
-    Create a button with an icon.
 
-    Args:
-        frame: The parent frame to place the button and icon.
-        image_path: The path to the icon image.
-        text: The text label for the button.
-        x: The x-coordinate of the button.
-        y: The y-coordinate of the button.
-        cmd: The command to be executed when the button is clicked.
-
-    Returns:
-        The created button.
-    """
-    icon = Image.open(image_path)
-    icon = icon.resize((20, 20))
-    image = ImageTk.PhotoImage(icon)
-    img_label = Label(frame, image=image, border=0, bg="sky blue")
-    img_label.image = image
-    img_label.place(x=x, y=y)
-    btn = Button(frame, text=text, border=0, bg="sky blue", font=('Segoe Print', '12', 'bold'), width=25, anchor='w',command=cmd)
-    btn.place(x=x+30, y=y-10)
-    return btn
-
-def highlight_button(btn):
-    """
-    Change the color of the button text when the button is clicked.
-
-    Args:
-        btn: The button to highlight.
-    """
-    btn.config(bg="sky blue",fg="blue")
-
-def reset_button(btn):
-    """
-    Reset the color of button text.
-
-    Args:
-        btn: The button to reset.
-    """
-    btn.config(bg="sky blue",fg="black")
 def home_section():
     '''
     Display the honme section.
@@ -431,6 +390,12 @@ def personalization_section():
 
         frame_personaliztion.destroy()
 
+        def back():
+            '''
+            Displays the personalozation section when back button is clicked.
+            '''
+            personalization_section()
+            
         profile_frame = Frame(right_frame, width=1050, height=668, bg="sky blue", border=1)
         profile_frame.place(x=0, y=0)
 
@@ -458,6 +423,9 @@ def personalization_section():
         email_add_entry = Entry(profile_frame, font=('Segoe Print', '12', 'bold'), width=22)
         email_add_entry.place(x=480, y=300)
 
+        back_button = Button(profile_frame,text="Back",font=('Segoe Print', '12', 'bold'),bg='sky blue',command=back)
+        back_button.place(x=980, y=70)
+
         def enable_entry():
             '''
             Enable the entry fields for editing and disable the update button.
@@ -479,7 +447,6 @@ def personalization_section():
                 new_email_add = email_add_entry.get()
 
                 football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num, 'email': new_email_add}})
-
 
                 # Display a success message
                 messagebox.showinfo("Profile Updated", "Your profile has been updated successfully.")
@@ -622,31 +589,6 @@ def personalization_section():
 
         delete_window.mainloop()
 
-    def create_personalization_btns(frame_personaliztion, image_path1, text, x, y, cmd):
-        '''
-        Create the buttons in personalization frame with icon.
-
-        Args:
-            frame_personalization:  The frame to place the buttons and icons.
-            image_path1: The path to the icon images.
-            text: The text for the button.
-            x: x-coordinate for the button.
-            y: y-coordinate for the button.
-            cmd: The command to be executed when button is clicked.
-        Returns:
-            The created button with icon.
-
-        '''
-        personalization_icon = Image.open(image_path1)
-        personalization_icon = personalization_icon.resize((20, 20))
-        personalization_image = ImageTk.PhotoImage(personalization_icon)
-        per_img_label = Label(frame_personaliztion, image=personalization_image, border=0, bg="sky blue")
-        per_img_label.image = personalization_image
-        per_img_label.place(x=x, y=y)
-        per_btn = Button(frame_personaliztion, text=text, height=0, border=0, bg="sky blue", font=('Segoe Print', '12', 'bold'), width=20, anchor='w', command=cmd)
-        per_btn.place(x=x + 30, y=y - 10)
-        return per_btn
-
     personaliztion_button = []
     personaliztion_button.append(create_personalization_btns(frame_personaliztion, 'Images/profile.png', "Profile", 10, 100, profile))
     personaliztion_button.append(create_personalization_btns(frame_personaliztion, 'Images/logout.png', "Log Out", 10, 150, log_out))
@@ -657,7 +599,6 @@ def personalization_section():
     for btn in buttons[:5] + buttons[6:]:
         reset_button(btn)
 
-    
 def feedback_section():
     '''
     Display the feedback section.
@@ -673,10 +614,7 @@ def feedback_section():
     highlight_button(buttons[6])
     for btn in buttons[:6]:
         reset_button(btn)
-'''
-Create the application GUI and display the home section by default.
-'''
-global right_frame, buttons, app
+
 #Creating the main window of the application
 app = Tk()
 app.geometry("1350x700")
