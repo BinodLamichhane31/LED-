@@ -96,9 +96,9 @@ def home_section():
     separator = Frame(frame_home, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
     try:
-        welcome_text = "Hello! "+ user_data['fullName']
-        welcome_text_label = Label(leftFrame,text=welcome_text,font=('League Spartan Medium', '11', 'bold'), bg="#FFFACD",anchor='center')
-        welcome_text_label.place(x=10,y=10)
+        username_text = user_data['fullName']
+        username_text_label = Label(leftFrame,text=username_text,font=('League Spartan Medium', '11', 'bold'), bg="#FFFACD",anchor='center')
+        username_text_label.place(x=10,y=10)
     except:
         pass
 
