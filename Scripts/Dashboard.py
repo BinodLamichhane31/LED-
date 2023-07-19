@@ -38,7 +38,6 @@ def home_section():
 
     global frame_signup_back
     global frame_home
-
     frame_home =Frame(rightFrame,width=1070, height=668, bg="#FFFACD", border=1)
     frame_home.place(x=0,y=0)
 
@@ -98,8 +97,8 @@ def home_section():
     separator.place(x = 0, y = 64)
     try:
         welcome_text = "Hello! "+ user_data['fullName']
-        welcome_text_label = Label(frame_home,text=welcome_text,font=('League Spartan Medium', '20', 'bold'), bg="#FFFACD",anchor='center')
-        welcome_text_label.place(relx=0.5,rely=0.5,anchor=TOP)
+        welcome_text_label = Label(leftFrame,text=welcome_text,font=('League Spartan Medium', '11', 'bold'), bg="#FFFACD",anchor='center')
+        welcome_text_label.place(x=10,y=10)
     except:
         pass
 
@@ -606,43 +605,46 @@ def personalization_section():
                 if user_data['password'] == hashlib.sha256(current_password_entry.get().encode()).hexdigest():
                     password_change_window.destroy()
                     password_change_window1 = Toplevel(frame_personalization)
-                    password_change_window1.title("Change your password")
-                    password_change_window1.geometry("280x350")
-                    password_change_window1.config(bg = "sky blue")
+                    password_change_window1.title('Change your password')
+                    password_change_window1.geometry('280x350')
+                    password_change_window1.config(bg="#FFFACD")
 
                     def confirm_change():
+                        '''
+                        Change the password and update in the database.
+                        '''
                         if new_password_entry.get() == re_password_entry.get():
-                            new_hash_psw = hashlib.sha256(new_password_entry.get().encode()).hexdigest()
-                            football_collection.update_one({'password' : user_data['password']}, {'$set': {'password': new_hash_psw}})
-                            messagebox.showinfo("Password Changed!", "Password updated Successfully!")
+                            # Update the password in the database
+                            new_hash_psw=hashlib.sha256(new_password_entry.get().encode()).hexdigest()
+                            football_collection.update_one({'password': user_data['password']}, {'$set': {'password': new_hash_psw}})
+                            messagebox.showinfo('Password Change', 'Password updated successfully.')
                         else:
-                            messagebox.showerror("Password Field!", "Password didn't match!")
-                            
-                    new_password_label = Label(password_change_window, text='Enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
-                    new_password_label.pack()
-                    new_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
-                    new_password_entry.pack()
+                            messagebox.showerror('Password Change', "Password doesn't match.")
 
-                    re_password_label = Label(password_change_window, text='Re-enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
-                    re_password_label.pack()
-                    re_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
-                    re_password_entry.pack()
+                    new_password_label = Label(password_change_window1, text='Enter New Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+                    new_password_label.place(x=10, y=20)
+                    new_password_entry = Entry(password_change_window1, font=('Segoe Print', '12', 'bold'),show='*')
+                    new_password_entry.place(x=10, y=50)
 
-                    change_btn = Button(password_change_window, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'))
-                    change_btn.pack()
+                    re_password_label = Label(password_change_window1, text='Re-enter New Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+                    re_password_label.place(x=10, y=90)
+                    re_password_entry = Entry(password_change_window1, font=('Segoe Print', '12', 'bold'),show='*')
+                    re_password_entry.place(x=10, y=120)
+
+                    change_btn = Button(password_change_window1, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'), command=confirm_change)
+                    change_btn.place(x=180, y=170)
+
                 else:
-                    messagebox.showerror("Password Error", "Wrong Password!")
-
+                    messagebox.showerror('Password Change', 'Wrong password')
             except:
                 messagebox.showerror('System Error','Sorry for the inconvenience. We will fix it ASAP.')
-
         current_password_label = Label(password_change_window, text='Current Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
-        current_password_label.pack()
-        current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'))
-        current_password_entry.pack()
+        current_password_label.place(x=10, y=20)
+        current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+        current_password_entry.place(x=10, y=50)
 
         next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
-        next_btn.pack()
+        next_btn.place(x=200, y=100)
 
 
     def delete():
@@ -658,7 +660,7 @@ def personalization_section():
             '''
             Delete the user account.
             '''
-            account_delete = delete_password_entry.get()
+            account_delete = hashlib.sha256(delete_password_entry.get().encode()).hexdigest()
             if account_delete == user_data['password']:
                 football_collection.delete_one({'password': user_data['password']})
                 messagebox.showinfo("Account Deleted", "Your account has been deleted successfully.")
@@ -1030,5 +1032,5 @@ personalizeButton.place(x = -32, y = 546)
 feedbackButton = Button(leftFrame, text = "   Feedback & Support", cursor = "hand2", image = iconFeedback, compound = LEFT, border = 0, width = 300, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = feedback_section)
 feedbackButton.place(x = 0, y = 612)
 
-
+home_section()
 app.mainloop()
