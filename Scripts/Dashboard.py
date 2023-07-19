@@ -290,6 +290,7 @@ def overview_section():
                     tk_image = ImageTk.PhotoImage(image)
                     # Create a Tkinter label and display the image
                     image_label = Label(frame_player, image = tk_image)
+                    image_label.image = tk_image
                     image_label.place(x = 150,y = 150)
                     def details_label(frame_player,players_text,x,y):
                         '''
