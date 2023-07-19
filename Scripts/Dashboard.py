@@ -165,6 +165,8 @@ def live_section():
         link = values[6]
         # Open the link in a web browser
         webbrowser.open(link)
+    treeview1.bind("<<TreeviewSelect>>", open_link)
+
 
     try:
         frameFeedback.destroy()
