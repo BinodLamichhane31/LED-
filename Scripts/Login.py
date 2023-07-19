@@ -78,7 +78,7 @@ def sign_up():
         signupBgRound = Label(image = bgRoundSignup, bg = "#FFFACD")
         signupBgRound.place(x = 780, y = 60)
 
-        signin_icon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\loginicon.png")
+        signin_icon = Image.open("Images\\loginicon.png")
         signin_image = signin_icon.resize((50,50))
         signin_image = ImageTk.PhotoImage(signin_image)
         signin_img_label = Label(signupBgRound,image=signin_image,border=0, bg = "#fff")
@@ -163,7 +163,7 @@ def login():
                 if stored_psw == hashed_psw:
                     messagebox.showinfo("Login Result", "Login Successful.")
                     app.destroy()
-                    with open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Scripts\\phone_number.txt", "w") as file:
+                    with open("Scripts\\phone_number.txt", "w") as file:
                         file.write(phone)
                     import Dashboard 
                 else:
@@ -194,7 +194,7 @@ def login():
 
     # GUI elements for login page
     global right_frame
-    login_icon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\loginicon.png")
+    login_icon = Image.open("Images\\loginicon.png")
     login_image = login_icon.resize((50, 50))
     login_image = ImageTk.PhotoImage(login_image)
     login_img_label = Label(roundImgLabel, image=login_image, border=0, bg = "#fff")
@@ -222,8 +222,8 @@ def login():
     forgotPwd = Button(roundImgLabel, text = "Forgot Password?", bg = "#fff", border = 0, fg ="blue")
     forgotPwd.place(x = 260, y = 344)
 
-    show_icon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\show.png").resize((20, 20))
-    hide_icon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\hide.png").resize((20, 20))
+    show_icon = Image.open("Images\\show.png").resize((20, 20))
+    hide_icon = Image.open("Images\\hide.png").resize((20, 20))
 
     show_img = ImageTk.PhotoImage(show_icon)
     hide_img = ImageTk.PhotoImage(hide_icon)
@@ -264,17 +264,17 @@ lower_frame.place(x=0, y=702)
 verticalLine = Frame(right_frame, width = 2, height = 520, bg = "#000")
 verticalLine.place(x = 640, y = 100)
 
-football_img = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\logonp.png")
+football_img = Image.open("Images\\logonp.png")
 football_photo = football_img.resize((160,160))
 football_photo1 = ImageTk.PhotoImage(football_photo)
 football_label = Label(right_frame,image=football_photo1,border=0,background = "#FFFACD")
 football_label.image = football_photo  # Store a reference to the image to prevent it from being garbage collected
 football_label.place(x=560,y=220)
 
-entryImg = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\entryImg.png")
+entryImg = Image.open("Images\\entryImg.png")
 imgEntry = ImageTk.PhotoImage(entryImg)
 
-roundBg = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\roundBg.png")
+roundBg = Image.open("Images\\roundBg.png")
 resizeBg = roundBg.resize((480, 580))
 bgRound = ImageTk.PhotoImage(resizeBg)
 
@@ -282,30 +282,30 @@ roundImgLabel = Label(right_frame, image = bgRound, bg = "#FFFACD")
 roundImgLabel.image = bgRound
 roundImgLabel.place(x = 780, y = 60)
 
-roundBgSignup = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\roundBgSignup.png")
+roundBgSignup = Image.open("Images\\roundBgSignup.png")
 resizeBgSignup = roundBgSignup.resize((480, 580))
 bgRoundSignup = ImageTk.PhotoImage(resizeBgSignup)
 
-kick_png = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\pitch.png")
+kick_png = Image.open("Images\\pitch.png")
 kick_photo = kick_png.resize((400,350))
 kick_photo = ImageTk.PhotoImage(kick_photo)
 kick_label = Label(right_frame,image=kick_photo,border=0,bg="#FFFACD")
 kick_label.image = kick_photo  
 kick_label.place(x=60,y=156)
 
-loginImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\loginButton.png")
+loginImage = Image.open("Images\\loginButton.png")
 resizedLogin = loginImage.resize((100, 50))
 imageLogin = ImageTk.PhotoImage(resizedLogin)
 
-signupImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\signupbtn.png")
+signupImage = Image.open("Images\\signupbtn.png")
 resizedSignup = signupImage.resize((100, 50))
 imageSignup = ImageTk.PhotoImage(resizedSignup)
 
-trophyImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\football.png")
+trophyImage = Image.open("Images\\football.png")
 resizedTrophy = trophyImage.resize((54, 84))
 imageTrophy = ImageTk.PhotoImage(resizedTrophy)
 
-mainHeading = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\mainHeading.png")
+mainHeading = Image.open("Images\\mainHeading.png")
 resizedHeading = mainHeading.resize((400, 80))
 headingMain = ImageTk.PhotoImage(resizedHeading)
 

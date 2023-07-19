@@ -7,6 +7,7 @@ from base64 import *
 import io,webbrowser
 import pandas as pd
 import hashlib
+from ButtonCreation import *
 
 try:
     # Connecting to the database
@@ -22,54 +23,13 @@ except Exception as e:
 
 try:
     # Reading the phone number from a file
-    with open("\\Users\\shahi\\Downloads\\MartyrLeague\\Scripts\\phone_number.txt", "r") as file:
+    with open("Scripts\\phone_number.txt", "r") as file:
         phone = file.read().strip()
     user_data = football_collection.find_one({"phone":phone})
 except Exception as e:
     messagebox.showerror('System Error',"There is an error in the system.\nYou may face some problems while using app.\nWe will try to fix it asap.")
 
-def create_button_with_icon(frame, image_path, text, x, y,cmd):
-    """
-    Create a button with an icon.
 
-    Args:
-        frame: The parent frame to place the button and icon.
-        image_path: The path to the icon image.
-        text: The text label for the button.
-        x: The x-coordinate of the button.
-        y: The y-coordinate of the button.
-        cmd: The command to be executed when the button is clicked.
-
-    Returns:
-        The created button.
-    """
-    icon = Image.open(image_path)
-    icon = icon.resize((20, 20))
-    image = ImageTk.PhotoImage(icon)
-    img_label = Label(frame, image=image, border=0, bg="sky blue")
-    img_label.image = image
-    img_label.place(x=x, y=y)
-    btn = Button(frame, text=text, border=0, bg="sky blue", font=('Segoe Print', '12', 'bold'), width=25, anchor='w',command=cmd)
-    btn.place(x=x+30, y=y-10)
-    return btn
-
-def highlight_button(btn):
-    """
-    Change the color of the button text when the button is clicked.
-
-    Args:
-        btn: The button to highlight.
-    """
-    btn.config(bg="sky blue",fg="blue")
-
-def reset_button(btn):
-    """
-    Reset the color of button text.
-
-    Args:
-        btn: The button to reset.
-    """
-    btn.config(bg="sky blue",fg="black")
     
 def home_section():
     '''
@@ -169,7 +129,7 @@ def live_section():
     separator.place(x = 0, y = 64)
 
     # Read the data from the Excel file
-    live_data = pd.read_excel("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Points\\Point Table.xlsx", sheet_name="Live")
+    live_data = pd.read_excel("C:Points\\Point Table.xlsx", sheet_name="Live")
     # Create a pandas DataFrame from the data
     df = pd.DataFrame(live_data)
     # Create a treeview widget to display the data
@@ -419,7 +379,7 @@ def matches_section():
     separator = Frame(frame_matches, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
         # Read the data from the Excel file
-    date_time = pd.read_excel("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Points\\Point Table.xlsx",sheet_name="Matches Date")
+    date_time = pd.read_excel("C:Points\\Point Table.xlsx",sheet_name="Matches Date")
     # Create a pandas DataFrame from the data
     df = pd.DataFrame(date_time)
     # Create a treeview widget to display the data
@@ -473,7 +433,7 @@ def standing_section():
     separator = Frame(frame_standings, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
     # Read the data from the Excel file
-    standings_data = pd.read_excel("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Points\\Point Table.xlsx")
+    standings_data = pd.read_excel("C:Points\\Point Table.xlsx")
     # Create a pandas DataFrame from the data
     df = pd.DataFrame(standings_data)
     # Create a treeview widget to display the data
@@ -542,7 +502,6 @@ def personalization_section():
         Display the user's information.
         '''
 
-        # frame_personalization.destroy()
 
         profile_frame = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
         profile_frame.place(x=0, y=0)
@@ -720,36 +679,11 @@ def personalization_section():
 
         delete_window.mainloop()
 
-    def create_personalization_btns(frame_personaliztion, image_path1, text, x, y, cmd):
-        '''
-        Create the buttons in personalization frame with icon.
-
-        Args:
-            frame_personalization:  The frame to place the buttons and icons.
-            image_path1: The path to the icon images.
-            text: The text for the button.
-            x: x-coordinate for the button.
-            y: y-coordinate for the button.
-            cmd: The command to be executed when button is clicked.
-        Returns:
-            The created button with icon.
-
-        '''
-        personalization_icon = Image.open(image_path1)
-        personalization_icon = personalization_icon.resize((20, 20))
-        personalization_image = ImageTk.PhotoImage(personalization_icon)
-        per_img_label = Label(frame_personaliztion, image=personalization_image, border=0, bg="#FFFACD")
-        per_img_label.image = personalization_image
-        per_img_label.place(x=x, y=y)
-        per_btn = Button(frame_personaliztion, text=text, height=0, border=0, bg="#FFFACD", font=('Segoe Print', '12', 'bold'), width=20, anchor='w', command=cmd)
-        per_btn.place(x=x + 30, y=y - 10)
-        return per_btn
-
     personaliztion_button = []
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\profile.png', "Profile", 10, 100, profile))
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\logout.png', "Log Out", 10, 150, log_out))
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\change.png', "Change Password", 10, 200, change))
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\delete.png', "Delete Account", 10, 250, delete))
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\profile.png', "Profile", 10, 100, profile))
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\logout.png', "Log Out", 10, 150, log_out))
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\change.png', "Change Password", 10, 200, change))
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\delete.png', "Delete Account", 10, 250, delete))
     
 
     try:
@@ -949,47 +883,47 @@ app.state("zoomed")
 app.resizable(False, False)
 app.title("Dashboard")
 
-feedbackImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\feedBox.png")
+feedbackImage = Image.open("C:Images\\feedBox.png")
 ImageFeedback = ImageTk.PhotoImage(feedbackImage)
 
-groundImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\ground.png")
+groundImage = Image.open("C:Images\\ground.png")
 imageGround = ImageTk.PhotoImage(groundImage)
 
-logoImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\logonp.png")
+logoImage = Image.open("C:Images\\logonp.png")
 resizedLogo = logoImage.resize((160, 160))
 imageLogo = ImageTk.PhotoImage(resizedLogo)
 
-homeIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\home.png")
+homeIcon = Image.open("C:Images\\home.png")
 iconHome = ImageTk.PhotoImage(homeIcon)
 
-liveIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\live.png")
+liveIcon = Image.open("C:Images\\live.png")
 iconLive= ImageTk.PhotoImage(liveIcon)
 
-overviewIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\overview.png")
+overviewIcon = Image.open("C:Images\\overview.png")
 iconOverview = ImageTk.PhotoImage(overviewIcon)
 
-matchIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\match.png")
+matchIcon = Image.open("C:Images\\match.png")
 iconMatch = ImageTk.PhotoImage(matchIcon)
 
-standingsIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\standings.png")
+standingsIcon = Image.open("C:Images\\standings.png")
 iconStandings = ImageTk.PhotoImage(standingsIcon)
 
-personalizeIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\personalize.png")
+personalizeIcon = Image.open("C:Images\\personalize.png")
 iconPersonalize = ImageTk.PhotoImage(personalizeIcon)
 
-feedbackIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\feedbackIcon.png")
+feedbackIcon = Image.open("C:Images\\feedbackIcon.png")
 iconFeedback = ImageTk.PhotoImage(feedbackIcon)
 
-rightIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\right.png")
+rightIcon = Image.open("C:Images\\right.png")
 iconRight = ImageTk.PhotoImage(rightIcon)
 
-importIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\importIcon.png")
+importIcon = Image.open("C:Images\\importIcon.png")
 iconImport = ImageTk.PhotoImage(importIcon)
 
-submitIcon = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\next.png")
+submitIcon = Image.open("C:Images\\next.png")
 iconSubmit = ImageTk.PhotoImage(submitIcon)
 
-userFeedbackImage = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\otherFeeds.png")
+userFeedbackImage = Image.open("C:Images\\otherFeeds.png")
 imagefeedbackUser = ImageTk.PhotoImage(userFeedbackImage)
 
 # Styling the speparator
