@@ -5,6 +5,7 @@ from tkinter import messagebox
 from pymongo import MongoClient
 import re, subprocess
 import hashlib
+import time
 
 try:
     # Creating MongoClient, connecting to database and collection
@@ -40,13 +41,17 @@ def sign_up():
             try:   
                 # input validation
                 if uname=='' or email =='' or phone =='' or password == '' or confirm == '':
-                    messagebox.showerror("Registeration",'No fields can be empty.')
+                    messagebox.showerror("Registration",'No fields can be empty.')
+
                 elif password!=confirm:
-                    messagebox.showerror('Registeration','Password and confirm password are not matching.')
+                    messagebox.showerror('Registration','Password and confirm password are not matching.')
+
                 elif football_collection.find_one({'phone':phone}):
-                    messagebox.showwarning('Registeration','This number already exists.')
+                    messagebox.showwarning('Registration','This number already exists.')
+
                 elif not re.match(r"[^@]+@[^@]+\.[^@]+",email):
                     messagebox.showerror('Registration', 'Please give the valid email address.')
+                    
                 elif not re.match(r"^\d{10}$",phone) :
                     messagebox.showerror('Registration', 'Please give the valid phone number')
 
@@ -56,13 +61,15 @@ def sign_up():
                 else:
                     hashed_password = hashlib.sha256(password.encode()).hexdigest()
                     football_collection.insert_one({'fullName':uname,'email':email,'phone':phone,'password':hashed_password})
-                    messagebox.showinfo('Registeration',"Registeration Successful!! \\nYou have to use your phone number as your username.")
+                    messagebox.showinfo('Registration',"Registration Successful!! \\nYou have to use your phone number as your username.")
                     # To clear the entry fields 
                     uname_entry.delete(0, 'end')
                     email_entry.delete(0, 'end')
                     phone_entry.delete(0, 'end')
                     psw_entry.delete(0, 'end')
                     confirm_entry.delete(0, 'end')
+                    signupBgRound.destroy()
+                    login()
             except Exception as e:
                 messagebox.showerror('Registration', 'An error occurred during registration: ' + str(e))
     
@@ -125,18 +132,34 @@ def login():
     '''
     Display the login section.
     '''
-
+    try:
+        football_collection['users']
+    except Exception as e:
+        messagebox.showerror("MongoDB connection error", str(e))
+    
     def login_work():
         try:
             phone = phone_n_entry.get()
             psw = password_entry.get()
             hashed_psw = hashlib.sha256(psw.encode()).hexdigest()
             user_data = get_login_data(phone)
+            remember = remember_var.get()
+            
+            filter = {'phone': phone}
+            
+            update = {
+                "$set":{
+                    'Save Password' : remember
+                }
+            }
+
+            football_collection.update_one(filter, update)
 
             #  Login Validation
             if user_data:
                 stored_psw = user_data['password']
-                stored_uname = user_data['phone']
+                stored_phone = user_data['phone']
+                stored_remember = user_data.get('Save Password')
                 if stored_psw == hashed_psw:
                     messagebox.showinfo("Login Result", "Login Successful.")
                     app.destroy()
@@ -157,6 +180,17 @@ def login():
     def hide_password():
         password_entry.config(show="●")
         show_password_button.config(image=show_img, command=show_password)
+
+    def on_password_focus_in(event):
+        phone = phone_n_entry.get()
+        user_data = get_login_data(phone)
+        if user_data:
+            stored_psw = user_data['password']
+            stored_phone = user_data['phone']
+            stored_remember = user_data.get('Save Password', False)
+            if stored_phone == phone and stored_remember:
+                password_entry.delete(0, END)
+                password_entry.insert(0, stored_psw)
 
     # GUI elements for login page
     global right_frame
@@ -180,7 +214,7 @@ def login():
     password_label.place(x=12, y=80)
     password_entry = Entry(entryLabel, width = 22, border = 0, font=('Tahoma', '12', ''), show="●", bg = "#fff")
     password_entry.place(x=14, y=112, height = 28)
-
+    password_entry.bind("<FocusIn>", on_password_focus_in)
     remember_var = BooleanVar()
     remember_check = Checkbutton(roundImgLabel, text="Remember Me", variable=remember_var, bg = "#fff")
     remember_check.place(x = 128, y = 342)
@@ -212,12 +246,7 @@ def login():
 
 # Function for about us
 def about_us():
-    def back():
-        about_frame.destroy()
-    about_frame = Frame(app, width=700, height=600, bg="#fff", border=1, relief='raised')
-    about_frame.place(x=550, y=30)
-    back_btn = Button(about_frame,height=1,text="╳",bg="#fff",font=('League Spartan Medium', '10', ''),border=0,command=back)
-    back_btn.place(x=675,y=0)
+    import aboutus
 
 app = Tk()
 app.geometry("1350x700")

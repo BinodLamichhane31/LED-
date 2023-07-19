@@ -1,6 +1,6 @@
 # Importing all the required libraries
 from tkinter import *
-from tkinter import ttk,messagebox,Label,PhotoImage
+from tkinter import ttk,messagebox,Label,PhotoImage, filedialog
 from PIL import Image, ImageTk
 from pymongo import MongoClient
 from base64 import *
@@ -8,19 +8,69 @@ import io,webbrowser
 import pandas as pd
 import hashlib
 
+try:
+    # Connecting to the database
+    football_client = MongoClient('mongodb://localhost:27017/')
+    football_database = football_client['football_database']
+    football_collection = football_database['users']
+    player_collection = football_database['players']
+    team_collection = football_database['teams']
+    picture_collection = football_database['picture']
 
-# Connecting to the database
-football_client = MongoClient('mongodb://localhost:27017/')
-football_database = football_client['football_database']
-football_collection = football_database['users']
-player_collection = football_database['players']
-team_collection = football_database['teams']
+except Exception as e:
+    messagebox.showerror('Database Connection Error',str(e))
 
-# Reading the phone number from a file
-with open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Scripts\\phonenumber.txt", "r") as file:
-    phone = file.read().strip()
-user_data = football_collection.find_one({"phone":phone})
+try:
+    # Reading the phone number from a file
+    with open("\\Users\\shahi\\Downloads\\MartyrLeague\\Scripts\\phone_number.txt", "r") as file:
+        phone = file.read().strip()
+    user_data = football_collection.find_one({"phone":phone})
+except Exception as e:
+    messagebox.showerror('System Error',"There is an error in the system.\nYou may face some problems while using app.\nWe will try to fix it asap.")
 
+def create_button_with_icon(frame, image_path, text, x, y,cmd):
+    """
+    Create a button with an icon.
+
+    Args:
+        frame: The parent frame to place the button and icon.
+        image_path: The path to the icon image.
+        text: The text label for the button.
+        x: The x-coordinate of the button.
+        y: The y-coordinate of the button.
+        cmd: The command to be executed when the button is clicked.
+
+    Returns:
+        The created button.
+    """
+    icon = Image.open(image_path)
+    icon = icon.resize((20, 20))
+    image = ImageTk.PhotoImage(icon)
+    img_label = Label(frame, image=image, border=0, bg="sky blue")
+    img_label.image = image
+    img_label.place(x=x, y=y)
+    btn = Button(frame, text=text, border=0, bg="sky blue", font=('Segoe Print', '12', 'bold'), width=25, anchor='w',command=cmd)
+    btn.place(x=x+30, y=y-10)
+    return btn
+
+def highlight_button(btn):
+    """
+    Change the color of the button text when the button is clicked.
+
+    Args:
+        btn: The button to highlight.
+    """
+    btn.config(bg="sky blue",fg="blue")
+
+def reset_button(btn):
+    """
+    Reset the color of button text.
+
+    Args:
+        btn: The button to reset.
+    """
+    btn.config(bg="sky blue",fg="black")
+    
 def home_section():
     '''
     Display the honme section.
@@ -89,7 +139,7 @@ def home_section():
     try:
         welcome_text = "Hello! "+ user_data['fullName']
         welcome_text_label = Label(frame_home,text=welcome_text,font=('League Spartan Medium', '20', 'bold'), bg="#FFFACD",anchor='center')
-        welcome_text_label.place(relx=0.5,rely=0.5,anchor='center')
+        welcome_text_label.place(relx=0.5,rely=0.5,anchor=TOP)
     except:
         pass
 
@@ -198,7 +248,18 @@ def overview_section():
                 Search the team and display it's information.
                 '''
                 team_data = team_collection.find_one({'name':team_search_entry.get()})
-                def label_tame_details(frame_team,label_text,x,y):
+                encoded_logo = team_data['image']
+                logo_data = b64decode(encoded_logo)
+                logo = Image.open(io.BytesIO(logo_data))
+                logo = logo.resize((150,200))
+                # Convert the logo to a Tkinter-compatible format
+                tk_logo = ImageTk.PhotoImage(logo)
+                # Create a Tkinter label and display the logo
+                logo_label = Label(frame_team, image=tk_logo)
+                logo_label.image = tk_logo
+                logo_label.place(x=150,y=150)
+
+                def label_team_details(frame_team,label_text,x,y):
                     '''
                     Label and display the details of team.
 
@@ -212,20 +273,20 @@ def overview_section():
                     label_team_info.place(x=x,y=y)
                 team_info_list = []
                 if team_data is not None:
-                    team_info_list.append(label_tame_details(frame_team,"Club Name:",350,150))
-                    team_info_list.append(label_tame_details(frame_team,team_data['name'],480,150))
-                    team_info_list.append(label_tame_details(frame_team,"Founded Year:",350,180))
-                    team_info_list.append(label_tame_details(frame_team,team_data['founded'],480,180))
-                    team_info_list.append(label_tame_details(frame_team,"Location:",350,210))
-                    team_info_list.append(label_tame_details(frame_team,team_data['location'],480,210))
-                    team_info_list.append(label_tame_details(frame_team,"Stadium:",350,240))
-                    team_info_list.append(label_tame_details(frame_team,team_data['stadium'],480,240))
-                    team_info_list.append(label_tame_details(frame_team,"President:",350,270))
-                    team_info_list.append(label_tame_details(frame_team,team_data['president'],480,270))
-                    team_info_list.append(label_tame_details(frame_team,"Manager:",350,300))
-                    team_info_list.append(label_tame_details(frame_team,team_data['manager'],480,300))
-                    team_info_list.append(label_tame_details(frame_team,"Captain:",350,330))
-                    team_info_list.append(label_tame_details(frame_team,team_data['captain'],480,330))
+                    team_info_list.append(label_team_details(frame_team,"Club Name:",350,150))
+                    team_info_list.append(label_team_details(frame_team,team_data['name'],480,150))
+                    team_info_list.append(label_team_details(frame_team,"Founded Year:",350,180))
+                    team_info_list.append(label_team_details(frame_team,team_data['founded'],480,180))
+                    team_info_list.append(label_team_details(frame_team,"Location:",350,210))
+                    team_info_list.append(label_team_details(frame_team,team_data['location'],480,210))
+                    team_info_list.append(label_team_details(frame_team,"Stadium:",350,240))
+                    team_info_list.append(label_team_details(frame_team,team_data['stadium'],480,240))
+                    team_info_list.append(label_team_details(frame_team,"President:",350,270))
+                    team_info_list.append(label_team_details(frame_team,team_data['president'],480,270))
+                    team_info_list.append(label_team_details(frame_team,"Manager:",350,300))
+                    team_info_list.append(label_team_details(frame_team,team_data['manager'],480,300))
+                    team_info_list.append(label_team_details(frame_team,"Captain:",350,330))
+                    team_info_list.append(label_team_details(frame_team,team_data['captain'],480,330))
             def on_entry_click(event):
                 '''
                 Perform actions when the team search entry field is clicked.
@@ -525,21 +586,25 @@ def personalization_section():
             '''
             Save the updated profile information to the database and disable the entry fields.
             '''
-            new_full_name = full_name_entry.get()
-            new_phone_num = phone_num_entry.get()
-            new_email_add = email_add_entry.get()
+            try:
+                new_full_name = full_name_entry.get()
+                new_phone_num = phone_num_entry.get()
+                new_email_add = email_add_entry.get()
 
-            football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num, 'email': new_email_add}})
+                football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num, 'email': new_email_add}})
 
 
-            # Display a success message
-            messagebox.showinfo("Profile Updated", "Your profile has been updated successfully.")
+                # Display a success message
+                messagebox.showinfo("Profile Updated", "Your profile has been updated successfully.")
 
-            # Disable the entry fields again
-            full_name_entry.config(state = DISABLED)
-            phone_num_entry.config(state = DISABLED)
-            email_add_entry.config(state = DISABLED)
-            update_button.config(state = NORMAL)
+                # Disable the entry fields again
+                full_name_entry.config(state = DISABLED)
+                phone_num_entry.config(state = DISABLED)
+                email_add_entry.config(state = DISABLED)
+                update_button.config(state = NORMAL)
+
+            except:
+                messagebox.showerror("System Error!", "Sorry for the inconvenience. We are working on it.")
 
         update_button = Button(profile_frame, text="Edit", font=('Segoe Print', '12', 'bold'), bg="#FFFACD", command=enable_entry)
         update_button.place(x=350, y=350)
@@ -562,49 +627,60 @@ def personalization_section():
         else:
             pass
     
-    # def change():
-    #     '''
-    #     Open another window and ask user to enter the current password.
-    #     '''
-    #     password_change_window = Toplevel(frame_personalization)
-    #     password_change_window.title('Change your password')
-    #     password_change_window.geometry('280x350')
-    #     password_change_window.config(bg="#FFFACD")
+    def change():
+        '''
+        Open another window and ask user to enter the current password.
+        '''
+        password_change_window = Toplevel(frame_personalization)
+        password_change_window.title('Change your password')
+        password_change_window.geometry('280x350')
+        password_change_window.config(bg="#FFFACD")
 
-    #     def password_change(): 
-    #         '''
-    #         Open the password change window.
-    #         '''
-    #         try:
-    #             if new_password_entry.get() == re_password_entry.get() == user_data['password'] == hashlib.sha256(current_password_entry.get().encode()).hexdigest():
-    #                 new_hash_psw=hashlib.sha256(new_password_entry.get().encode()).hexdigest()
-    #                 football_collection.update_one({'password': user_data['password']}, {'$set': {'password': new_hash_psw}})
-    #                 messagebox.showinfo('Password Change', 'Password updated successfully.')
-    #             else:
-    #                 messagebox.showerror('Password Change', "Password didn't match.")
+        def password_change(): 
+            '''
+            Open the password change window.
+            '''
+            try:
+                if user_data['password'] == hashlib.sha256(current_password_entry.get().encode()).hexdigest():
+                    password_change_window.destroy()
+                    password_change_window1 = Toplevel(frame_personalization)
+                    password_change_window1.title("Change your password")
+                    password_change_window1.geometry("280x350")
+                    password_change_window1.config(bg = "sky blue")
 
-    #             new_password_label = Label(password_change_window, text='Enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
-    #             new_password_label.pack()
-    #             new_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
-    #             new_password_entry.pack()
+                    def confirm_change():
+                        if new_password_entry.get() == re_password_entry.get():
+                            new_hash_psw = hashlib.sha256(new_password_entry.get().encode()).hexdigest()
+                            football_collection.update_one({'password' : user_data['password']}, {'$set': {'password': new_hash_psw}})
+                            messagebox.showinfo("Password Changed!", "Password updated Successfully!")
+                        else:
+                            messagebox.showerror("Password Field!", "Password didn't match!")
+                            
+                    new_password_label = Label(password_change_window, text='Enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    new_password_label.pack()
+                    new_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+                    new_password_entry.pack()
 
-    #             re_password_label = Label(password_change_window, text='Re-enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
-    #             re_password_label.pack()
-    #             re_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
-    #             re_password_entry.pack()
+                    re_password_label = Label(password_change_window, text='Re-enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    re_password_label.pack()
+                    re_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+                    re_password_entry.pack()
 
-    #             change_btn = Button(password_change_window, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'))
-    #             change_btn.pack()
-    #         except:
-    #             messagebox.showerror('System Error','Sorry for the inconvenience. We will fix it ASAP.')
+                    change_btn = Button(password_change_window, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    change_btn.pack()
+                else:
+                    messagebox.showerror("Password Error", "Wrong Password!")
 
-        # current_password_label = Label(password_change_window, text='Current Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
-        # current_password_label.pack()
-        # current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'))
-        # current_password_entry.pack()
+            except:
+                messagebox.showerror('System Error','Sorry for the inconvenience. We will fix it ASAP.')
 
-        # next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
-        # next_btn.pack()
+        current_password_label = Label(password_change_window, text='Current Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+        current_password_label.pack()
+        current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'))
+        current_password_entry.pack()
+
+        next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
+        next_btn.pack()
 
 
     def delete():
@@ -620,8 +696,8 @@ def personalization_section():
             '''
             Delete the user account.
             '''
-            password_delete = delete_password_entry.get()
-            if password_delete == user_data['password']:
+            account_delete = delete_password_entry.get()
+            if account_delete == user_data['password']:
                 football_collection.delete_one({'password': user_data['password']})
                 messagebox.showinfo("Account Deleted", "Your account has been deleted successfully.")
                 app.destroy()
@@ -672,7 +748,7 @@ def personalization_section():
     personaliztion_button = []
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\profile.png', "Profile", 10, 100, profile))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\logout.png', "Log Out", 10, 150, log_out))
-    # personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\change.png', "Change Password", 10, 200, change))
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\change.png', "Change Password", 10, 200, change))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\delete.png', "Delete Account", 10, 250, delete))
     
 
@@ -706,10 +782,7 @@ def feedback_section():
     separator.place(x=0, y=64)
 
     try:
-        client = MongoClient("mongodb://localhost:27017/")
-        db = client["feedbackDatabase"]
-        feedCollection = db['feedBacks']
-
+        feedCollection = football_database['feedBacks']
     except Exception as e:
         messagebox.showerror("MongoDB connection error", str(e))
 
@@ -938,7 +1011,7 @@ frame_home.place(x=0,y=0)
 
 def playlive():
     webbrowser.open("https://www.youtube.com/live/O2ANLnuEBmg")
-frame_signup_back = Frame(frame_home, width = 540, bg = "#FFFACD", height = 180, highlightthickness = 1, relief = RAISED, highlightcolor = "#000")
+frame_signup_back = Frame(frame_home, width = 540, bg = "#FFFACD", height = 180, highlightthickness = 1, relief = GROOVE, border= 4, highlightcolor="red")
 frame_signup_back.place(x = 120, y = 110)
 logoLabel = Label(frame_signup_back, image = imageLogo, bg = "#FFFACD")
 logoLabel.place(x = 350, y = 10)
