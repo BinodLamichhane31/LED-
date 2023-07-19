@@ -166,7 +166,7 @@ def live_section():
         # Open the link in a web browser
         webbrowser.open(link)
     treeview1.bind("<<TreeviewSelect>>", open_link)
-
+  
 
     try:
         frameFeedback.destroy()
@@ -681,13 +681,23 @@ def personalization_section():
         delete_btn.place(x=175, y=240)
 
         delete_window.mainloop()
+    def setting():
+        setting_window = Toplevel(frame_personalization)
+        setting_window.title('Setting')
+        setting_window.resizable(0,0)
+        setting_window.geometry('250x350')
+        setting_window.config(bg="#FFFACD")
+        change_font_label = Label(setting_window,text="Change App Font",font=("Segoe Print", '12', ''),bg="#FFFACD")
+        change_font_label.place(x=10,y=15)
 
     personaliztion_button = []
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\profile.png', "Profile", 10, 100, profile))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\logout.png', "Log Out", 10, 150, log_out))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\change.png', "Change Password", 10, 200, change))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\delete.png', "Delete Account", 10, 250, delete))
-    
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\setting.png', "Setting", 10, 300, setting))
+
+
 
     try:
         frameFeedback.destroy()
