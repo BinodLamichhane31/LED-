@@ -1033,6 +1033,7 @@ separator = Frame(leftFrame, width = 80, height = 2, bg = "#000")
 separator.place(x = 0, y = 64)
 
 hoverFrame = Frame(height = 40, width = 3, bg = "red")
+hoverFrame.place(x = 2, y = 212)
 
 def on_button_click_with_section(func, button):
     func()
