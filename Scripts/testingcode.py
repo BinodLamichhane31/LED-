@@ -1,131 +1,54 @@
 import tkinter as tk
-from pymongo import MongoClient
-from PIL import ImageTk, Image
-import io
-import tkinter.filedialog as filedialog
+from tkinter import filedialog
+from PIL import Image as PILImage, ImageDraw, ImageTk
 
+app = tk.Tk()
+app.geometry("300x300")
 
-# MongoDB connection
-client = MongoClient('mongodb://localhost:27017')
-db = client['image_db']
-collection = db['images']
+def create_rounded_profile_picture(input_path, output_path, size=(60, 60)):
+    # Step 1: Load the user's selected profile picture
+    profile_image = PILImage.open(input_path)
 
-# Global variables
-current_image_index = 0
-image_list = []
-image_labels = []
-# Fetch images from MongoDB
-def fetch_images():
-    global image_list
-    image_list = list(collection.find({}, {'_id': 0, 'image': 1}))
+    # Step 2: Resize the image to the desired dimensions
+    profile_image = profile_image.resize(size)
 
-# Event handlers for left and right buttons
-def move_left():
-    global current_image_index
-    if current_image_index > 0:
-        current_image_index -= 1
-    focus_image()
+    # Step 3: Create a circular mask
+    mask = PILImage.new("L", profile_image.size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0, profile_image.size[0], profile_image.size[1]), fill=255)  # Change fill value to 255
 
-def move_right():
-    global current_image_index, image_list
-    if current_image_index < len(image_list) - 1:
-        current_image_index += 1
-    focus_image()
+    # Step 4: Apply the mask to the profile image
+    rounded_image = PILImage.new("RGBA", profile_image.size, (255, 255, 255, 0))
+    rounded_image.paste(profile_image, (0, 0), mask=mask)
 
+    # Step 5: Save the rounded image
+    rounded_image.save(output_path)
 
+def get_profile_picture_path():
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename(title="Select Profile Picture", filetypes=[("Image files", "*.jpg;*.png;*.jpeg")])
+    return file_path
 
-# Select and store image in MongoDB
-def select_and_store_image():
-    filename = filedialog.askopenfilename(filetypes=[("Image Files", "*.png;*.jpg;*.jpeg")])
-    if filename:
-        with open(filename, 'rb') as image_file:
-            image_data = image_file.read()
-            collection.insert_one({'image': image_data})
-        update_image()
-        fetch_images()
+def display_rounded_profile_picture():
+    input_path = get_profile_picture_path()
+    if input_path:
+        output_path = "rounded_profile_picture.png"
+        create_rounded_profile_picture(input_path, output_path)
 
+        # Create a PhotoImage object from the rounded profile picture
+        rounded_profile_image = ImageTk.PhotoImage(file=output_path)
 
-root = tk.Tk()
-root.title("Image Viewer")
+        # Create a button with the rounded profile picture as the image
+        profile_button = tk.Button(app, image=rounded_profile_image, border = 0, background="#fff", command=profile_button_clicked)
+        profile_button.image = rounded_profile_image  # Keep a reference to the image
+        profile_button.place(x=180, y=80)
 
-# Configure grid layout
-root.grid_columnconfigure(0, weight=1)
+def profile_button_clicked():
+    # Replace this function with the desired action when the button is clicked
+    print("Profile button clicked!")
+    create_rounded_profile_picture() 
+display_button = tk.Button(app, text="Select Profile Picture", command=display_rounded_profile_picture)
+display_button.pack(pady=20)
 
-for i in range(len(image_list)):
-    label = tk.Label(root, height=100, width=100, relief="flat")
-    label.grid(row=0, column=i, padx=5, pady=5)
-    image_labels.append(label)
-
-# Update the `update_image()` function to display images on the labels
-def update_image():
-    global current_image_index, image_list
-    if image_list and 0 <= current_image_index < len(image_list):
-        image_data = image_list[current_image_index]['image']
-        image = Image.open(io.BytesIO(image_data))
-        image = image.resize((100, 100), Image.BILINEAR)
-        photo = ImageTk.PhotoImage(image)
-        image_label.configure(image=photo)
-        image_label.image = photo
-
-        for i in range(len(image_labels)):
-            if i < len(image_list):
-                image_data = image_list[i]['image']
-                image = Image.open(io.BytesIO(image_data))
-                image = image.resize((100, 100), Image.BILINEAR)
-                photo = ImageTk.PhotoImage(image)
-                image_labels[i].configure(image=photo)
-                image_labels[i].image = photo
-            else:
-                # Clear any additional labels
-                image_labels[i].configure(image=None)
-
-# Add image labels to the gri
-for i in range(len(image_list)):
-    label = tk.Label(root, height=100, width=100, relief="flat")
-    label.grid(row=0, column=i, padx=5, pady=5)
-    image_labels.append(label)
-
-# Update the `focus_image()` function to apply focus on the selected image
-def focus_image():
-    global current_image_index, image_labels
-    if image_list and 0 <= current_image_index < len(image_list):
-        # Reset all labels
-        for label in image_labels:
-            label.configure(relief="flat")
-
-        # Apply focus on the selected image
-        image_labels[current_image_index].configure(relief="solid")
-
-
-# Add image labels to the grid
-for i in range(len(image_list)):
-    label = tk.Label(root, height=100, width=100, relief="flat")
-    label.grid(row=0, column=i, padx=5, pady=5)
-    image_labels.append(label)
-
-# Add the image label for the focused image
-image_label = tk.Label(root, height=500, width=500, relief="solid")
-image_label.grid(row=1, column=0, columnspan=max(len(image_list), 1), padx=5, pady=5)
-
-
-
-# Rest of the code remains unchanged
-
-left_button = tk.Button(root, text="Left", command=move_left)
-left_button.grid(row=2, column=0, padx=5, pady=5)
-
-right_button = tk.Button(root, text="Right", command=move_right)
-right_button.grid(row=2, column=1, padx=5, pady=5)
-
-select_button = tk.Button(root, text="Select and Store Image", command=select_and_store_image)
-select_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
-
-
-# Fetch images from MongoDB on startup
-fetch_images()
-
-# Display the first image
-update_image()
-
-# Start the Tkinter event loop
-root.mainloop()
+app.mainloop()

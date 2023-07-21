@@ -192,6 +192,7 @@ def overview_section():
     label_overview.place(x=10,y=10)
     separator = Frame(frame_overview, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
+
     def overview_selection(select):
         '''
         Display the overview based on the selection from the option.
@@ -291,6 +292,7 @@ def overview_section():
                     # Create a Tkinter label and display the image
                     image_label = Label(frame_player, image = tk_image)
                     image_label.place(x = 150,y = 150)
+
                     def details_label(frame_player,players_text,x,y):
                         '''
                         Create and place a label of player's details.
@@ -317,8 +319,30 @@ def overview_section():
                     label_the_details.append(details_label(frame_player,player_data['number'],480,270))
                     label_the_details.append(details_label(frame_player,"Position:",350,300))
                     label_the_details.append(details_label(frame_player,player_data['position'],480,300))
+
+                    seasonText = Label(frame_player, text = "SEASON STATS", font = ("Oswald", 14, "bold"), bg = "#FFFACD")
+                    seasonText.place(x = 346, y = 94)
+
+                    positionText = Label(frame_player, text = "PLAYING POSITIONS", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    positionText.place(x = 724, y = 78)
+
+                    playerPosition = Label(frame_player, image = playerposImage, bg = "#FFFACD")
+                    playerPosition.place(x = 720, y = 110)
+
+                    playerweightLabel = Label(frame_player, text = "YR", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    playerweightLabel.place(x = 80, y = 548)
+
+                    playerageLabel = Label(frame_player, text = "AGE", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    playerageLabel.place(x = 172, y = 548)
+
+                    playerheightLabel = Label(frame_player, text = "HEIGHT", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    playerheightLabel.place(x = 260, y = 548)
+
                 except:
                     messagebox.showinfo('Message','Player not found')
+
+
+
             def on_entry_click_1(event):
                 '''
                 Perform actions when the team search entry field is clicked.
@@ -337,8 +361,10 @@ def overview_section():
                 '''
                 if player_search_entry.get() == '':
                     player_search_entry.insert(0, "Player's name")
+
             frame_player = Frame(frame_overview,bg="#FFFACD",height = 600,width = 1050)
             frame_player.place(x = 0,y = 70)
+
             player_search_entry = Entry(frame_player,font=('Segoe Print', '12', 'bold'))
             player_search_entry.place(x = 10,y = 10)
             player_search_entry.insert(0,"Player's name")
@@ -724,18 +750,20 @@ def feedback_section():
         feedback = userExp.get()
         complaints = msgBox.get("1.0", END)
         fullName = fnameEntry.get()
-        emailID = emailEntry.get()
+        phoneNumber = phoneEntry.get()
         try:
-            appRating = rating
+            if not None:
+                appRating = rating
         except:
             pass
         
         feedbackData = {'Full Name': fullName, 
-                        'Email': emailID,
+                        'Contact No': phoneNumber,
                         'Complaints': complaints,
                         'Feedback': feedback,
-                        'Ratings': appRating
+                        'Ratings': str(appRating) + "/ 5"
                             }
+        
         
         try:
             feedCollection.insert_one(feedbackData)
@@ -753,22 +781,24 @@ def feedback_section():
     fnameEntry.place(x=122, y=73, height=29)
 
     def importData():
-        football_client = MongoClient('mongodb://localhost:27017/')
-        football_database = football_client['football_database']
-        football_collection = football_database['users']
+        fnameEntry.insert(0, user_data['fullName'])
+        fnameEntry.config(state = DISABLED, disabledbackground = "#FFFACD", disabledforeground="#000")
+
+        phoneEntry.insert(0, user_data['phone'])
+        phoneEntry.config(state = DISABLED, disabledbackground = "#FFFACD", disabledforeground="#000")
 
 
-    importName = Button(feedbackLabel,text = "Import \nfrom your\n profile", image = iconImport, compound = BOTTOM, border = 0, bg = "#FFFACD", font = ("Tahoma", 10), fg = "#545454", command = importData)
-    importName.place(x = 336, y = 58)
+    importName = Button(feedbackLabel,text = "Import Details  ", image = iconImport, compound = RIGHT, border = 0, bg = "#FFFACD", font = ("Tahoma", 10), fg = "#545454", command = importData)
+    importName.place(x = 310, y = 76)
 
-    emailLabel = Label(feedbackLabel, text="Email ID*", font=("League Spartan", 15), bg="#FFFACD")
-    emailLabel.place(x=118, y=113)
+    phoneLabel = Label(feedbackLabel, text="Contact No. *", font=("League Spartan", 15), bg="#FFFACD")
+    phoneLabel.place(x=118, y=113)
 
     complaintLabel = Label(feedbackLabel, text="Any Complaints*", font=("League Spartan", 15), bg="#FFFACD")
     complaintLabel.place(x=118, y=218)
 
-    emailEntry = Entry(feedbackLabel, width=30, border=0, bg="#FFFACD", font=("Tahoma", 12), justify=LEFT)
-    emailEntry.place(x=122, y=152, height=29)
+    phoneEntry = Entry(feedbackLabel, width=30, border=0, bg="#FFFACD", font=("Tahoma", 12), justify=LEFT)
+    phoneEntry.place(x=122, y=152, height=29)
 
     msgBox = Text(feedbackLabel, width = 32, height = 5, border = 0, bg = "#FFFACD", font = ("Tahoma", 12))
     msgBox.place(x = 118, y = 274)
@@ -811,6 +841,7 @@ def feedback_section():
                 s.config(text='\u2606')
 
     def on_star_leave(event):
+        global rating
         for i, s in enumerate(stars):
             try:
                 if i >= rating:
@@ -822,8 +853,8 @@ def feedback_section():
 
 
     def on_star_click(event):
-        star = event.widget
         global rating
+        star = event.widget
         rating = stars.index(star) + 1
         for i, star in enumerate(stars):
             try:
@@ -861,13 +892,13 @@ def feedback_section():
     otherRatingsFrame.place(x = 754, y = 128)
 
     othersRatingText = Label(otherRatingsFrame, text = "WHAT OTHER SAYS?", font = ("League Spartan Semibold", 16), fg = "#f0710a", bg = "#FFFACD")
-    othersRatingText.place(x = 8, y = 2)
+    othersRatingText.place(x = 8, y = 10)
 
     otherFeedsLabel = Label(otherRatingsFrame, image = imagefeedbackUser, bg = "#FFFACD")
-    otherFeedsLabel.place(x = 8, y = 50)
+    otherFeedsLabel.place(x = -2, y = 44)
 
     textSaugat = Label(otherFeedsLabel, text = "Saugat Shahi", font = ("Tahoma", 10), bg = "#FFFACD")
-    textSaugat.place(x = 20, y = -5)
+    textSaugat.place(x = 24, y = 8)
 
     submitButton = Button(feedbackLabel, text = "Submit ", bg = "#FFFACD", border = 0, image = iconSubmit, compound = RIGHT, font = ("Tahoma", 12), command = feedSubmit)
     submitButton.place(x = 602, y = 388)
@@ -926,6 +957,11 @@ iconSubmit = ImageTk.PhotoImage(submitIcon)
 userFeedbackImage = Image.open("C:Images\\otherFeeds.png")
 imagefeedbackUser = ImageTk.PhotoImage(userFeedbackImage)
 
+imagePlayerpos = Image.open("C:Images\\playerPosition.png")
+resizePosimage = imagePlayerpos.resize((260, 150))
+playerposImage = ImageTk.PhotoImage(resizePosimage)
+
+
 # Styling the speparator
 style = ttk.Style()
 style.configure("Separator.TSeparator", background="black")
@@ -948,7 +984,7 @@ def playlive():
 frame_signup_back = Frame(frame_home, width = 540, bg = "#FFFACD", height = 180, highlightthickness = 1, relief = GROOVE, border= 4, highlightcolor="red")
 frame_signup_back.place(x = 120, y = 110)
 logoLabel = Label(frame_signup_back, image = imageLogo, bg = "#FFFACD")
-logoLabel.place(x = 350, y = 10)
+logoLabel.place(x = 350, y = 6)
 
 def facebook(e = None):
     webbrowser.open("https://www.facebook.com/Saugat Shahi Thakuri")
@@ -996,26 +1032,52 @@ separator.place(x = 0, y = 64)
 separator = Frame(leftFrame, width = 80, height = 2, bg = "#000")
 separator.place(x = 0, y = 64)
 
-homeButton = Button(leftFrame, text = "   Home", border = 0, cursor = "hand2", width = 408, image = iconHome, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, fg = "red", command = home_section)
+hoverFrame = Frame(height = 40, width = 3, bg = "red")
+
+def on_button_click_with_section(func, button):
+    func()
+    on_button_click(button)
+
+homeButton = Button(leftFrame, text = "   Home", border = 0, cursor = "hand2", width = 408, image = iconHome, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, fg = "red", command=lambda: on_button_click_with_section(home_section, homeButton))
 homeButton.place(x = -108, y = 209)
 
-liveButton = Button(leftFrame, text = "   Live", border = 0, compound = LEFT, width = 416, cursor = "hand2", image = iconLive, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = live_section)
+liveButton = Button(leftFrame, text = "   Live", border = 0, compound = LEFT, width = 416, cursor = "hand2", image = iconLive, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(live_section, liveButton))
 liveButton.place(x = -118, y = 282)
 
-overviewButton = Button(leftFrame, text = "   Overview", cursor = "hand2", image = iconOverview, compound = LEFT, border = 0, width = 372, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = overview_section)
+overviewButton = Button(leftFrame, text = "   Overview", cursor = "hand2", image = iconOverview, compound = LEFT, border = 0, width = 372, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(overview_section, overviewButton))
 overviewButton.place(x = -76, y = 348)
 
-matchButton = Button(leftFrame, text = "   Matches", border = 0, cursor = "hand2", width = 390, image = iconMatch, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = matches_section)
+matchButton = Button(leftFrame, text = "   Matches", border = 0, cursor = "hand2", width = 390, image = iconMatch, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(matches_section, matchButton))
 matchButton.place(x = -90, y = 414)
 
-standingsButton = Button(leftFrame, text = "   Standings", cursor = "hand2", image = iconStandings, compound=LEFT, border = 0, width = 390, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = standing_section)
+standingsButton = Button(leftFrame, text = "   Standings", cursor = "hand2", image = iconStandings, compound=LEFT, border = 0, width = 390, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(standing_section, standingsButton))
 standingsButton.place(x = -85, y = 480)
 
-personalizeButton = Button(leftFrame, text = "   Personalization", cursor = "hand2", border = 0, image = iconPersonalize, compound = LEFT, width = 326, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = personalization_section)
+personalizeButton = Button(leftFrame, text = "   Personalization", cursor = "hand2", border = 0, image = iconPersonalize, compound = LEFT, width = 326, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(personalization_section, personalizeButton))
 personalizeButton.place(x = -32, y = 546)
 
-feedbackButton = Button(leftFrame, text = "   Feedback & Support", cursor = "hand2", image = iconFeedback, compound = LEFT, border = 0, width = 300, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command = feedback_section)
+feedbackButton = Button(leftFrame, text = "   Feedback & Support", cursor = "hand2", image = iconFeedback, compound = LEFT, border = 0, width = 300, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(feedback_section, feedbackButton))
 feedbackButton.place(x = 0, y = 612)
+
+def on_button_click(button):
+    # Reset the hoverFrame position for all buttons
+    hoverFrame.place_forget()
+
+    # Position the hoverFrame based on the clicked button
+    if button == homeButton:
+        hoverFrame.place(x=2, y=212)
+    elif button == liveButton:
+        hoverFrame.place(x=2, y=286)
+    elif button == overviewButton:
+        hoverFrame.place(x=2, y=352)
+    elif button == matchButton:
+        hoverFrame.place(x=2, y=418)
+    elif button == standingsButton:
+        hoverFrame.place(x=2, y=484)
+    elif button == personalizeButton:
+        hoverFrame.place(x=2, y=550)
+    elif button == feedbackButton:
+        hoverFrame.place(x=2, y=616)
 
 
 app.mainloop()

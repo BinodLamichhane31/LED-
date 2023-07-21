@@ -9,7 +9,7 @@ root_frame.pack()
 
 # Create a canvas
 canvas = tk.Canvas(root_frame, background="#FFFACD", width=740, height=600)
-canvas.place(x = 140, y = 120)
+canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 # Create a scrollbar
 scrollbar = tk.Scrollbar(root_frame, command=canvas.yview)
