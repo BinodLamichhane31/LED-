@@ -231,7 +231,7 @@ def overview_section():
                         x: x-coordinate of the label's position.
                         y: y-coordinate of the label's position.
                     '''
-                    label_team_info = Label(frame_team,text=label_text,font=('Segoe Print', '12', 'bold'),bg="#FFFACD")
+                    label_team_info = Label(frame_team,text=label_text,font=('League Spartan Medium', '12', 'bold'),bg="#FFFACD")
                     label_team_info.place(x=x,y=y)
                 team_info_list = []
                 if team_data is not None:
@@ -269,9 +269,9 @@ def overview_section():
                     team_search_entry.insert(0, "Team's name")  
             frame_team = Frame(frame_overview,bg="#FFFACD",height = 600, width = 1050)
             frame_team.place(x=0,y=70)
-            team_search_entry = Entry(frame_team,font=('Segoe Print', '12', 'bold'))
+            team_search_entry = Entry(frame_team,font=('League Spartan Medium', '12', 'bold'))
             team_search_entry.place(x=10,y=10)
-            team_search_button = Button(frame_team,text="Search",font=('Segoe Print', '8', 'bold'),bg="#FFFACD",command=team_search)
+            team_search_button = Button(frame_team,text="Search",font=('League Spartan Medium', '8', 'bold'),bg="#FFFACD",command=team_search)
             team_search_button.place(x=255,y=10)
             team_search_entry.insert(0,"Team's name")
             team_search_entry.bind('<FocusIn>',on_entry_click)
@@ -306,7 +306,7 @@ def overview_section():
                             y: y-coordinate of the label's position.
 
                         '''
-                        label_details = Label(frame_player,text=players_text,font=('Segoe Print', '12', 'bold'),bg="#FFFACD")
+                        label_details = Label(frame_player,text=players_text,font=('League Spartan Medium', '12', 'bold'),bg="#FFFACD")
                         label_details.place(x=x,y=y)
                     label_the_details = []
                     label_the_details.append(details_label(frame_player,"Full Name:",350,150))
@@ -367,12 +367,12 @@ def overview_section():
             frame_player = Frame(frame_overview,bg="#FFFACD",height = 600,width = 1050)
             frame_player.place(x = 0,y = 70)
 
-            player_search_entry = Entry(frame_player,font=('Segoe Print', '12', 'bold'))
+            player_search_entry = Entry(frame_player,font=('League Spartan Medium', '12', 'bold'))
             player_search_entry.place(x = 10,y = 10)
             player_search_entry.insert(0,"Player's name")
             player_search_entry.bind('<FocusIn>',on_entry_click_1)
             player_search_entry.bind('<FocusOut>',on_focus_out_1)
-            player_search_button = Button(frame_player,text="Search",font=('Segoe Print', '8', 'bold'),bg="#FFFACD",command=player_search)
+            player_search_button = Button(frame_player,text="Search",font=('League Spartan Medium', '8', 'bold'),bg="#FFFACD",command=player_search)
             player_search_button.place(x=255,y=10)
   
     options = ["League", "Team", "Player"]
@@ -380,7 +380,7 @@ def overview_section():
     selected_option.set("Choose an option")  # Set the default selected option
     option_menu = OptionMenu(frame_overview, selected_option, *options, command=overview_selection)
     option_menu.place(x=890,y=15)
-    option_menu.config(font=('Segoe Print', '10', 'bold'),width=12,bg="#FFFACD")
+    option_menu.config(font=('League Spartan Medium', '10', 'bold'),width=12,bg="#FFFACD")
 
     try:
         frameFeedback.destroy()
@@ -456,7 +456,7 @@ def standing_section():
 
     frame_standings = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
     frame_standings.place(x=0, y=0)
-    label_standings = Label(frame_standings, text="Standings", font=('Segoe Print', 17, 'bold'), bg='#FFFACD')
+    label_standings = Label(frame_standings, text="Standings", font=('League Spartan Medium', 17, 'bold'), bg='#FFFACD')
     label_standings.place(x=10, y=10)
     separator = Frame(frame_standings, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
@@ -519,7 +519,7 @@ def personalization_section():
     frame_personalization = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
     frame_personalization.place(x=0, y=0)
 
-    label_personalization = Label(frame_personalization, text="Personalization", font=('Segoe Print', '17', 'bold'), bg='#FFFACD')
+    label_personalization = Label(frame_personalization, text="Personalization", font=('League Spartan Medium', '17', 'bold'), bg='#FFFACD')
     label_personalization.place(x=10, y=10)
 
     separator = Frame(frame_personalization, width = 1070, height = 2, bg = "#000")
@@ -529,33 +529,40 @@ def personalization_section():
         '''
         Display the user's information.
         '''
+        def back():
+            '''
+            Displays the personalozation section when back button is clicked.
+            '''
+            personalization_section()
 
         profile_frame = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
         profile_frame.place(x=0, y=0)
 
-        label_profile = Label(profile_frame, text="User Profile", font=('Segoe Print', '16', 'bold'), bg="#FFFACD")
+        label_profile = Label(profile_frame, text="User Profile", font=('League Spartan Medium', '16', 'bold'), bg="#FFFACD")
         label_profile.place(x=10, y=10)
 
         separator = Frame(profile_frame, width = 1070, height = 2, bg = "#000")
         separator.place(x = 0, y = 64)
 
-        full_name_label = Label(profile_frame, text="Full Name:", font=('Segoe Print', '14', 'bold'), bg="#FFFACD")
+        full_name_label = Label(profile_frame, text="Full Name:", font=('League Spartan Medium', '14', 'bold'), bg="#FFFACD")
         full_name_label.place(x=350, y=200)
 
-        full_name_entry = Entry(profile_frame, font=('Segoe Print', '12', 'bold'), width=22)
+        full_name_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         full_name_entry.place(x=480, y=200)
 
-        phone_num_label = Label(profile_frame, text="Phone No.:", font=('Segoe Print', '14', 'bold'), bg="#FFFACD")
+        phone_num_label = Label(profile_frame, text="Phone No.:", font=('League Spartan Medium', '14', 'bold'), bg="#FFFACD")
         phone_num_label.place(x=350, y=250)
 
-        phone_num_entry = Entry(profile_frame, font=('Segoe Print', '12', 'bold'), width=22)
+        phone_num_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         phone_num_entry.place(x=480, y=250)
 
-        email_add_label = Label(profile_frame, text="Email:", font=('Segoe Print', '14', 'bold'), bg="#FFFACD")
+        email_add_label = Label(profile_frame, text="Email:", font=('League Spartan Medium', '14', 'bold'), bg="#FFFACD")
         email_add_label.place(x=350, y=300)
 
-        email_add_entry = Entry(profile_frame, font=('Segoe Print', '12', 'bold'), width=22)
+        email_add_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         email_add_entry.place(x=480, y=300)
+        back_button = Button(profile_frame,text="Back",font=('League Spartan Medium', '12', 'bold'),bg="#FFFACD",command=back)
+        back_button.place(x=980, y=70)
 
         def enable_entry():
             '''
@@ -565,7 +572,7 @@ def personalization_section():
             phone_num_entry.config(state = NORMAL)
             email_add_entry.config(state = NORMAL)
             update_button.config(state = DISABLED)
-            save_button = Button(profile_frame, text="Save", font=('Segoe Print', '12', 'bold'), bg="#FFFACD", command=save_profile)
+            save_button = Button(profile_frame, text="Save", font=('League Spartan Medium', '12', 'bold'), bg="#FFFACD", command=save_profile)
             save_button.place(x=350, y=350)
 
         def save_profile():
@@ -592,7 +599,7 @@ def personalization_section():
             except:
                 messagebox.showerror("System Error!", "Sorry for the inconvenience. We are working on it.")
 
-        update_button = Button(profile_frame, text="Edit", font=('Segoe Print', '12', 'bold'), bg="#FFFACD", command=enable_entry)
+        update_button = Button(profile_frame, text="Edit", font=('League Spartan Medium', '12', 'bold'), bg="#FFFACD", command=enable_entry)
         update_button.place(x=350, y=350)
 
         full_name_entry.insert(0, user_data['fullName'])
@@ -638,68 +645,61 @@ def personalization_section():
                         '''
                         Change the password and update in the database.
                         '''
-                        if new_password_entry.get() == re_password_entry.get():
+                        if new_password_entry.get() == '' or re_password_entry.get() == '':
+                            messagebox.showinfo('Password Change','No fields can be empty.')
+                        elif new_password_entry.get() == re_password_entry.get():
                             # Update the password in the database
                             new_hash_psw=hashlib.sha256(new_password_entry.get().encode()).hexdigest()
                             football_collection.update_one({'password': user_data['password']}, {'$set': {'password': new_hash_psw}})
                             messagebox.showinfo('Password Change', 'Password updated successfully.')
                         else:
-<<<<<<< HEAD
                             messagebox.showerror('Password Change', "Password doesn't match.")
 
-                    new_password_label = Label(password_change_window1, text='Enter New Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+                    new_password_label = Label(password_change_window1, text='Enter New Password:', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'))
                     new_password_label.place(x=10, y=20)
-                    new_password_entry = Entry(password_change_window1, font=('Segoe Print', '12', 'bold'),show='*')
+                    new_password_entry = Entry(password_change_window1, font=('League Spartan Medium', '12', 'bold'),show='*')
                     new_password_entry.place(x=10, y=50)
 
-                    re_password_label = Label(password_change_window1, text='Re-enter New Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+                    re_password_label = Label(password_change_window1, text='Re-enter New Password:', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'))
                     re_password_label.place(x=10, y=90)
-                    re_password_entry = Entry(password_change_window1, font=('Segoe Print', '12', 'bold'),show='*')
+                    re_password_entry = Entry(password_change_window1, font=('League Spartan Medium', '12', 'bold'),show='*')
                     re_password_entry.place(x=10, y=120)
 
-                    change_btn = Button(password_change_window1, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'), command=confirm_change)
+                    change_btn = Button(password_change_window1, text='Change', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'), command=confirm_change)
                     change_btn.place(x=180, y=170)
-=======
-                            messagebox.showerror("Password Field!", "Password didn't match!")
                             
-                    new_password_label = Label(password_change_window, text='Enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    new_password_label = Label(password_change_window1, text='Enter New Password:', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'))
                     new_password_label.place(x = 10, y = 20)
-                    new_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+                    new_password_entry = Entry(password_change_window1, font=('League Spartan Medium', '12', 'bold'),show='*')
                     new_password_entry.place(x = 10, y = 50)
 
-                    re_password_label = Label(password_change_window, text='Re-enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    re_password_label = Label(password_change_window1, text='Re-enter New Password:', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'))
                     re_password_label.place(x = 10, y = 90)
-                    re_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+                    re_password_entry = Entry(password_change_window1, font=('League Spartan Medium', '12', 'bold'),show='*')
                     re_password_entry.place(x = 10, y = 120)
 
-                    change_btn = Button(password_change_window, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'), command = confirm_change)
+                    change_btn = Button(password_change_window1, text='Change', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'), command = confirm_change)
                     change_btn.place(x = 180 , y = 170)
->>>>>>> 83e48b0524fdee52f112d649032cf66650102113
 
                 else:
                     messagebox.showerror('Password Change', 'Wrong password')
-            except:
-                messagebox.showerror('System Error','Sorry for the inconvenience. We will fix it ASAP.')
-        current_password_label = Label(password_change_window, text='Current Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
-<<<<<<< HEAD
+            except Exception as e:
+                messagebox.showerror('System Error','Sorry for the inconvenience. We will fix it ASAP.'+str(e))
+        current_password_label = Label(password_change_window, text='Current Password:', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'))
         current_password_label.place(x=10, y=20)
-        current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+        current_password_entry = Entry(password_change_window, font=('League Spartan Medium', '12', 'bold'),show='*')
         current_password_entry.place(x=10, y=50)
 
-        next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
+        next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'), command=password_change)
         next_btn.place(x=200, y=100)
-=======
         current_password_label.place(x = 10, y = 20)
-        current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'))
+        current_password_entry = Entry(password_change_window, font=('League Spartan Medium', '12', 'bold'))
         current_password_entry.place(x = 10, y = 50)
 
-        next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
+        next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'), command=password_change)
         next_btn.place(x = 200, y = 100)
->>>>>>> 83e48b0524fdee52f112d649032cf66650102113
 
-        highlight_button(personaliztion_button[2])
-        for btn in personaliztion_button[:2] + personaliztion_button[3:]:
-            reset_button(btn)
+        
 
     def delete():
         '''
@@ -723,17 +723,13 @@ def personalization_section():
             else:
                 messagebox.showerror("Delete Account", "Wrong password.")
 
-        highlight_button(personaliztion_button[3])
-        for btn in personaliztion_button[:3] + personaliztion_button[4:]:
-            reset_button(btn)
-
-        delete_password_label = Label(delete_window, text="Please enter your password:", bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+        delete_password_label = Label(delete_window, text="Please enter your password:", bg="#FFFACD", font=('League Spartan Medium', '12', 'bold'))
         delete_password_label.place(x=10, y=120)
 
-        delete_password_entry = Entry(delete_window, font=('Segoe Print', '12', 'bold'), width=19, show="*")
+        delete_password_entry = Entry(delete_window, font=('League Spartan Medium', '12', 'bold'), width=19, show="*")
         delete_password_entry.place(x=10, y=160)
 
-        delete_btn = Button(delete_window, text="DELETE", bg="#FFFACD", font=('Segoe Print', '10', 'bold'), command=delete_acc)
+        delete_btn = Button(delete_window, text="DELETE", bg="#FFFACD", font=('League Spartan Medium', '10', 'bold'), command=delete_acc)
         delete_btn.place(x=175, y=240)
 
         delete_window.mainloop()
@@ -743,7 +739,7 @@ def personalization_section():
         setting_window.resizable(0,0)
         setting_window.geometry('250x350')
         setting_window.config(bg="#FFFACD")
-        change_font_label = Label(setting_window,text="Change App Font",font=("Segoe Print", '12', ''),bg="#FFFACD")
+        change_font_label = Label(setting_window,text="Change App Font",font=("League Spartan Medium", '12', ''),bg="#FFFACD")
         change_font_label.place(x=10,y=15)
 
     personaliztion_button = []
@@ -1103,9 +1099,8 @@ personalizeButton.place(x = -32, y = 546)
 feedbackButton = Button(leftFrame, text = "   Feedback & Support", cursor = "hand2", image = iconFeedback, compound = LEFT, border = 0, width = 300, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(feedback_section, feedbackButton))
 feedbackButton.place(x = 0, y = 612)
 
-# <<<<<<< HEAD
 home_section()
-# =======
+
 def on_button_click(button):
     # Reset the hoverFrame position for all buttons
     hoverFrame.place_forget()
@@ -1126,6 +1121,4 @@ def on_button_click(button):
     elif button == feedbackButton:
         hoverFrame.place(x=2, y=616)
 
-
-# >>>>>>> 55707c70d45bf0d1e40c84e873c16a935c614156
 app.mainloop()

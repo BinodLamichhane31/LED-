@@ -1,1 +1,1 @@
-standings.png
+League Spartan
