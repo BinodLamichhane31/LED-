@@ -15,6 +15,22 @@ try:
 except:
     messagebox.showerror('Error','Database Connection Error')
 
+def on_click_uname(e):
+    uname_entry.delete(0, END)
+
+def on_click_email(e):
+    email_entry.delete(0, END)
+
+def on_click_phone(e):
+    phone_entry.delete(0, END)
+
+def on_click_pwd(e):
+    psw_entry.delete(0, END)
+
+def on_click_cfmPwd(e):
+    confirm_entry.delete(0, END)
+
+
 # Function to go back to login page after clicking Sign In button in signup page
 def back_to_login():
     '''
@@ -73,7 +89,7 @@ def sign_up():
             except Exception as e:
                 messagebox.showerror('Registration', 'An error occurred during registration: ' + str(e))
     
-        global signupBgRound           
+        global signupBgRound, uname_entry, email_entry, phone_entry, psw_entry, confirm_entry           
         # GUI elements of the signup page   
         signupBgRound = Label(image = bgRoundSignup, bg = "#FFFACD")
         signupBgRound.place(x = 780, y = 60)
@@ -83,43 +99,43 @@ def sign_up():
         signin_image = ImageTk.PhotoImage(signin_image)
         signin_img_label = Label(signupBgRound,image=signin_image,border=0, bg = "#fff")
         signin_img_label.image = signin_image  
-        signin_img_label.place(x=210,y=60)
+        signin_img_label.place(x=210,y=90)
         label_login = Label(signupBgRound, text="Create an Account", bg="#fff",border=0, font=('League Spartan Medium', '16', 'bold'))
-        label_login.place(x=158, y=22)
+        label_login.place(x=158, y=42)
 
-        uname_label = Label(signupBgRound, text="Full Name *", bg="#fff", border=0,font=('Tahoma', '12', ''))
-        uname_label.place(x=108, y=121)
-        uname_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#fff", border = 0)
-        uname_entry.place(x=108, y=148, height = 25)
+        uname_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        uname_entry.insert(0, "Full Name")
+        uname_entry.bind("<FocusIn>", on_click_uname)
+        uname_entry.place(x=113, y=171, height = 25)
 
-        email_label = Label(signupBgRound, text="Email *", bg="#fff", border=0,font=('Tahoma', '12', ''))
-        email_label.place(x=108, y=194)
-        email_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#fff", border = 0)
-        email_entry.place(x=108, y=221, height = 25)
+        email_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        email_entry.insert(0, "Email")
+        email_entry.bind("<FocusIn>", on_click_email)
+        email_entry.place(x=113, y=228, height = 25)
 
-        phone_label = Label(signupBgRound, text="Phone Number *", bg="#fff", border=0,font=('Tahoma', '12', ''))
-        phone_label.place(x=108, y=268)
-        phone_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#fff", border = 0)
-        phone_entry.place(x=108, y=295, height = 25)
+        phone_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        phone_entry.insert(0, "Contact No.")
+        phone_entry.bind("<FocusIn>", on_click_phone)
+        phone_entry.place(x=113, y=284, height = 25)
 
-        psw_label = Label(signupBgRound, text="Passsword *", bg="#fff", border=0,font=('Tahoma', '12', ''))
-        psw_label.place(x=108, y=342)
-        psw_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#fff", border = 0)
-        psw_entry.place(x=108, y=369, height = 25)
+        psw_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        psw_entry.insert(0, "New Password")
+        psw_entry.bind("<FocusIn>", on_click_pwd)
+        psw_entry.place(x=113, y=340, height = 25)
 
-        confirm_label = Label(signupBgRound, text="Confirm Passsword *", bg="#fff", border=0,font=('Tahoma', '12', ''))
-        confirm_label.place(x=108, y=416)
-        confirm_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#fff", border = 0)
-        confirm_entry.place(x=108, y=443, height = 25)
+        confirm_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        confirm_entry.insert(0, "Confirm New Password")
+        confirm_entry.bind("<FocusIn>", on_click_cfmPwd)
+        confirm_entry.place(x=113, y=397, height = 25)
 
-        create_button = Button(signupBgRound, image = imageSignup , border = 0, bg = "#fff", command=signup_work)
-        create_button.place(x=192, y=475)
+        create_button = Button(signupBgRound, image = imageSignup, cursor = "hand2", compound = CENTER, width = 116, border = 0, bg = "#FFF", fg = "#FFF", font = ("League Spartan", 8, "bold"), command=signup_work)
+        create_button.place(x=184, y=454, height = 34)
 
         app.bind('<Return>',lambda e: signup_work())
 
         signupBgRound_label = Label(signupBgRound,text="Already have an account?",font=('Tahoma','10',''),bg="#fff",border=0)
         signupBgRound_label.place(x=149,y=540)
-        log_in_btn = Button(signupBgRound,text="LOGIN",font=('League Spartan SemiBold', '10', ''),bg="#fff",border=0,fg="blue",command=back_to_login)
+        log_in_btn = Button(signupBgRound,text="LOGIN", cursor = "hand2", font=('League Spartan SemiBold', '10', ''),bg="#fff",border=0,fg="blue",command=back_to_login)
         log_in_btn.place(x=299,y=534)
 # Function to get the user's data from the database
 def get_login_data(phone):
@@ -216,10 +232,10 @@ def login():
     password_entry.place(x=14, y=112, height = 28)
     password_entry.bind("<FocusIn>", on_password_focus_in)
     remember_var = BooleanVar()
-    remember_check = Checkbutton(roundImgLabel, text="Remember Me", variable=remember_var, bg = "#fff")
+    remember_check = Checkbutton(roundImgLabel, text="Remember Me", cursor = "hand2", variable=remember_var, bg = "#fff")
     remember_check.place(x = 128, y = 342)
 
-    forgotPwd = Button(roundImgLabel, text = "Forgot Password?", bg = "#fff", border = 0, fg ="blue")
+    forgotPwd = Button(roundImgLabel, text = "Forgot Password?", cursor = "hand2", bg = "#fff", border = 0, fg ="blue")
     forgotPwd.place(x = 260, y = 344)
 
     show_icon = Image.open("Images\\show.png").resize((20, 20))
@@ -228,11 +244,11 @@ def login():
     show_img = ImageTk.PhotoImage(show_icon)
     hide_img = ImageTk.PhotoImage(hide_icon)
 
-    show_password_button = Button(entryLabel, image=show_img, border=0, bg = "#fff", command=show_password)
+    show_password_button = Button(entryLabel, image=show_img, cursor = "hand2", border=0, bg = "#fff", command=show_password)
     show_password_button.place(x=222, y=115)
 
-    login_button = Button(roundImgLabel, image = imageLogin, border = 0, bg = "#fff", command=login_work)
-    login_button.place(x=196, y=380)
+    login_button = Button(roundImgLabel, image = imageLogin, cursor = "hand2", border = 0, bg = "#fff", command=login_work)
+    login_button.place(x=196, y=396, height = 32)
 
     app.bind('<Return>', lambda e: login_work())
 
@@ -241,7 +257,7 @@ def login():
     right_frame_label = Label(roundImgLabel, text="Don't have an account?", font=('Tahoma', '10'), bg="#fff",border=0)
     right_frame_label.place(x=156, y=520)
 
-    signupButton = Button(roundImgLabel, text="SIGN UP", font=('League Spartan SemiBold', '10', "bold"), bg="#fff", border=0,fg="blue", command=sign_up)
+    signupButton = Button(roundImgLabel, text="SIGN UP", cursor = "hand2", font=('League Spartan SemiBold', '10', "bold"), bg="#fff", border=0,fg="blue", command=sign_up)
     signupButton.place(x=294, y=514)
 
 # Function for about us
@@ -264,12 +280,12 @@ lower_frame.place(x=0, y=702)
 verticalLine = Frame(right_frame, width = 2, height = 520, bg = "#000")
 verticalLine.place(x = 640, y = 100)
 
-football_img = Image.open("Images\\logonp.png")
-football_photo = football_img.resize((160,160))
+football_img = Image.open("Images\\A-Division.png")
+football_photo = football_img.resize((180,180))
 football_photo1 = ImageTk.PhotoImage(football_photo)
 football_label = Label(right_frame,image=football_photo1,border=0,background = "#FFFACD")
 football_label.image = football_photo  # Store a reference to the image to prevent it from being garbage collected
-football_label.place(x=560,y=220)
+football_label.place(x=550,y=224)
 
 entryImg = Image.open("Images\\entryImg.png")
 imgEntry = ImageTk.PhotoImage(entryImg)
@@ -287,19 +303,18 @@ resizeBgSignup = roundBgSignup.resize((480, 580))
 bgRoundSignup = ImageTk.PhotoImage(resizeBgSignup)
 
 kick_png = Image.open("Images\\pitch.png")
-kick_photo = kick_png.resize((400,350))
+kick_photo = kick_png.resize((380,320))
 kick_photo = ImageTk.PhotoImage(kick_photo)
 kick_label = Label(right_frame,image=kick_photo,border=0,bg="#FFFACD")
 kick_label.image = kick_photo  
-kick_label.place(x=60,y=156)
+kick_label.place(x=66,y=156)
 
 loginImage = Image.open("Images\\loginButton.png")
 resizedLogin = loginImage.resize((100, 50))
 imageLogin = ImageTk.PhotoImage(resizedLogin)
 
-signupImage = Image.open("Images\\signupbtn.png")
-resizedSignup = signupImage.resize((100, 50))
-imageSignup = ImageTk.PhotoImage(resizedSignup)
+signupImage = Image.open("Images\\button.png")
+imageSignup = ImageTk.PhotoImage(signupImage)
 
 trophyImage = Image.open("Images\\football.png")
 resizedTrophy = trophyImage.resize((54, 84))
@@ -322,10 +337,8 @@ entryLabel.place(x = 110, y = 180)
 unleash_label = Label(right_frame,text = 'UNLEASH YOUR FOOTBALL PASSION',font=('League Spartan Medium', '18', 'bold'),bg="#FFFACD")
 unleash_label.place(x=60,y=510)
 
-about_us_btn = Button(right_frame,text="About Us",bg="#FFFACD",border=0,font=('League Spartan Medium', '12', ''),command=about_us)
+about_us_btn = Button(right_frame,text="About Us 🡢",bg="#FFFACD",border=0, cursor = "hand2", font=('League Spartan Medium', '12', ''),command=about_us)
 about_us_btn.place(x=60,y=570)
-arrow_label = Label(right_frame,text="🡢",bg="#FFFACD",border=0,font=('League Spartan Medium', '12', 'bold'))
-arrow_label.place(x=136,y=577)
 
 copyright_label = Label(right_frame, text="Copyright © Martyr's Memorial Inc. All rights reserved.",font=('Tahoma', '10'), bg="#FFFACD")
 copyright_label.place(x=58,y=630)
