@@ -1,1 +1,1 @@
-('Tahoma', '12', '')
+standings.png

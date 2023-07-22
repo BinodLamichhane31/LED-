@@ -1,37 +1,24 @@
 import tkinter as tk
-import pymongo
-from bson.binary import Binary
-from PIL import Image, ImageTk
-from io import BytesIO
 
-# Connect to MongoDB
-client = pymongo.MongoClient('mongodb://localhost:27017/')
-db = client['football_database']
-feedCollection = db['feedBacks']
-
-def submit_feedback():
-    # Retrieve all images from the database
-    all_feedback = feedCollection.find()
-
-    images_frame.pack_forget()  # Clear the previous images frame
-    images_frame.pack()  # Repack the frame
-
-    for feedback in all_feedback:
-        image_data = feedback['image_data']
-        image = Image.open(BytesIO(image_data))
-        photo = ImageTk.PhotoImage(image)
-
-        image_label = tk.Label(images_frame, image=photo)
-        image_label.image = photo
-        image_label.pack(pady=0)
+def update_cursor_position(event):
+    custom_cursor.place(x=event.x, y=event.y)
 
 root = tk.Tk()
-root.title("Feedback App")
+root.geometry("400x400")
 
-submit_button = tk.Button(root, text="Submit", command=submit_feedback)
-submit_button.pack(pady=10)
+# Hide the default cursor
+root.config(cursor='none')
 
-images_frame = tk.Frame(root)
-images_frame.pack(pady=10)
+# Load your custom cursor image
+cursor_image = tk.PhotoImage(file='C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\show.png')
+
+# Create a Label widget to display the custom cursor image
+custom_cursor = tk.Label(root, image=cursor_image, bd=0)
+
+# Bind the custom cursor to the mouse movement
+root.bind('<Motion>', update_cursor_position)
+
+# Ensure the cursor image is always on top of other widgets
+custom_cursor.lift()
 
 root.mainloop()

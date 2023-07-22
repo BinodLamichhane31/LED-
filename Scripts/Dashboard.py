@@ -530,7 +530,6 @@ def personalization_section():
         Display the user's information.
         '''
 
-
         profile_frame = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
         profile_frame.place(x=0, y=0)
 
@@ -645,6 +644,7 @@ def personalization_section():
                             football_collection.update_one({'password': user_data['password']}, {'$set': {'password': new_hash_psw}})
                             messagebox.showinfo('Password Change', 'Password updated successfully.')
                         else:
+<<<<<<< HEAD
                             messagebox.showerror('Password Change', "Password doesn't match.")
 
                     new_password_label = Label(password_change_window1, text='Enter New Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
@@ -659,19 +659,47 @@ def personalization_section():
 
                     change_btn = Button(password_change_window1, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'), command=confirm_change)
                     change_btn.place(x=180, y=170)
+=======
+                            messagebox.showerror("Password Field!", "Password didn't match!")
+                            
+                    new_password_label = Label(password_change_window, text='Enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    new_password_label.place(x = 10, y = 20)
+                    new_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+                    new_password_entry.place(x = 10, y = 50)
+
+                    re_password_label = Label(password_change_window, text='Re-enter New Password:', bg="sky blue", font=('Segoe Print', '12', 'bold'))
+                    re_password_label.place(x = 10, y = 90)
+                    re_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
+                    re_password_entry.place(x = 10, y = 120)
+
+                    change_btn = Button(password_change_window, text='Change', bg="sky blue", font=('Segoe Print', '12', 'bold'), command = confirm_change)
+                    change_btn.place(x = 180 , y = 170)
+>>>>>>> 83e48b0524fdee52f112d649032cf66650102113
 
                 else:
                     messagebox.showerror('Password Change', 'Wrong password')
             except:
                 messagebox.showerror('System Error','Sorry for the inconvenience. We will fix it ASAP.')
         current_password_label = Label(password_change_window, text='Current Password:', bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
+<<<<<<< HEAD
         current_password_label.place(x=10, y=20)
         current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'),show='*')
         current_password_entry.place(x=10, y=50)
 
         next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
         next_btn.place(x=200, y=100)
+=======
+        current_password_label.place(x = 10, y = 20)
+        current_password_entry = Entry(password_change_window, font=('Segoe Print', '12', 'bold'))
+        current_password_entry.place(x = 10, y = 50)
 
+        next_btn = Button(password_change_window, text='Next', bg="#FFFACD", font=('Segoe Print', '12', 'bold'), command=password_change)
+        next_btn.place(x = 200, y = 100)
+>>>>>>> 83e48b0524fdee52f112d649032cf66650102113
+
+        highlight_button(personaliztion_button[2])
+        for btn in personaliztion_button[:2] + personaliztion_button[3:]:
+            reset_button(btn)
 
     def delete():
         '''
@@ -695,9 +723,9 @@ def personalization_section():
             else:
                 messagebox.showerror("Delete Account", "Wrong password.")
 
-        # highlight_button(personaliztion_button[3])
-        # for btn in personaliztion_button[:3] + personaliztion_button[4:]:
-        #     reset_button(btn)
+        highlight_button(personaliztion_button[3])
+        for btn in personaliztion_button[:3] + personaliztion_button[4:]:
+            reset_button(btn)
 
         delete_password_label = Label(delete_window, text="Please enter your password:", bg="#FFFACD", font=('Segoe Print', '12', 'bold'))
         delete_password_label.place(x=10, y=120)
@@ -719,7 +747,7 @@ def personalization_section():
         change_font_label.place(x=10,y=15)
 
     personaliztion_button = []
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\profile.png', "Profile", 10, 100, profile))
+    personaliztion_button.append(create_personalization_btns(frame_personalization,'C:Images\\profile.png', "Profile", 10, 100, profile))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\logout.png', "Log Out", 10, 150, log_out))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\change.png', "Change Password", 10, 200, change))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\delete.png', "Delete Account", 10, 250, delete))
