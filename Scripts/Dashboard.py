@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from base64 import *
 import io,webbrowser
 import pandas as pd
-import hashlib
+import hashlib, re
 from ButtonCreation import *
 
 try:
@@ -650,6 +650,11 @@ def personalization_section():
                 if user_data['password'] == hashlib.sha256(current_password_entry.get().encode()).hexdigest():
                     if new_password_entry.get() == '' or re_password_entry.get() == '':
                         messagebox.showinfo('Password Change', 'No fields can be empty.')
+                    elif current_password_entry.get() == new_password_entry.get():
+                        messagebox.showinfo('Password Change', 'You cannot keep the current password as new.')
+                    elif len(new_password_entry.get())<7 or not re.search('[A-Z]',new_password_entry.get()) or not re.search('[0-9]',new_password_entry.get()) or not re.search('[!@#$%]',new_password_entry.get()):
+                        messagebox.showerror('Registration', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
+
                     elif new_password_entry.get() == re_password_entry.get():
                     # Update the password in the database
                         new_hash_psw = hashlib.sha256(new_password_entry.get().encode()).hexdigest()
@@ -657,12 +662,13 @@ def personalization_section():
                         messagebox.showinfo('Password Change', 'Password updated successfully.')
                         password_change_window.destroy()
                         messagebox.showinfo("Login Again", "Login with your new password!")
+                        app.destroy()
                         import Login
                     else:
                         messagebox.showerror('Password Change', "Passwords don't match.")
                 else:
                     messagebox.showerror('Password Change', 'Wrong password')
-            except Exception as e:
+            except:
                 messagebox.showerror('Account Error', 'Please login to your account')
 
         password_change_window = Toplevel(frame_personalization)
@@ -863,7 +869,9 @@ def feedback_section():
         try:
             feedCollection.insert_one(feedbackData)
 
-            messagebox.showinfo("Thank you for the feedback!")
+            messagebox.showinfo("Feedback","Thank you for the feedback!")
+            feedback_section()
+            
 
         except Exception as e:
             messagebox.showerror("Connection error!", str(e))

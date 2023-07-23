@@ -72,7 +72,7 @@ def sign_up():
                     messagebox.showerror('Registration', 'Please give the valid phone number')
 
                 elif len(password)<7 or not re.search('[A-Z]',password) or not re.search('[0-9]',password) or not re.search('[!@#$%]',password):
-                    messagebox.showerror('Registration', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
+                    messagebox.showerror('Password Change', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
 
                 else:
                     hashed_password = hashlib.sha256(password.encode()).hexdigest()
@@ -165,7 +165,7 @@ def login():
             
             update = {
                 "$set":{
-                    'Save Password' : remember
+                    'Remember me' : remember
                 }
             }
 
