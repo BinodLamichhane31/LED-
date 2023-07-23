@@ -1,24 +1,26 @@
 import tkinter as tk
+from tkinter import PhotoImage
 
-def update_cursor_position(event):
-    custom_cursor.place(x=event.x, y=event.y)
+def custom_button_click():
+    print("Custom button clicked!")
 
+# Create the Tkinter window and set its properties
 root = tk.Tk()
-root.geometry("400x400")
+root.title("Custom Round Button Example")
+root.geometry("300x200")
 
-# Hide the default cursor
-root.config(cursor='none')
+# Create a transparent image for the button
+button_image = PhotoImage(width=1, height=1)
 
-# Load your custom cursor image
-cursor_image = tk.PhotoImage(file='C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\show.png')
+# Store the PhotoImage in a persistent attribute of the root to prevent garbage collection
+root.custom_button_image = button_image
 
-# Create a Label widget to display the custom cursor image
-custom_cursor = tk.Label(root, image=cursor_image, bd=0)
+# Create a custom button by using the label widget
+custom_button = tk.Label(root, image=root.custom_button_image, bg="#FFA500", bd=0, relief=tk.FLAT, cursor="hand2")
+custom_button.pack(pady=20)
 
-# Bind the custom cursor to the mouse movement
-root.bind('<Motion>', update_cursor_position)
+# Bind the custom_button_click function to the button's click event
+custom_button.bind("<Button-1>", lambda event: custom_button_click())
 
-# Ensure the cursor image is always on top of other widgets
-custom_cursor.lift()
-
+# Start the Tkinter event loop
 root.mainloop()

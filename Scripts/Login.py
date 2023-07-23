@@ -302,7 +302,7 @@ roundBgSignup = Image.open("Images\\roundBgSignup.png")
 resizeBgSignup = roundBgSignup.resize((480, 580))
 bgRoundSignup = ImageTk.PhotoImage(resizeBgSignup)
 
-kick_png = Image.open("Images\\pitch.png")
+kick_png = Image.open("Images\\stadium.png")
 kick_photo = kick_png.resize((380,320))
 kick_photo = ImageTk.PhotoImage(kick_photo)
 kick_label = Label(right_frame,image=kick_photo,border=0,bg="#FFFACD")
