@@ -30,10 +30,10 @@ title_label.pack(pady=10, padx=40, anchor="w")
 description_label1 = Label(content_frame, text="Your go-to companion for all things related to the thrilling world of A Division football.", wraplength=800, font=("Default", 12), bg="#FFFACD")
 description_label1.pack(pady=10, padx=40, anchor="w")
 
-description_label2 = Label(content_frame, text="This innovative and user-friendly application is designed to provide fans, players, and enthusiasts with a comprehensive platform to stay updated, engaged, and connected to their favorite teams and matches.", wraplength=800, font=("Default", 12), bg="#FFFACD")
+description_label2 = Label(content_frame, text="This innovative and user-friendly application is designed to provide fans, players, and enthusiasts\nwith a comprehensive  platform to stay updated, engaged, and  connected to their favorite  teams\nand matches.", wraplength=800, justify="left",font=("Default", 12), bg="#FFFACD")
 description_label2.pack(pady=10, padx=40, anchor="w")
 
-description_label3 = Label(content_frame, text="With our A Division Football League App, you can access real-time match scores, standings, and statistics, ensuring you never miss a moment of the action.", wraplength=800, font=("Default", 12), bg="#FFFACD")
+description_label3 = Label(content_frame, text="With our A Division Football League App, you can access real-time match scores, standings, and \nstatistics, ensuring you never miss a moment of the action.", wraplength=800, justify="left",font=("Default", 12), bg="#FFFACD")
 description_label3.pack(pady=10, padx=40, anchor="w")
 
 features_label = Label(content_frame, text="Key Features", font=("Tahoma", 14, "bold"), bg="#FFFACD")
@@ -51,27 +51,32 @@ feature3_label.pack(anchor="w", padx=40)
 commentary_label = Label(content_frame, text="Live Commentary", font=("Tahoma", 14, "bold"), bg="#FFFACD")
 commentary_label.pack(pady=10, padx=40, anchor="w")
 
-commentary_desc_label = Label(content_frame, text="Experience the excitement firsthand with our in-app live commentary feature, providing you with minute-by-minute updates, key player performances, and crucial match moments.", font=("Default", 12), bg="#FFFACD")
+commentary_desc_label = Label(content_frame, text="Experience the excitement firsthand  with our in-app live commentary feature, providing you with \nminute-by-minute updates, key player performances, and crucial match moments.",justify="left" ,font=("Default", 12), bg="#FFFACD")
 commentary_desc_label.pack(anchor="w", padx=40)
 
 multimedia_label = Label(content_frame, text="Immersive Multimedia Content", font=("Tahoma", 14, "bold"), bg="#FFFACD")
 multimedia_label.pack(pady=10, padx=40, anchor="w")
 
-multimedia_desc_label = Label(content_frame, text="Dive into the heart of the game through our immersive multimedia content. Watch match highlights, enjoy player interviews, and get exclusive behind-the-scenes footage.", font=("Default", 12), bg="#FFFACD")
+multimedia_desc_label = Label(content_frame, text="Dive into the heart of the game through our immersive multimedia content. Watch match highlights,\nenjoy player interviews, and get exclusive behind-the-scenes footage.",justify="left" ,font=("Default", 12), bg="#FFFACD")
 multimedia_desc_label.pack(anchor="w", padx=40)
 
 community_label = Label(content_frame, text="Vibrant Community", font=("Tahoma", 14, "bold"), bg="#FFFACD")
 community_label.pack(pady=10, anchor="w", padx=40)
 
-community_desc_label = Label(content_frame, text="Engage in lively discussions with fellow fans through the integrated chat feature. Share your thoughts, celebrate victories, and stay connected with the A Division football community.", font=("Default", 12), bg="#FFFACD")
+community_desc_label = Label(content_frame, text="Share your thoughts, celebrate victories, and stay connected with the A Division football community.\nEngage in lively discussions with fellow fans through the integrated chat feature. ", justify=LEFT,font=("Default", 12), bg="#FFFACD")
 community_desc_label.pack(anchor="w", padx=40)
 
 data_label = Label(content_frame, text="Historical Data and Profiles", font=("Tahoma", 14, "bold"), bg="#FFFACD")
 data_label.pack(pady=10, anchor="w", padx=40)
 
-data_desc_label = Label(content_frame, text="Explore a treasure trove of historical data, club profiles, player profiles, and fascinating trivia to enhance your knowledge of A Division football.", font=("Default", 12), bg="#FFFACD")
+data_desc_label = Label(content_frame, text="Explore a  treasure trove  of historical data,  club profiles, player profiles, and  fascinating trivia to\nenhance your knowledge of A Division football.",justify='left' ,font=("Default", 12), bg="#FFFACD")
 data_desc_label.pack(anchor="w", padx=40)
 
+def goto_login_page():
+    root_frame.destroy()
+
+goto_login_page_button = Button(root_frame,text='X',font=("Default", 12), bg="#FFFACD",relief='raised',command=goto_login_page)
+goto_login_page_button.place(x=720,y=1)
 # Create a window into the canvas
 canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
