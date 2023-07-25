@@ -43,43 +43,54 @@ def home_section():
 
     def playlive():
         webbrowser.open("https://www.youtube.com/live/O2ANLnuEBmg")
-    frame_signup_back = Frame(frame_home, width = 540, bg = "#FFFACD", height = 180, highlightthickness = 1, relief = RAISED, highlightcolor = "#000")
+
+    frame_signup_back = Label(frame_home,image = frameBackImage, bg = "#FFFACD")
     frame_signup_back.place(x = 120, y = 110)
-    logoLabel = Label(frame_signup_back, image = imageLogo, bg = "#FFFACD")
-    logoLabel.place(x = 350, y = 0)
 
-    def facebook(e = None):
-        webbrowser.open("https://www.facebook.com/Saugat Shahi Thakuri")
-        facebook_button.config(fg = "#000000")
-        facebook_button.config(bg = "#FFFACD")
-    def facebook_leave(e = None):
-        facebook_button.config(fg = "blue")
-        facebook_button.config(bg = "#FFFACD")
+    logoLabel = Label(frame_signup_back, image = imageLogo, bg = "#FFFAF0")
+    logoLabel.place(x = 356, y = 14)
 
-    facebook_button = Button(frame_signup_back, image = iconRight, compound = RIGHT, bg = "#FFFACD",text="Connect with facebook  ", border = 0, font = ("Tahoma", 10), command = facebook, fg = "blue")
-    facebook_button.place(x = 32, y = 86)
-    facebook_button.bind("<Button-1>", facebook)
-    facebook_button.bind("<Leave>", facebook_leave)
+    signup_frame_text = Label(frame_signup_back, text = "Your favorite teams in one place", font = ("Oswald", 16), bg = "#FFFAF0", fg = "#000000")
+    signup_frame_text.place(x = 46, y = 46)
 
-    signup_frame_text = Label(frame_signup_back, text = "Your Favorite Teams in one place", font = ("Tahoma", 12), bg = "#FFFACD", fg = "#000000")
-    signup_frame_text.place(x = 30, y = 36)
+    connectFacebook = Label(frame_signup_back, text = "Connect with facebook ", image = iconRight, compound = RIGHT, bg = "#FFFAF0", fg = "blue", font = ("Oswald", 12))
+    connectFacebook.place(x = 46, y = 92)
 
-    live_match1_frame = Frame(frame_home, width = 244, height = 314)
-    live_match1_frame.place(x = 130, y = 320)
+    smallHRule = Frame(frame_signup_back, width = 2, height = 72, bg = "#777070")
+    smallHRule.place(x = 328, y = 58)
 
-    live_match2_frame = Frame(frame_home, width = 244, height = 314)
-    live_match2_frame.place(x = 406, y = 320)
+    live_match1_frame = Label(frame_home, image = live1BackImage, bg = "#FFFACD")
+    live_match1_frame.place(x = 120, y = 332)
+
+    live_match2_frame = Label(frame_home, image = live2BackImage, bg = "#FFFACD")
+    live_match2_frame.place(x = 412, y = 332)
 
     live_ground_frame = Frame(frame_home, width = 232, height = 330, border = 0, relief = RAISED)
     live_ground_frame.place(x = 740, y = 114)
     groundLabel = Label(live_ground_frame, image = imageGround, bg = "#FFFACD", border = 0)
     groundLabel.pack()
 
-    scores_frame = Frame(frame_home, width = 230, height = 100)
+    scores_frame = Label(frame_home, image = scoresImage, bg = "#FFFACD")
     scores_frame.place(x = 740, y = 474)
 
-    summaryButton = Button(scores_frame, text = "Summary", fg = "dark orange", border = 0)
-    summaryButton.place(x = 8, y = 8)
+    smallVRule = Frame(scores_frame, width = 176, height = 2, bg = "#777070")
+    smallVRule.place(x = 24, y = 60)
+
+    hRule = Frame(scores_frame, width = 2, height = 72, bg = "#777070")
+    hRule.place(x = 128, y = 80)
+    
+    def summaryView():
+        hoverFrame.place(x=2, y=352)
+        overview_section()
+    summaryButton = Button(scores_frame, text = "Summary", bg = "#FFFAF0", fg = "red", border = 0, font = ("League Spartan", 14), cursor = "hand2", command = summaryView)
+    summaryButton.place(x = 16, y = 12)
+    
+    def matchInfo():
+        hoverFrame.place(x=2, y=418)
+        matches_section()
+
+    matchInfoButton = Button(scores_frame, text = "Match Info", bg = "#FFFAF0", fg = "red", border = 0, font = ("League Spartan", 14), cursor = "hand2", command = matchInfo)
+    matchInfoButton.place(x = 116, y = 13)
 
     label_live_match = Label(frame_home, text = "Streaming", font = ("Yu Gothic UI Semibold", 10), bg = "#FFFACD", fg = "black")
     label_live_match.place(x = 754, y = 84)
@@ -664,6 +675,7 @@ def personalization_section():
                         messagebox.showinfo("Login Again", "Login with your new password!")
                         app.destroy()
                         import Login
+                        home_section()
                     else:
                         messagebox.showerror('Password Change', "Passwords don't match.")
                 else:
@@ -1036,8 +1048,8 @@ ImageFeedback = ImageTk.PhotoImage(feedbackImage)
 groundImage = Image.open("C:Images\\ground.png")
 imageGround = ImageTk.PhotoImage(groundImage)
 
-logoImage = Image.open("C:Images\\A-Division.png")
-resizedLogo = logoImage.resize((180, 180))
+logoImage = Image.open("C:Images\\logonp.png")
+resizedLogo = logoImage.resize((140, 140))
 imageLogo = ImageTk.PhotoImage(resizedLogo)
 
 homeIcon = Image.open("C:Images\\home.png")
@@ -1104,6 +1116,18 @@ dltAccButton= ImageTk.PhotoImage(resizeaccDltButton)
 accDltImage= Image.open("C:Images\\deleteAcc.png")
 resizeaccDltImage= accDltImage.resize((60, 60))
 dltAccImage= ImageTk.PhotoImage(resizeaccDltImage)
+
+frameBack= Image.open("C:Images\\frameBack.png")
+frameBackImage = ImageTk.PhotoImage(frameBack)
+
+live1Back= Image.open("C:Images\\live1.png")
+live1BackImage = ImageTk.PhotoImage(live1Back)
+
+live2Back= Image.open("C:Images\\live2.png")
+live2BackImage = ImageTk.PhotoImage(live2Back)
+
+scores = Image.open("C:Images\\scores.png")
+scoresImage = ImageTk.PhotoImage(scores)
 
 # Styling the speparator
 style = ttk.Style()

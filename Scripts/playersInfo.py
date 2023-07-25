@@ -35,26 +35,28 @@ def picture():
 
 def label_and_entry(player_window, label_text, x, y, x1, y1):
     global box_entry
-    text_label = Label(player_window, text=label_text)
+    text_label = Label(player_window, text=label_text, bg = "#FFFACD")
     text_label.place(x=x, y=y)
-    box_entry = Entry(player_window)
+    box_entry = Entry(player_window, bg = "#FFFACD")
     box_entry.place(x=x1, y=y1)
     return box_entry
 
 
 player_window = Tk()
 player_window.geometry("400x500")
+player_window.config(bg = "#FFFACD")
 label_entry = []
-label_entry.append(label_and_entry(player_window,"Full Name:",10,20,100,20))
-label_entry.append(label_and_entry(player_window,"Date of Birth:",10,50,100,50))
-label_entry.append(label_and_entry(player_window,"Nationality:",10,80,100,80))
-label_entry.append(label_and_entry(player_window,"Present Club:",10,110,100,110))
-label_entry.append(label_and_entry(player_window,"Number:",10,140,100,140))
-label_entry.append(label_and_entry(player_window,"Position:",10,170,100,170))
-label_entry.append(label_and_entry(player_window,"Link:",10,200,100,200))
-submit_btn = Button(player_window,text='Choose Photo',command=picture)
+label_entry.append(label_and_entry(player_window,"Full Name:",30,20,120,20))
+label_entry.append(label_and_entry(player_window,"Date of Birth:",30,50,120,50))
+label_entry.append(label_and_entry(player_window,"Nationality:",30,80,120,80))
+label_entry.append(label_and_entry(player_window,"Present Club:",30,110,120,110))
+label_entry.append(label_and_entry(player_window,"Number:",30,140,120,140))
+label_entry.append(label_and_entry(player_window,"Position:",30,170,120,170))
+label_entry.append(label_and_entry(player_window,"Link:",30,200,120,200))
+
+submit_btn = Button(player_window,text='Choose Photo',command=picture, bg = "#FFFACD")
 submit_btn.place(x=70,y=260)
-submit_btn = Button(player_window,text='Submit',command=submit)
+submit_btn = Button(player_window,text='Submit',command=submit, bg = "#FFFACD")
 submit_btn.place(x=170,y=260)
 
 player_window.mainloop()

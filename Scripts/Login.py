@@ -280,12 +280,12 @@ lower_frame.place(x=0, y=702)
 verticalLine = Frame(right_frame, width = 2, height = 520, bg = "#000")
 verticalLine.place(x = 640, y = 100)
 
-football_img = Image.open("Images\\A-Division.png")
-football_photo = football_img.resize((180,180))
+football_img = Image.open("Images\\logonp.png")
+football_photo = football_img.resize((160,160))
 football_photo1 = ImageTk.PhotoImage(football_photo)
 football_label = Label(right_frame,image=football_photo1,border=0,background = "#FFFACD")
 football_label.image = football_photo  # Store a reference to the image to prevent it from being garbage collected
-football_label.place(x=550,y=224)
+football_label.place(x=562,y=224)
 
 entryImg = Image.open("Images\\entryImg.png")
 imgEntry = ImageTk.PhotoImage(entryImg)
