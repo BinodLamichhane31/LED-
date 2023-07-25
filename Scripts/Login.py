@@ -160,23 +160,15 @@ def login():
             hashed_psw = hashlib.sha256(psw.encode()).hexdigest()
             user_data = get_login_data(phone)
             remember = remember_var.get()
-            
-            filter = {'phone': phone}
-            
-            update = {
-                "$set":{
-                    'Remember me' : remember
-                }
-            }
 
-            football_collection.update_one(filter, update)
 
             #  Login Validation
             if user_data:
                 stored_psw = user_data['password']
-                stored_phone = user_data['phone']
-                stored_remember = user_data.get('Save Password')
                 if stored_psw == hashed_psw:
+                    if remember == True:
+                        with open('Scripts\\remember.txt','w') as rem:
+                            rem.write(phone)
                     messagebox.showinfo("Login Result", "Login Successful.")
                     app.destroy()
                     with open("Scripts\\phone_number.txt", "w") as file:
@@ -186,6 +178,7 @@ def login():
                     messagebox.showerror("Login Result", "Login Unsuccessful.")
             else:
                 messagebox.showerror("Login Result", "User not found.")
+                
         except Exception as e:
             messagebox.showerror('Login Error', 'An error occurred during login: ' + str(e))
     
@@ -249,6 +242,13 @@ def login():
 
     login_button = Button(roundImgLabel, image = imageLogin, cursor = "hand2", border = 0, bg = "#fff", command=login_work)
     login_button.place(x=196, y=396, height = 32)
+
+    try:
+        with open('Scripts\\remember.txt','r') as r:
+            rem_ph = r.read().strip()
+        phone_n_entry.insert(0,rem_ph)
+    except Exception as e:
+        print(str(e))
 
     app.bind('<Return>', lambda e: login_work())
 
@@ -339,6 +339,7 @@ unleash_label.place(x=60,y=510)
 
 about_us_btn = Button(right_frame,text="About Us 🡢",bg="#FFFACD",border=0, cursor = "hand2", font=('League Spartan Medium', '12', ''),command=about_us)
 about_us_btn.place(x=60,y=570)
+
 
 copyright_label = Label(right_frame, text="Copyright © Martyr's Memorial Inc. All rights reserved.",font=('Tahoma', '10'), bg="#FFFACD")
 copyright_label.place(x=58,y=630)
