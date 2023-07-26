@@ -1368,13 +1368,17 @@ def select_image():
             image = Image.open(file_path)
             image = resize_image(image, (70, 70))  # Resize the image to 70x70
             image = make_round_image(image, (70, 70))
-            buffered = BytesIO()
-            image.save(buffered, format="PNG")
-            profilePicture = {
-                'profile': buffered.getvalue()
-            }
-            football_collection.update_one({'phone': user_data['phone']}, {'$set': {'Profile Picture': profilePicture}})
-            display_image(image)
+            # buffered = BytesIO()
+            # image.save(buffered, format="PNG")
+            # profilePicture = {
+            #     'profile': buffered.getvalue()
+            # }
+            # football_collection.update_one({'phone': user_data['phone']}, {'$set': {'Profile Picture': profilePicture}})
+            # display_image(image)
+            save_image_to_mongodb(image)
+            photo = ImageTk.PhotoImage(image)
+            profile_image_label.config(image=photo)
+            profile_image_label.image = photo
     
    
 def resize_image(image, size):
@@ -1399,10 +1403,31 @@ def display_image(image):
 
     img_label.image = photo
     photo_references.append(photo)
-    
+def save_image_to_mongodb(image):
+    image_byte_array = io.BytesIO()
+    image.save(image_byte_array, format='PNG')
+    image_binary = image_byte_array.getvalue()
+    picture_collection.delete_many({"user_phone":phone,"profile_image": image_binary})  # Clear any existing profile pictures (optional)
+    picture_collection.insert_one({"user_phone":phone,"profile_image": image_binary})
+
+def fetch_image_from_mongodb():
+    data = picture_collection.find_one({"user_phone":phone})
+    if data and "profile_image" in data:
+        return Image.open(io.BytesIO(data["profile_image"]))
+
+    # If no profile picture is found, return a default image 
+    default_pic = Image.open("Images\\user.png")
+    default_pic=default_pic.resize((70,70))
+    return default_pic
+profile_image_label = Label(app)
+profile_image_label.place(x=42,y=50)   
 
 select_button = Button(app, text="Select Image", command=select_image, bg="#FFF", border = 0)
 select_button.place(x = 140, y = 116)
+profile_picture = fetch_image_from_mongodb()
+photo = ImageTk.PhotoImage(profile_picture)
+profile_image_label.config(image=photo)
+profile_image_label.image = photo
 
 def on_button_click(button):
     # Reset the hoverFrame position for all buttons
