@@ -433,91 +433,8 @@ def overview_section():
         '''
         global team_search_entry
         if select==options[0]:
-            def team_search():
-                overviewTeamGUI()
-            #     '''
-            #     Search the team and display it's information.
-            #     '''
-            #     try:
-            #         team_data = team_collection.find_one({'name':team_search_entry.get()})
-            #         encoded_logo = team_data['image']
-            #         logo_data = b64decode(encoded_logo)
-            #         logo = Image.open(io.BytesIO(logo_data))
-            #         logo = logo.resize((150,200))
-            #     # Convert the logo to a Tkinter-compatible format
-            #         tk_logo = ImageTk.PhotoImage(logo)
-            #     # Create a Tkinter label and display the logo
-            #         logo_label = Label(frame_team, image=tk_logo)
-            #         logo_label.image = tk_logo
-            #         logo_label.place(x=150,y=150)
-                
-
-            #         def label_team_details(frame_team,label_text,x,y):
-            #             '''
-            #             Label and display the details of team.
-
-            #             Args:
-            #                 frame_team: The frame for labeling and displaying the team information.
-            #                 label_text: The text to display on the label.
-            #                 x: x-coordinate of the label's position.
-            #                 y: y-coordinate of the label's position.
-            #             '''
-            #             label_team_info = Label(frame_team,text=label_text,font=('League Spartan Medium', '12', 'bold'),bg="#f2f2f2")
-            #             label_team_info.place(x=x,y=y)
-            #         team_info_list = []
-            #         if team_data is not None:
-            #             team_info_list.append(label_team_details(frame_team,"Club Name:",350,150))
-            #             team_info_list.append(label_team_details(frame_team,team_data['name'],480,150))
-            #             team_info_list.append(label_team_details(frame_team,"Founded Year:",350,180))
-            #             team_info_list.append(label_team_details(frame_team,team_data['founded'],480,180))
-            #             team_info_list.append(label_team_details(frame_team,"Location:",350,210))
-            #             team_info_list.append(label_team_details(frame_team,team_data['location'],480,210))
-            #             team_info_list.append(label_team_details(frame_team,"Stadium:",350,240))
-            #             team_info_list.append(label_team_details(frame_team,team_data['stadium'],480,240))
-            #             team_info_list.append(label_team_details(frame_team,"President:",350,270))
-            #             team_info_list.append(label_team_details(frame_team,team_data['president'],480,270))
-            #             team_info_list.append(label_team_details(frame_team,"Manager:",350,300))
-            #             team_info_list.append(label_team_details(frame_team,team_data['manager'],480,300))
-            #             team_info_list.append(label_team_details(frame_team,"Captain:",350,330))
-            #             team_info_list.append(label_team_details(frame_team,team_data['captain'],480,330))
-            #     except:
-            #         messagebox.showerror("Error Fetch", "Team not found!")
-            # def on_entry_click(event):
-            #     '''
-            #     Perform actions when the team search entry field is clicked.
-                
-            #     Args:
-            #         event: The event object.
-            #     '''
-            #     if team_search_entry.get() == "Team's name":
-            #         team_search_entry.delete(0, END)  
-            # def on_focus_out(event):
-            #     '''
-            #     Perform actions when the team search entry field loses focus.
-                
-            #     Args:
-            #         event: The event object.
-            #     '''
-            #     if team_search_entry.get() == '':
-            #         team_search_entry.insert(0, "Team's name")  
-
-            # frame_team = Frame(frame_overview,bg="#f2f2f2",height = 600, width = 1050)
-            # frame_team.place(x=0,y=70)
-
-            # teamSearchLabel = Label(frame_overview, image = entrySearch, border = 0, bg = "#f2f2f2")
-            # teamSearchLabel.image = entrySearch
-            # teamSearchLabel.place(x = 30, y = 92)
-
-            # team_search_entry = Entry(teamSearchLabel,font=('Tahoma', '12'), bg = "#f2f2f2", border = 0)
-            # team_search_entry.place(x=18,y=8)
-
-            # team_search_button = Button(teamSearchLabel, image = buttonSearch, border = 0, bg="#f2f2f2",command=team_search)
-            # team_search_button.place(x=206,y=6)
-
-            # team_search_entry.insert(0,"Team's name")
-            # team_search_entry.bind('<FocusIn>',on_entry_click)
-            # team_search_entry.bind('<FocusOut>',on_focus_out)
-
+            overview_section()
+            
         if select == options[1]:
             def player_search():
                 '''
@@ -1441,7 +1358,10 @@ feedbackButton.place(x = 0, y = 612)
 
 photo_references = []
 
+
+
 def select_image():
+    global image
     file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png")])
     if file_path:
         with open(file_path, "rb") as image_file:
@@ -1454,9 +1374,9 @@ def select_image():
                 'profile': buffered.getvalue()
             }
             football_collection.update_one({'phone': user_data['phone']}, {'$set': {'Profile Picture': profilePicture}})
-            
             display_image(image)
-            
+    
+   
 def resize_image(image, size):
     _image = image.resize(size, Image.BILINEAR)
     return _image
@@ -1469,6 +1389,8 @@ def make_round_image(image, size):
     result.paste(image, (0, 0), mask)
     return result
 
+
+
 def display_image(image):
     global img_label
     photo = ImageTk.PhotoImage(image)
@@ -1477,7 +1399,7 @@ def display_image(image):
 
     img_label.image = photo
     photo_references.append(photo)
-
+    
 
 select_button = Button(app, text="Select Image", command=select_image, bg="#FFF", border = 0)
 select_button.place(x = 140, y = 116)
