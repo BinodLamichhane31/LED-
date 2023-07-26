@@ -1,11 +1,12 @@
 # Importing all the required libraries
 from tkinter import *
 from tkinter import ttk,messagebox,Label,PhotoImage, filedialog
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 from pymongo import MongoClient
 from base64 import *
 import io,webbrowser
 import pandas as pd
+from io import BytesIO
 import hashlib, re
 from ButtonCreation import *
 
@@ -28,8 +29,6 @@ try:
     user_data = football_collection.find_one({"phone":phone})
 except Exception as e:
     messagebox.showerror('System Error',"There is an error in the system.\nYou may face some problems while using app.\nWe will try to fix it asap.")
-
-
     
 def home_section():
     '''
@@ -38,39 +37,39 @@ def home_section():
 
     global frame_signup_back
     global frame_home
-    frame_home =Frame(rightFrame,width=1070, height=668, bg="#FFFACD", border=1)
+    frame_home =Frame(rightFrame,width=1070, height=668, bg="#f2f2f2", border=1)
     frame_home.place(x=0,y=0)
 
     def playlive():
         webbrowser.open("https://www.youtube.com/live/O2ANLnuEBmg")
 
-    frame_signup_back = Label(frame_home,image = frameBackImage, bg = "#FFFACD")
+    frame_signup_back = Label(frame_home,image = frameBackImage, bg = "#f2f2f2")
     frame_signup_back.place(x = 120, y = 110)
 
-    logoLabel = Label(frame_signup_back, image = imageLogo, bg = "#FFFAF0")
-    logoLabel.place(x = 356, y = 14)
+    logoLabel = Label(frame_signup_back, image = imageLogo, bg = "#FFF")
+    logoLabel.place(x = 376, y = 26)
 
-    signup_frame_text = Label(frame_signup_back, text = "Your favorite teams in one place", font = ("Oswald", 16), bg = "#FFFAF0", fg = "#000000")
-    signup_frame_text.place(x = 46, y = 46)
+    signup_frame_text = Label(frame_signup_back, text = "Your favorite teams in one place", font = ("Nunito", 14, 'bold'), bg = "#FFF", fg = "#000000")
+    signup_frame_text.place(x = 36, y = 58)
 
-    connectFacebook = Label(frame_signup_back, text = "Connect with facebook ", image = iconRight, compound = RIGHT, bg = "#FFFAF0", fg = "blue", font = ("Oswald", 12))
-    connectFacebook.place(x = 46, y = 92)
+    connectFacebook = Label(frame_signup_back, text = "Connect with facebook ", image = iconRight, compound = RIGHT, bg = "#FFF", fg = "blue", font = ("Nunito", 12))
+    connectFacebook.place(x = 36, y = 94)
 
     smallHRule = Frame(frame_signup_back, width = 2, height = 72, bg = "#777070")
-    smallHRule.place(x = 328, y = 58)
+    smallHRule.place(x = 354, y = 58)
 
-    live_match1_frame = Label(frame_home, image = live1BackImage, bg = "#FFFACD")
+    live_match1_frame = Label(frame_home, image = live1BackImage, bg = "#f2f2f2")
     live_match1_frame.place(x = 120, y = 332)
 
-    live_match2_frame = Label(frame_home, image = live2BackImage, bg = "#FFFACD")
+    live_match2_frame = Label(frame_home, image = live2BackImage, bg = "#f2f2f2")
     live_match2_frame.place(x = 412, y = 332)
 
     live_ground_frame = Frame(frame_home, width = 232, height = 330, border = 0, relief = RAISED)
     live_ground_frame.place(x = 740, y = 114)
-    groundLabel = Label(live_ground_frame, image = imageGround, bg = "#FFFACD", border = 0)
+    groundLabel = Label(live_ground_frame, image = imageGround, bg = "#f2f2f2", border = 0)
     groundLabel.pack()
 
-    scores_frame = Label(frame_home, image = scoresImage, bg = "#FFFACD")
+    scores_frame = Label(frame_home, image = scoresImage, bg = "#f2f2f2")
     scores_frame.place(x = 740, y = 474)
 
     smallVRule = Frame(scores_frame, width = 176, height = 2, bg = "#777070")
@@ -82,22 +81,22 @@ def home_section():
     def summaryView():
         hoverFrame.place(x=2, y=352)
         overview_section()
-    summaryButton = Button(scores_frame, text = "Summary", bg = "#FFFAF0", fg = "red", border = 0, font = ("League Spartan", 14), cursor = "hand2", command = summaryView)
+    summaryButton = Button(scores_frame, text = "Summary", bg = "#FFF", fg = "red", border = 0, font = ("League Spartan", 14), cursor = "hand2", command = summaryView)
     summaryButton.place(x = 16, y = 12)
     
     def matchInfo():
         hoverFrame.place(x=2, y=418)
         matches_section()
 
-    matchInfoButton = Button(scores_frame, text = "Match Info", bg = "#FFFAF0", fg = "red", border = 0, font = ("League Spartan", 14), cursor = "hand2", command = matchInfo)
+    matchInfoButton = Button(scores_frame, text = "Match Info", bg = "#FFF", fg = "red", border = 0, font = ("League Spartan", 14), cursor = "hand2", command = matchInfo)
     matchInfoButton.place(x = 116, y = 13)
 
-    label_live_match = Label(frame_home, text = "Streaming", font = ("Yu Gothic UI Semibold", 10), bg = "#FFFACD", fg = "black")
+    label_live_match = Label(frame_home, text = "Streaming", font = ("Yu Gothic UI Semibold", 10), bg = "#f2f2f2", fg = "black")
     label_live_match.place(x = 754, y = 84)
 
-    watch_live = Button(frame_home, text = "LIVE", bg = "#FFFACD", border = 0, width = 5, height = 0, command = playlive, font = ("Yu Gothic UI Semibold", 10), fg = "red")
+    watch_live = Button(frame_home, text = "LIVE", bg = "#f2f2f2", border = 0, width = 5, height = 0, command = playlive, font = ("Yu Gothic UI Semibold", 10), fg = "red")
     watch_live.place(x = 908, y = 84)
-    homeButton.config(fg="red", bg = "#FFFACD")
+    homeButton.config(fg="red", bg = "#f2f2f2")
     liveButton.config(fg = "black")
     matchButton.config(fg = "black")
     overviewButton.config(fg = "black")
@@ -105,14 +104,14 @@ def home_section():
     personalizeButton.config(fg = "black")
     feedbackButton.config(fg = "black") 
 
-    label_home = Label(frame_home,text="HOME •",font=('Tahoma', '14'),bg='#FFFACD')
+    label_home = Label(frame_home,text="HOME •",font=('Nunito', '14', 'bold'),bg='#f2f2f2')
     label_home.place(x=20,y=16)
     separator = Frame(frame_home, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
     try:
         username_text = user_data['fullName']
-        username_text_label = Label(leftFrame,text=username_text,font=('Tahoma', 12), bg="#FFFACD", wraplength = 180)
-        username_text_label.place(x=60,y=20)
+        username_text_label = Label(app,text=username_text, font=('Nunito', 12, "bold"), bg="#FFF", fg = "#545454", wraplength = 120, justify= LEFT)
+        username_text_label.place(x=138,y=50)
     except:
         pass
 
@@ -134,9 +133,9 @@ def live_section():
     personalizeButton.config(fg = "black")
     feedbackButton.config(fg = "black")
 
-    frame_live = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
+    frame_live = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
     frame_live.place(x=0, y=0)
-    label_live = Label(frame_live, text="LIVE •", font=('Tahoma', '14'), bg='#FFFACD')
+    label_live = Label(frame_live, text="LIVE •", font=('Nunito', '14', 'bold'), bg='#f2f2f2')
     label_live.place(x=20, y=16)
     separator = Frame(frame_live, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
@@ -155,8 +154,8 @@ def live_section():
     column_widths = [25, 25, 5, 50, 20, 50, 300]  # Add more widths for additional columns
     # Create a custom style for the treeview
     style = ttk.Style()
-    style.configure('Custom.Treeview', font=('Arial', 12), background='#FFFACD', foreground='black')  # Set the font and colors for the table
-    style.configure('Custom.Treeview.Heading', font=('Arial', 12, 'bold'),background='#FFFACD')
+    style.configure('Custom.Treeview', font=('Arial', 12), background='#f2f2f2', foreground='black')  # Set the font and colors for the table
+    style.configure('Custom.Treeview.Heading', font=('Arial', 12, 'bold'),background='#f2f2f2')
     # Add the column headers to the treeview
     for i, column in enumerate(df.columns):
         treeview1.heading(column, text=column)
@@ -200,13 +199,231 @@ def overview_section():
     feedbackButton.config(fg = "black")
 
     global frame_overview
-    frame_overview =Frame(rightFrame,width=1070, height=668, bg="#FFFACD", border=1)
+    frame_overview =Frame(rightFrame,width=1070, height=668, bg="#f2f2f2", border=1)
     frame_overview.place(x=0,y=0)
     frame_overview.place(x=0,y=0)
-    label_overview = Label(frame_overview,text="OVERVIEW •",font=('Tahoma', '14'),bg='#FFFACD')
+    label_overview = Label(frame_overview,text="OVERVIEW •",font=('Nunito', '14', 'bold'),bg='#f2f2f2')
     label_overview.place(x=20,y=16)
     separator = Frame(frame_overview, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
+
+    def overviewTeamGUI():
+
+        clubframe = Label(frame_overview, image = imageClubList1, bg = "#f2f2f2")
+
+        def on_enter_club1(e):
+            clubframe.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()))  # placing the widget(button) just below the main button destination..
+            clear_frame()
+            playersName(clubframe, "1. Ananta Tamang (captain)", 20, 146)
+            playersName(clubframe, "2. Kamal Shrestha", 20, 182)
+            playersName(clubframe, "3. Arik Bista", 20, 218)
+            playersName(clubframe, "4. Suvash Gurung", 20, 254)
+            playersName(clubframe, "5. Ashish Chaudhary", 20, 290)
+            clubframe.lift()
+            Club1Name = Label(clubframe, text = "Church Boys United", font = ("Nunito", 12, "bold"),bg = "#FFF")
+            Club1Name.place(x = 94, y = 26)
+            Club1Estd = Label(clubframe, text = "Estd. 2009", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            Club1Estd.place(x = 94, y = 54)
+            membersClub1 = Label(clubframe, text = "Current Squad. 26", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            membersClub1.place(x = 94, y = 76)
+            logo1 = Label(clubframe, image = logoClub1, bg = "#FFF")
+            logo1.place(x = 10, y = 6)
+            hRULE = Frame(clubframe, width = 220, height = 3, bg = "#ff8e48")
+            hRULE.place(x = 20, y = 118)
+
+        def on_enter_club2(e):
+            clubframe.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()))  # placing the widget(button) just below the main button destination..
+            clear_frame()
+            playersName(clubframe, "1. Sujal Shrestha (captain)", 20, 146)
+            playersName(clubframe, "2. Devendra Tamang", 20, 182)
+            playersName(clubframe, "3. Bishal Shrestha", 20, 218)
+            playersName(clubframe, "4. Ranjit Dhimal", 20, 254)
+            playersName(clubframe, "5. Sagar Thapa", 20, 290)
+            clubframe.lift()
+            Club2Name = Label(clubframe, text = "Machhindra FC", font = ("Nunito", 12, "bold"),bg = "#FFF")
+            Club2Name.place(x = 102, y = 26)
+            Club2Estd = Label(clubframe, text = "Estd. 1973", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            Club2Estd.place(x = 102, y = 54)
+            membersClub2 = Label(clubframe, text = "Current Squad. 22", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            membersClub2.place(x = 102, y = 76)
+            logo2 = Label(clubframe, image = logoClub2, bg = "#FFF")
+            logo2.place(x = 10, y = 20)
+            hRULE = Frame(clubframe, width = 220, height = 3, bg = "#ff8e48")
+            hRULE.place(x = 20, y = 118)
+
+        def on_enter_club3(e):
+
+            clubframe.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()))  # placing the widget(button) just below the main button destination..
+            clear_frame()
+            playersName(clubframe, "1. Man Bahadur Tmg (captain)", 20, 146)
+            playersName(clubframe, "2. Abhisek Baral", 20, 182)
+            playersName(clubframe, "3. Mahendra Karki", 20, 218)
+            playersName(clubframe, "4. Akash Budha Magar", 20, 254)
+            playersName(clubframe, "5. Basanta Tamang", 20, 290)
+            Club3Name = Label(clubframe, text = "Satdobato Youth FC", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+            Club3Name.place(x = 88, y = 26)
+            Club3Estd = Label(clubframe, text = "Estd. 1998", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            Club3Estd.place(x = 88, y = 54)
+            membersClub3 = Label(clubframe, text = "Current Squad. 26", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            membersClub3.place(x = 88, y = 76)
+            logo3 = Label(clubframe, image = logoClub3, bg = "#FFF")
+            logo3.place(x = 10, y = 16)
+            hRULE = Frame(clubframe, width = 220, height = 3, bg = "#ff8e48")
+            hRULE.place(x = 20, y = 118)
+            clubframe.lift()
+
+   
+        def on_enter_club4(e):
+
+            clubframe.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()))  # placing the widget(button) just below the main button destination..
+            clear_frame()
+            playersName(clubframe, "1. Saroj Tamang", 20, 146)
+            playersName(clubframe, "2. Ashok Thapa", 20, 182)
+            playersName(clubframe, "3. Santosh Mahat", 20, 218)
+            playersName(clubframe, "4. Nicolas Serge Song", 20, 254)
+            playersName(clubframe, "5. Mohit Gurung", 20, 290)
+            Club4Name = Label(clubframe, text = "New Road Team", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+            Club4Name.place(x = 98, y = 26)
+            Club4Estd = Label(clubframe, text = "Estd. 1934", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            Club4Estd.place(x = 98, y = 54)
+            membersClub4 = Label(clubframe, text = "Current Squad. 27", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            membersClub4.place(x = 98, y = 76)
+            logo4 = Label(clubframe, image = logoClub4, bg = "#FFF")
+            logo4.place(x = 10, y = 16)
+            hRULE = Frame(clubframe, width = 220, height = 3, bg = "#ff8e48")
+            hRULE.place(x = 20, y = 118)
+            
+            clubframe.lift()
+    
+        def on_enter_club5(e):
+
+            clubframe.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()))  # placing the widget(button) just below the main button destination..
+            clear_frame()
+            playersName(clubframe, "1. Simanta Thapa (captain)", 20, 146)
+            playersName(clubframe, "2. Samiraj Thokar", 20, 182)
+            playersName(clubframe, "3. Santosh Dahal", 20, 218)
+            playersName(clubframe, "4. Anish Deula", 20, 254)
+            playersName(clubframe, "5. Fode Fofana", 20, 290)
+            Club5Name = Label(clubframe, text = "Jawalakhel YC.", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+            Club5Name.place(x = 98, y = 26)
+            Club5Estd = Label(clubframe, text = "Estd. 1972", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            Club5Estd.place(x = 98, y = 54)
+            membersClub5 = Label(clubframe, text = "Current Squad. 23", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            membersClub5.place(x = 98, y = 76)
+            logo5 = Label(clubframe, image = logoClub5, bg = "#FFF")
+            logo5.place(x = 16, y = 16)
+            hRULE = Frame(clubframe, width = 220, height = 3, bg = "#ff8e48")
+            hRULE.place(x = 20, y = 118)
+            clubframe.lift()
+    
+        def on_enter_club6(e):
+
+            clubframe.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()))  # placing the widget(button) just below the main button destination..
+            clear_frame()
+            playersName(clubframe, "1. Bikram Lama (captain)", 20, 146)
+            playersName(clubframe, "2. Ansumana Kromah", 20, 182)
+            playersName(clubframe, "3. Yogesh Gurung", 20, 218)
+            playersName(clubframe, "4. Dona Thapa  NEP", 20, 254)
+            playersName(clubframe, "5. Nirajan Maharjan  NEP", 20, 290)
+            Club6Name = Label(clubframe, text = "Three Star Club", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+            Club6Name.place(x = 102, y = 26)
+            Club6Estd = Label(clubframe, text = "Estd. 1974", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            Club6Estd.place(x = 102, y = 54)
+            membersClub6 = Label(clubframe, text = "Current Squad. 26", font = ("Nunito", 10, "bold"),bg = "#FFF")
+            membersClub6.place(x = 102, y = 76)
+            logo6 = Label(clubframe, image = logoClub6, bg = "#FFF")
+            logo6.place(x = 14, y = 22)
+            hRULE = Frame(clubframe, width = 220, height = 3, bg = "#ff8e48")
+            hRULE.place(x = 20, y = 118)
+            clubframe.lift()
+    
+
+        def on_clubframe_leave(e): 
+            clubframe.place_forget()
+
+        def create_club_frames(frame, image, x, y, enter_callback):
+            label = Label(frame, image = image, cursor = "hand2", bg = "#f2f2f2")
+            label.place(x = x, y = y)
+            label.bind("<Enter>", enter_callback)
+            clubframe.bind("<Leave>", on_clubframe_leave)
+            return label
+    
+        def playersName(frame, text, x, y):
+            playerName = Label(frame, text=text, font=("Tahoma", 12), border=0, cursor="hand2", bg="#FFF")
+            playerName.place(x=x, y=y)
+            return playerName
+
+
+        def clear_frame():
+            for widget in clubframe.winfo_children():
+                widget.destroy()
+
+        labels = []
+        labels.append(create_club_frames(frame_overview, imageClub1, 52 , 100, on_enter_club1))
+        labels.append(create_club_frames(frame_overview, imageClub1, 398 , 100, on_enter_club2))
+        labels.append(create_club_frames(frame_overview, imageClub1, 744 , 100, on_enter_club3))
+        labels.append(create_club_frames(frame_overview, imageClub1, 52 , 260, on_enter_club4))
+        labels.append(create_club_frames(frame_overview, imageClub1, 398 , 260, on_enter_club5))
+        labels.append(create_club_frames(frame_overview, imageClub1, 744 , 260, on_enter_club6))
+
+        Club1Name = Label(labels[0], text = "Church Boys United", font = ("Nunito", 12, "bold"),bg = "#FFF")
+        Club1Name.place(x = 94, y = 26)
+        Club1Estd = Label(labels[0], text = "Estd. 2009", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        Club1Estd.place(x = 94, y = 54)
+        membersClub1 = Label(labels[0], text = "Current Squad. 26", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        membersClub1.place(x = 94, y = 76)
+        logo1 = Label(labels[0], image = logoClub1, bg = "#FFF")
+        logo1.place(x = 10, y = 6)
+
+        Club2Name = Label(labels[1], text = "Machhindra FC", font = ("Nunito", 12, "bold"),bg = "#FFF")
+        Club2Name.place(x = 102, y = 26)
+        Club2Estd = Label(labels[1], text = "Estd. 1973", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        Club2Estd.place(x = 102, y = 54)
+        membersClub2 = Label(labels[1], text = "Current Squad. 22", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        membersClub2.place(x = 102, y = 76)
+        logo2 = Label(labels[1], image = logoClub2, bg = "#FFF")
+        logo2.place(x = 10, y = 20)
+
+        Club3Name = Label(labels[2], text = "Satdobato Youth FC", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+        Club3Name.place(x = 88, y = 26)
+        Club3Estd = Label(labels[2], text = "Estd. 1998", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        Club3Estd.place(x = 88, y = 54)
+        membersClub3 = Label(labels[2], text = "Current Squad. 26", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        membersClub3.place(x = 88, y = 76)
+        logo3 = Label(labels[2], image = logoClub3, bg = "#FFF")
+        logo3.place(x = 10, y = 16)
+
+        Club4Name = Label(labels[3], text = "New Road Team", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+        Club4Name.place(x = 98, y = 26)
+        Club4Estd = Label(labels[3], text = "Estd. 1934", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        Club4Estd.place(x = 98, y = 54)
+        membersClub4 = Label(labels[3], text = "Current Squad. 27", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        membersClub4.place(x = 98, y = 76)
+        logo4 = Label(labels[3], image = logoClub4, bg = "#FFF")
+        logo4.place(x = 10, y = 18)
+
+        Club5Name = Label(labels[4], text = "Jawalakhel YC.", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+        Club5Name.place(x = 98, y = 26)
+        Club5Estd = Label(labels[4], text = "Estd. 1972", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        Club5Estd.place(x = 98, y = 54)
+        membersClub5 = Label(labels[4], text = "Current Squad. 23", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        membersClub5.place(x = 98, y = 76)
+        logo5 = Label(labels[4], image = logoClub5, bg = "#FFF")
+        logo5.place(x = 16, y = 18)
+
+        Club6Name = Label(labels[5], text = "Three Star Club", justify = LEFT, font = ("Nunito", 12, "bold"),bg = "#FFF")
+        Club6Name.place(x = 102, y = 26)
+        Club6Estd = Label(labels[5], text = "Estd. 1974", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        Club6Estd.place(x = 102, y = 54)
+        membersClub6 = Label(labels[5], text = "Current Squad. 26", font = ("Nunito", 10, "bold"),bg = "#FFF")
+        membersClub6.place(x = 102, y = 76)
+        logo6 = Label(labels[5], image = logoClub6, bg = "#FFF")
+        logo6 .place(x = 14, y = 22)
+
+        def display_players_Club1(name):
+            playersName = Label(clubframe, text = name, bg = "#FFF")
+            playersName.place(x = 20, y = 40)
+    overviewTeamGUI()
 
     def overview_selection(select):
         '''
@@ -215,95 +432,93 @@ def overview_section():
             select: The selected option from the OptionMenu widget.
         '''
         global team_search_entry
-        if select == "League":
-            frame_league = Frame(frame_overview,bg="blue",height=600,width=1050)
-            frame_league.place(x=0,y=70)
-        elif select==options[1]:
+        if select==options[0]:
             def team_search():
-                '''
-                Search the team and display it's information.
-                '''
-                try:
-                    team_data = team_collection.find_one({'name':team_search_entry.get()})
-                    encoded_logo = team_data['image']
-                    logo_data = b64decode(encoded_logo)
-                    logo = Image.open(io.BytesIO(logo_data))
-                    logo = logo.resize((150,200))
-                # Convert the logo to a Tkinter-compatible format
-                    tk_logo = ImageTk.PhotoImage(logo)
-                # Create a Tkinter label and display the logo
-                    logo_label = Label(frame_team, image=tk_logo)
-                    logo_label.image = tk_logo
-                    logo_label.place(x=150,y=150)
+                overviewTeamGUI()
+            #     '''
+            #     Search the team and display it's information.
+            #     '''
+            #     try:
+            #         team_data = team_collection.find_one({'name':team_search_entry.get()})
+            #         encoded_logo = team_data['image']
+            #         logo_data = b64decode(encoded_logo)
+            #         logo = Image.open(io.BytesIO(logo_data))
+            #         logo = logo.resize((150,200))
+            #     # Convert the logo to a Tkinter-compatible format
+            #         tk_logo = ImageTk.PhotoImage(logo)
+            #     # Create a Tkinter label and display the logo
+            #         logo_label = Label(frame_team, image=tk_logo)
+            #         logo_label.image = tk_logo
+            #         logo_label.place(x=150,y=150)
                 
 
-                    def label_team_details(frame_team,label_text,x,y):
-                        '''
-                        Label and display the details of team.
+            #         def label_team_details(frame_team,label_text,x,y):
+            #             '''
+            #             Label and display the details of team.
 
-                        Args:
-                            frame_team: The frame for labeling and displaying the team information.
-                            label_text: The text to display on the label.
-                            x: x-coordinate of the label's position.
-                            y: y-coordinate of the label's position.
-                        '''
-                        label_team_info = Label(frame_team,text=label_text,font=('League Spartan Medium', '12', 'bold'),bg="#FFFACD")
-                        label_team_info.place(x=x,y=y)
-                    team_info_list = []
-                    if team_data is not None:
-                        team_info_list.append(label_team_details(frame_team,"Club Name:",350,150))
-                        team_info_list.append(label_team_details(frame_team,team_data['name'],480,150))
-                        team_info_list.append(label_team_details(frame_team,"Founded Year:",350,180))
-                        team_info_list.append(label_team_details(frame_team,team_data['founded'],480,180))
-                        team_info_list.append(label_team_details(frame_team,"Location:",350,210))
-                        team_info_list.append(label_team_details(frame_team,team_data['location'],480,210))
-                        team_info_list.append(label_team_details(frame_team,"Stadium:",350,240))
-                        team_info_list.append(label_team_details(frame_team,team_data['stadium'],480,240))
-                        team_info_list.append(label_team_details(frame_team,"President:",350,270))
-                        team_info_list.append(label_team_details(frame_team,team_data['president'],480,270))
-                        team_info_list.append(label_team_details(frame_team,"Manager:",350,300))
-                        team_info_list.append(label_team_details(frame_team,team_data['manager'],480,300))
-                        team_info_list.append(label_team_details(frame_team,"Captain:",350,330))
-                        team_info_list.append(label_team_details(frame_team,team_data['captain'],480,330))
-                except:
-                    messagebox.showerror("Error Fetch", "Team not found!")
-            def on_entry_click(event):
-                '''
-                Perform actions when the team search entry field is clicked.
+            #             Args:
+            #                 frame_team: The frame for labeling and displaying the team information.
+            #                 label_text: The text to display on the label.
+            #                 x: x-coordinate of the label's position.
+            #                 y: y-coordinate of the label's position.
+            #             '''
+            #             label_team_info = Label(frame_team,text=label_text,font=('League Spartan Medium', '12', 'bold'),bg="#f2f2f2")
+            #             label_team_info.place(x=x,y=y)
+            #         team_info_list = []
+            #         if team_data is not None:
+            #             team_info_list.append(label_team_details(frame_team,"Club Name:",350,150))
+            #             team_info_list.append(label_team_details(frame_team,team_data['name'],480,150))
+            #             team_info_list.append(label_team_details(frame_team,"Founded Year:",350,180))
+            #             team_info_list.append(label_team_details(frame_team,team_data['founded'],480,180))
+            #             team_info_list.append(label_team_details(frame_team,"Location:",350,210))
+            #             team_info_list.append(label_team_details(frame_team,team_data['location'],480,210))
+            #             team_info_list.append(label_team_details(frame_team,"Stadium:",350,240))
+            #             team_info_list.append(label_team_details(frame_team,team_data['stadium'],480,240))
+            #             team_info_list.append(label_team_details(frame_team,"President:",350,270))
+            #             team_info_list.append(label_team_details(frame_team,team_data['president'],480,270))
+            #             team_info_list.append(label_team_details(frame_team,"Manager:",350,300))
+            #             team_info_list.append(label_team_details(frame_team,team_data['manager'],480,300))
+            #             team_info_list.append(label_team_details(frame_team,"Captain:",350,330))
+            #             team_info_list.append(label_team_details(frame_team,team_data['captain'],480,330))
+            #     except:
+            #         messagebox.showerror("Error Fetch", "Team not found!")
+            # def on_entry_click(event):
+            #     '''
+            #     Perform actions when the team search entry field is clicked.
                 
-                Args:
-                    event: The event object.
-                '''
-                if team_search_entry.get() == "Team's name":
-                    team_search_entry.delete(0, END)  
-            def on_focus_out(event):
-                '''
-                Perform actions when the team search entry field loses focus.
+            #     Args:
+            #         event: The event object.
+            #     '''
+            #     if team_search_entry.get() == "Team's name":
+            #         team_search_entry.delete(0, END)  
+            # def on_focus_out(event):
+            #     '''
+            #     Perform actions when the team search entry field loses focus.
                 
-                Args:
-                    event: The event object.
-                '''
-                if team_search_entry.get() == '':
-                    team_search_entry.insert(0, "Team's name")  
+            #     Args:
+            #         event: The event object.
+            #     '''
+            #     if team_search_entry.get() == '':
+            #         team_search_entry.insert(0, "Team's name")  
 
-            frame_team = Frame(frame_overview,bg="#FFFACD",height = 600, width = 1050)
-            frame_team.place(x=0,y=70)
+            # frame_team = Frame(frame_overview,bg="#f2f2f2",height = 600, width = 1050)
+            # frame_team.place(x=0,y=70)
 
-            teamSearchLabel = Label(frame_overview, image = entrySearch, border = 0, bg = "#FFFACD")
-            teamSearchLabel.image = entrySearch
-            teamSearchLabel.place(x = 30, y = 92)
+            # teamSearchLabel = Label(frame_overview, image = entrySearch, border = 0, bg = "#f2f2f2")
+            # teamSearchLabel.image = entrySearch
+            # teamSearchLabel.place(x = 30, y = 92)
 
-            team_search_entry = Entry(teamSearchLabel,font=('Tahoma', '12'), bg = "#FFFACD", border = 0)
-            team_search_entry.place(x=18,y=8)
+            # team_search_entry = Entry(teamSearchLabel,font=('Tahoma', '12'), bg = "#f2f2f2", border = 0)
+            # team_search_entry.place(x=18,y=8)
 
-            team_search_button = Button(teamSearchLabel, image = buttonSearch, border = 0, bg="#FFFACD",command=team_search)
-            team_search_button.place(x=206,y=6)
+            # team_search_button = Button(teamSearchLabel, image = buttonSearch, border = 0, bg="#f2f2f2",command=team_search)
+            # team_search_button.place(x=206,y=6)
 
-            team_search_entry.insert(0,"Team's name")
-            team_search_entry.bind('<FocusIn>',on_entry_click)
-            team_search_entry.bind('<FocusOut>',on_focus_out)
+            # team_search_entry.insert(0,"Team's name")
+            # team_search_entry.bind('<FocusIn>',on_entry_click)
+            # team_search_entry.bind('<FocusOut>',on_focus_out)
 
-        elif select == options[2]:
+        if select == options[1]:
             def player_search():
                 '''
                 Display the searched player information.
@@ -314,13 +529,13 @@ def overview_section():
                     encoded_image = player_data["image"]
                     image_data = b64decode(encoded_image)
                     image = Image.open(io.BytesIO(image_data))
-                    image = image.resize((150,200))
+                    image = image.resize((380,400))
                     # Convert the image to a Tkinter-compatible format
                     tk_image = ImageTk.PhotoImage(image)
                     # Create a Tkinter label and display the image
-                    image_label = Label(frame_player, image = tk_image)
+                    image_label = Label(frame_player, image = tk_image, bg = "#f2f2f2")
                     image_label.image = tk_image
-                    image_label.place(x = 150,y = 150)
+                    image_label.place(x = 0,y = 68)
 
                     def details_label(frame_player,players_text,x,y):
                         '''
@@ -333,7 +548,7 @@ def overview_section():
                             y: y-coordinate of the label's position.
 
                         '''
-                        label_details = Label(frame_player,text=players_text,font=('League Spartan Medium', '12', 'bold'),bg="#FFFACD")
+                        label_details = Label(frame_player,text=players_text,font=('Tahoma', '12'),bg="#f2f2f2")
                         label_details.place(x=x,y=y)
                     label_the_details = []
                     label_the_details.append(details_label(frame_player,"Full Name:",350,150))
@@ -344,27 +559,29 @@ def overview_section():
                     label_the_details.append(details_label(frame_player,player_data['nationality'],480,210))
                     label_the_details.append(details_label(frame_player,"Current Club:",350,240))
                     label_the_details.append(details_label(frame_player,player_data['club'],480,240))
-                    label_the_details.append(details_label(frame_player,"Number:",350,270))
-                    label_the_details.append(details_label(frame_player,player_data['number'],480,270))
-                    label_the_details.append(details_label(frame_player,"Position:",350,300))
-                    label_the_details.append(details_label(frame_player,player_data['position'],480,300))
-
-                    seasonText = Label(frame_player, text = "SEASON STATS", font = ("Oswald", 14, "bold"), bg = "#FFFACD")
+                    label_the_details.append(details_label(frame_player,"Position:",350,270))
+                    label_the_details.append(details_label(frame_player,player_data['position'],480,270))
+                    label_the_details.append(details_label(frame_player,"Number:",350,300))
+                    label_the_details.append(details_label(frame_player,player_data['number'],480,300))
+                    
+                    PositionNumberLabel = Label(frame_player, text = player_data['number'], font = ("Oswald", 52, 'bold'), fg = "#545454", bg = "#f2f2f2")
+                    PositionNumberLabel.place(x = 40, y = 160)
+                    seasonText = Label(frame_player, text = "PLAYER'S DATA", font = ("League Spartan", 14, "bold"), bg = "#f2f2f2", fg = "#545454")
                     seasonText.place(x = 346, y = 94)
 
-                    positionText = Label(frame_player, text = "PLAYING POSITIONS", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
-                    positionText.place(x = 724, y = 78)
+                    positionText = Label(frame_player, text = "PLAYING POSITIONS", font = ("League Spartan", 14, "bold"), bg = "#f2f2f2", fg = "#545454")
+                    positionText.place(x = 724, y = 72)
 
-                    playerPosition = Label(frame_player, image = playerposImage, bg = "#FFFACD")
+                    playerPosition = Label(frame_player, image = playerposImage, bg = "#f2f2f2")
                     playerPosition.place(x = 720, y = 110)
 
-                    playerweightLabel = Label(frame_player, text = "YR", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    playerweightLabel = Label(frame_player, text = "YR", font = ("Oswald", 10, "bold"), bg = "#f2f2f2", fg = "#545454")
                     playerweightLabel.place(x = 80, y = 548)
 
-                    playerageLabel = Label(frame_player, text = "AGE", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    playerageLabel = Label(frame_player, text = "CM", font = ("Oswald", 10, "bold"), bg = "#f2f2f2", fg = "#545454")
                     playerageLabel.place(x = 172, y = 548)
 
-                    playerheightLabel = Label(frame_player, text = "HEIGHT", font = ("Oswald", 12, "bold"), bg = "#FFFACD")
+                    playerheightLabel = Label(frame_player, text = "WEIGHT", font = ("Oswald", 10, "bold"), bg = "#f2f2f2", fg = "#545454")
                     playerheightLabel.place(x = 260, y = 548)
 
                 except:
@@ -392,30 +609,30 @@ def overview_section():
                 if player_search_entry.get() == '':
                     player_search_entry.insert(0, "Player's name")
 
-            frame_player = Frame(frame_overview,bg="#FFFACD",height = 600,width = 1050)
+            frame_player = Frame(frame_overview,bg="#f2f2f2",height = 600,width = 1050)
             frame_player.place(x = 0,y = 70)
 
-            playerSearchLabel = Label(frame_overview, image = entrySearch, border = 0, bg = "#FFFACD")
+            playerSearchLabel = Label(frame_overview, image = entrySearch, border = 0, bg = "#f2f2f2")
             playerSearchLabel.image = entrySearch
             playerSearchLabel.place(x = 30, y = 92)
 
-            player_search_entry = Entry(playerSearchLabel,font=('Tahoma', 12), border = 0, bg = "#FFFACD")
+            player_search_entry = Entry(playerSearchLabel,font=('Tahoma', 12), border = 0, bg = "#f2f2f2")
             player_search_entry.place(x = 18,y = 8)
 
             player_search_entry.insert(0,"Player's name")
             player_search_entry.bind('<FocusIn>',on_entry_click_1)
             player_search_entry.bind('<FocusOut>',on_focus_out_1)
 
-            player_search_button = Button(playerSearchLabel, image = buttonSearch, border = 0,bg="#FFFACD",command=player_search)
+            player_search_button = Button(playerSearchLabel, image = buttonSearch, border = 0,bg="#f2f2f2",command=player_search)
             player_search_button.image_names = buttonSearch
             player_search_button.place(x=206,y=6)
   
-    options = ["League", "Team", "Player"]
+    options = ["Team", "Player"]
     selected_option = StringVar(frame_overview)
-    selected_option.set("Choose an option")  # Set the default selected option
+    selected_option.set("Team")  # Set the default selected option
     option_menu = OptionMenu(frame_overview, selected_option, *options, command=overview_selection)
     option_menu.place(x=890,y=15)
-    option_menu.config(font=('Tahoma', '10'), justify = LEFT ,width=16,bg="#FFFACD")
+    option_menu.config(font=('Tahoma', '10'), justify = LEFT ,width=16,bg="#f2f2f2")
 
     try:
         frameFeedback.destroy()
@@ -435,9 +652,9 @@ def matches_section():
     personalizeButton.config(fg = "black")
     feedbackButton.config(fg = "black")
 
-    frame_matches =Frame(rightFrame,width=1070, height=668, bg="#FFFACD", border=1)
+    frame_matches =Frame(rightFrame,width=1070, height=668, bg="#f2f2f2", border=1)
     frame_matches.place(x=0,y=0)
-    label_matches = Label(frame_matches,text="MACTHES •",font=('Tahoma', '14'),bg='#FFFACD')
+    label_matches = Label(frame_matches,text="MACTHES •",font=('Nunito', '14', 'bold'),bg='#f2f2f2')
     label_matches.place(x=20,y=16)
     separator = Frame(frame_matches, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
@@ -455,7 +672,7 @@ def matches_section():
     column_widths = [30,30,10,200,10,10,10,200]  # Add more widths for additional columns
     # Create a custom style for the treeview
     style = ttk.Style()
-    style.configure('Custom.Treeview', font=('Arial', 12), background='#FFFACD', foreground='black')  # Set the font and colors for the table
+    style.configure('Custom.Treeview', font=('Arial', 12), background='#f2f2f2', foreground='black')  # Set the font and colors for the table
     style.configure('Custom.Treeview.Heading', font=('Arial', 12, 'bold'))
     # Add the column headers to the treeview
     for i, column in enumerate(df.columns):
@@ -489,9 +706,9 @@ def standing_section():
     personalizeButton.config(fg = "black")
     feedbackButton.config(fg = "black")
 
-    frame_standings = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
+    frame_standings = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
     frame_standings.place(x=0, y=0)
-    label_standings = Label(frame_standings, text="STANDINGS •", font=('Tahoma', 14), bg='#FFFACD')
+    label_standings = Label(frame_standings, text="STANDINGS •", font=('Nunito', '14', 'bold'), bg='#f2f2f2')
     label_standings.place(x=20, y=16)
     separator = Frame(frame_standings, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
@@ -512,9 +729,9 @@ def standing_section():
 
     # Create a custom style for the treeview
     style = ttk.Style()
-    style.configure('Custom.Treeview', font=('Arial', 12), background='#FFFACD', foreground='black')  # Set the font and colors for the table
+    style.configure('Custom.Treeview', font=('Arial', 12), background='#f2f2f2', foreground='black')  # Set the font and colors for the table
 
-    style.configure('Custom.Treeview.Heading', font=('Arial', 12, 'bold'),background='#FFFACD', foreground='black')
+    style.configure('Custom.Treeview.Heading', font=('Arial', 12, 'bold'),background='#f2f2f2', foreground='black')
 
     # Add the column headers to the treeview
     for i, column in enumerate(df.columns):
@@ -551,10 +768,10 @@ def personalization_section():
     feedbackButton.config(fg = "black")
 
     global frame_personalization
-    frame_personalization = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
+    frame_personalization = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
     frame_personalization.place(x=0, y=0)
 
-    label_personalization = Label(frame_personalization, text="PERSONALIZATION •", font=('Tahoma', '14'), bg='#FFFACD')
+    label_personalization = Label(frame_personalization, text="PERSONALIZATION •", font=('Nunito', '14', 'bold'), bg='#f2f2f2')
     label_personalization.place(x=20, y=16)
 
     separator = Frame(frame_personalization, width = 1070, height = 2, bg = "#000")
@@ -570,33 +787,33 @@ def personalization_section():
             '''
             personalization_section()
 
-        profile_frame = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
+        profile_frame = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
         profile_frame.place(x=0, y=0)
 
-        label_profile = Label(profile_frame, text="User Profile", font=('League Spartan Medium', '16', 'bold'), bg="#FFFACD")
+        label_profile = Label(profile_frame, text="User Profile", font=('League Spartan Medium', '16', 'bold'), bg="#f2f2f2")
         label_profile.place(x=10, y=10)
 
         separator = Frame(profile_frame, width = 1070, height = 2, bg = "#000")
         separator.place(x = 0, y = 64)
 
-        full_name_label = Label(profile_frame, text="Full Name:", font=('League Spartan Medium', '14', 'bold'), bg="#FFFACD")
+        full_name_label = Label(profile_frame, text="Full Name:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
         full_name_label.place(x=350, y=200)
 
         full_name_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         full_name_entry.place(x=480, y=200)
 
-        phone_num_label = Label(profile_frame, text="Phone No.:", font=('League Spartan Medium', '14', 'bold'), bg="#FFFACD")
+        phone_num_label = Label(profile_frame, text="Phone No.:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
         phone_num_label.place(x=350, y=250)
 
         phone_num_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         phone_num_entry.place(x=480, y=250)
 
-        email_add_label = Label(profile_frame, text="Email:", font=('League Spartan Medium', '14', 'bold'), bg="#FFFACD")
+        email_add_label = Label(profile_frame, text="Email:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
         email_add_label.place(x=350, y=300)
 
         email_add_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         email_add_entry.place(x=480, y=300)
-        back_button = Button(profile_frame,text="Back",font=('League Spartan Medium', '12', 'bold'),bg="#FFFACD",command=back)
+        back_button = Button(profile_frame,text="Back",font=('League Spartan Medium', '12', 'bold'),bg="#f2f2f2",command=back)
         back_button.place(x=980, y=70)
 
         def enable_entry():
@@ -607,7 +824,7 @@ def personalization_section():
             phone_num_entry.config(state = NORMAL)
             email_add_entry.config(state = NORMAL)
             update_button.config(state = DISABLED)
-            save_button = Button(profile_frame, text="Save", font=('League Spartan Medium', '12', 'bold'), bg="#FFFACD", command=save_profile)
+            save_button = Button(profile_frame, text="Save", font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2", command=save_profile)
             save_button.place(x=350, y=350)
 
         def save_profile():
@@ -634,7 +851,7 @@ def personalization_section():
             except:
                 messagebox.showerror("System Error!", "Sorry for the inconvenience. We are working on it.")
 
-        update_button = Button(profile_frame, text="Edit", font=('League Spartan Medium', '12', 'bold'), bg="#FFFACD", command=enable_entry)
+        update_button = Button(profile_frame, text="Edit", font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2", command=enable_entry)
         update_button.place(x=350, y=350)
 
         full_name_entry.insert(0, user_data['fullName'])
@@ -696,28 +913,28 @@ def personalization_section():
 
         password_change_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        password_change_window.config(bg="#FFFACD")
+        password_change_window.config(bg="#f2f2f2")
         
-        pwdChangeLabel = Label(password_change_window, image = changePwd, bg = "#FFFACD")
+        pwdChangeLabel = Label(password_change_window, image = changePwd, bg = "#f2f2f2")
         pwdChangeLabel.place(x = 0, y = 0)
 
-        current_password_label = Label(pwdChangeLabel, text='Current Password:', bg="#FFFACD", font=('Tahoma', '12'))
-        current_password_label.place(x=46, y=43)
-        current_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#FFFACD")
-        current_password_entry.place(x=48, y=74)
+        current_password_label = Label(pwdChangeLabel, text='Current Password:', bg="#f2f2f2", font=('Tahoma', '12'))
+        current_password_label.place(x=46, y=31)
+        current_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
+        current_password_entry.place(x=48, y=63)
 
-        new_password_label = Label(pwdChangeLabel, text='Enter New Password:', bg="#FFFACD", font=('Tahoma', '12'))
-        new_password_label.place(x=46, y=116)
-        new_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#FFFACD")
-        new_password_entry.place(x=48, y=145)
+        new_password_label = Label(pwdChangeLabel, text='Enter New Password:', bg="#f2f2f2", font=('Tahoma', '12'))
+        new_password_label.place(x=46, y=100)
+        new_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
+        new_password_entry.place(x=48, y=133)
 
-        re_password_label = Label(pwdChangeLabel, text='Re-enter New Password:', bg="#FFFACD", font=('Tahoma', '12'))
-        re_password_label.place(x=46, y=186)
-        re_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#FFFACD")
-        re_password_entry.place(x=48, y=217)
+        re_password_label = Label(pwdChangeLabel, text='Re-enter New Password:', bg="#f2f2f2", font=('Tahoma', '12'))
+        re_password_label.place(x=46, y=169)
+        re_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
+        re_password_entry.place(x=48, y=202)
 
-        change_btn = Button(pwdChangeLabel, text='Change',width = 94, height = 24, border = 0, image = changePwdButton, compound = CENTER, bg="#FFFACD", font=('Tahoma', '12'), command=confirm_change)
-        change_btn.place(x=94, y=280)
+        change_btn = Button(pwdChangeLabel, text='Change',width = 94, height = 24, border = 0, image = changePwdButton, compound = CENTER, bg="#f2f2f2", font=('Tahoma', '12'), command=confirm_change)
+        change_btn.place(x=90, y=280)
 
         
 
@@ -748,18 +965,18 @@ def personalization_section():
 
                     deleteConfirmWindow.geometry(f"{window_width}x{window_height}+{x}+{y}")
          
-                    deleteConfirmWindow.config(bg="#FFFACD")
+                    deleteConfirmWindow.config(bg="#f2f2f2")
 
-                    accDltImage = Label(deleteConfirmWindow, image = dltAccImage, border = 0, bg = "#FFFACD")
-                    accDltImage.place(x = 134, y = 30)
+                    accDltImage = Label(deleteConfirmWindow, image = dltAccImage, border = 0, bg = "#f2f2f2")
+                    accDltImage.place(x = 130, y = 30)
 
-                    accDltWarn = Label(deleteConfirmWindow, text = "Are you sure, you want to delete your account?", wraplength = 180, font = ("Helvetica", 10, "bold"), bg = "#FFFACD")
+                    accDltWarn = Label(deleteConfirmWindow, text = "Are you sure, you want to delete your account?", wraplength = 180, font = ("Helvetica", 10, "bold"), bg = "#f2f2f2")
                     accDltWarn.place(x = 78, y = 108)
 
-                    confirmed = Button(deleteConfirmWindow, text = "Yes, Delete", width = 94, height = 24, image = dltAccButton, compound = CENTER, border = 0, bg = "#FFFACD", font = ("Arial", 10), fg = "#FFF", command = confirmDel)
+                    confirmed = Button(deleteConfirmWindow, width = 94, height = 24, image = buttonConDelete, compound = CENTER, border = 0, bg = "#f2f2f2", font = ("Arial", 10), fg = "#FFF", command = confirmDel)
                     confirmed.place(x = 38, y = 170)
 
-                    keepacc = Button(deleteConfirmWindow, text = "Keep Account", width = 94, height = 24, image = dltAccButton, compound = CENTER, border = 0, bg = "#FFFACD", font = ("Arial", 10), fg = "#FFF", command = stopDel)
+                    keepacc = Button(deleteConfirmWindow, width = 94, height = 24, image = buttonCancelDlt, compound = CENTER, border = 0, bg = "#f2f2f2", font = ("Arial", 10), fg = "#FFF", command = stopDel)
                     keepacc.place(x = 180, y = 170)
                 else:
                     messagebox.showerror("Delete Account", "Wrong password.")
@@ -784,24 +1001,24 @@ def personalization_section():
 
         delete_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        delete_window.config(bg="#FFFACD")
+        delete_window.config(bg="#f2f2f2")
 
-        delete_password_label = Label(delete_window, text="Verify that it's you!", bg="#FFFACD", font=('Tahoma', '12'))
+        delete_password_label = Label(delete_window, text="Verify that it's you!", bg="#f2f2f2", font=('Tahoma', '12'))
         delete_password_label.place(x=24, y=24)
 
         frameStyle = Frame(delete_window, height = 2, width = 220, bg = "red")
         frameStyle.place(x = 24, y = 56)
 
-        dltEntryLabel = Label(delete_window, image = entryDlt, border = 0, bg = '#FFFACD')
+        dltEntryLabel = Label(delete_window, image = entryDlt, border = 0, bg = '#f2f2f2')
         dltEntryLabel.place(x = 24, y = 112)
         
-        delete_password_entry = Entry(dltEntryLabel, font=('Tahoma', '12'), width=24, border = 0, bg = "#FFFACD")
+        delete_password_entry = Entry(dltEntryLabel, font=('Tahoma', '12'), width=24, border = 0, bg = "#f2f2f2")
         delete_password_entry.place(x=12, y=6, height = 26)
 
-        dltEntryText = Label(delete_window, text = "Enter Password: ", bg = "#FFFACD", font= ("Tahoma", 12))
+        dltEntryText = Label(delete_window, text = "Enter Password: ", bg = "#f2f2f2", font= ("Tahoma", 12))
         dltEntryText.place(x = 32, y = 84)
 
-        delete_btn = Button(delete_window, image = dltAccButton, text="Delete", width = 94, height = 24, compound = CENTER, bg="#FFFACD", border = 0, fg = "#FFF", font=('Helvetica', '10', "bold"), command=delete_acc)
+        delete_btn = Button(delete_window, image = dltAccButton, width = 94, height = 24, compound = CENTER, bg="#f2f2f2", border = 0, fg = "#FFF", font=('Helvetica', '10', "bold"), command=delete_acc)
         delete_btn.image_names = dltAccButton
         delete_btn.place(x=108, y=184)
 
@@ -812,8 +1029,8 @@ def personalization_section():
         setting_window.title('Setting')
         setting_window.resizable(0,0)
         setting_window.geometry('250x350')
-        setting_window.config(bg="#FFFACD")
-        change_font_label = Label(setting_window,text="Change App Font",font=("League Spartan Medium", '12', ''),bg="#FFFACD")
+        setting_window.config(bg="#f2f2f2")
+        change_font_label = Label(setting_window,text="Change App Font",font=("League Spartan Medium", '12', ''),bg="#f2f2f2")
         change_font_label.place(x=10,y=15)
 
     personaliztion_button = []
@@ -842,13 +1059,13 @@ def feedback_section():
 
     global frameFeedback
 
-    frameFeedback = Frame(rightFrame, width=1070, height=668, bg="#FFFACD", border=1)
+    frameFeedback = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
     frameFeedback.place(x=0, y=0)
 
     feedbackLabel = Label(frameFeedback, image=ImageFeedback, border=0)
     feedbackLabel.place(x=-60, y=102)
 
-    labelFeedback = Label(frameFeedback, text="FEEDBACK & SUPPORT •", font=('Tahoma', '14'), bg='#FFFACD')
+    labelFeedback = Label(frameFeedback, text="FEEDBACK & SUPPORT •", font=('Nunito', '14', 'bold'), bg='#f2f2f2')
     labelFeedback.place(x=20, y=16)
 
     separator = Frame(frameFeedback, width=1070, height=2, bg="#000")
@@ -889,70 +1106,70 @@ def feedback_section():
             messagebox.showerror("Connection error!", str(e))
 
 
-    fnameLabel = Label(feedbackLabel, text="Full Name*", font=("League Spartan", 15), bg="#FFFACD")
-    fnameLabel.place(x=118, y=34)
+    fnameLabel = Label(feedbackLabel, text="Full Name*", font=("League Spartan", 15), bg="#f2f2f2")
+    fnameLabel.place(x=132, y=44, height = 30)
 
-    fnameEntry = Entry(feedbackLabel, width=17, border=0, bg="#FFFACD", font=("Tahoma", 12), justify=LEFT)
-    fnameEntry.place(x=122, y=73, height=29)
+    fnameEntry = Entry(feedbackLabel, width=17, border=0, bg="#f2f2f2", font=("Tahoma", 12), justify=LEFT)
+    fnameEntry.place(x=132, y=80, height=26)
 
     def importData():
         fnameEntry.insert(0, user_data['fullName'])
-        fnameEntry.config(state = DISABLED, disabledbackground = "#FFFACD", disabledforeground="#000")
+        fnameEntry.config(state = DISABLED, disabledbackground = "#f2f2f2", disabledforeground="#000")
 
         phoneEntry.insert(0, user_data['phone'])
-        phoneEntry.config(state = DISABLED, disabledbackground = "#FFFACD", disabledforeground="#000")
+        phoneEntry.config(state = DISABLED, disabledbackground = "#f2f2f2", disabledforeground="#000")
 
 
-    importName = Button(feedbackLabel,text = "Import Details  ", image = iconImport, compound = RIGHT, border = 0, bg = "#FFFACD", font = ("Tahoma", 10), command = importData)
-    importName.place(x = 310, y = 76)
+    importName = Button(feedbackLabel,text = "Import Details  ", image = iconImport, compound = RIGHT, border = 0, bg = "#f2f2f2", font = ("Tahoma", 10), command = importData)
+    importName.place(x = 310, y = 81)
 
-    phoneLabel = Label(feedbackLabel, text="Contact No. *", font=("League Spartan", 15), bg="#FFFACD")
-    phoneLabel.place(x=118, y=113)
+    phoneLabel = Label(feedbackLabel, text="Contact No. *", font=("League Spartan", 15), bg="#f2f2f2")
+    phoneLabel.place(x=132, y=122, height = 30)
 
-    complaintLabel = Label(feedbackLabel, text="Any Complaints*", font=("League Spartan", 15), bg="#FFFACD")
-    complaintLabel.place(x=118, y=228)
+    phoneEntry = Entry(feedbackLabel, width=30, border=0, bg="#f2f2f2", font=("Tahoma", 12), justify=LEFT)
+    phoneEntry.place(x=132, y=158, height=26)
 
-    phoneEntry = Entry(feedbackLabel, width=30, border=0, bg="#FFFACD", font=("Tahoma", 12), justify=LEFT)
-    phoneEntry.place(x=122, y=152, height=29)
+    complaintLabel = Label(feedbackLabel, text="Any Complaints*", font=("League Spartan", 15), bg="#f2f2f2")
+    complaintLabel.place(x=132, y=234, height = 30)
 
     def on_enter(e):
     # Get the text from the Text widget
         message = msgBox.get("1.0", "end-1c")  # "1.0" means line 1, character 0. "end-1c" excludes the newline character at the end.
         character_count = len(message)
         if character_count >= 500:
-            msgBox.config(state = DISABLED, bg = "#FFFACD")
+            msgBox.config(state = DISABLED, bg = "#f2f2f2")
         else:
-            msgBox.config(state = NORMAL, bg="#FFFACD")
+            msgBox.config(state = NORMAL, bg="#f2f2f2")
             labelcount.config(text = f"{character_count}/500")
-    labelcount = Label(frameFeedback, text = "0/500", bg = "#FFFACD", fg = "#545454")
+    labelcount = Label(frameFeedback, text = "0/500", bg = "#f2f2f2", fg = "#545454")
     labelcount.place(x = 300, y = 344)
 
-    msgBox = Text(feedbackLabel, width = 32, height = 5, border = 0, bg = "#FFFACD", font = ("Tahoma", 12))
+    msgBox = Text(feedbackLabel, width = 30, height = 5, border = 0, bg = "#f2f2f2", font = ("Tahoma", 12))
     msgBox.bind("<KeyRelease>", on_enter)
-    msgBox.place(x = 118, y = 274)
+    msgBox.place(x = 132, y = 273)
 
-    contactText = Label(feedbackLabel, text = "CONTACT US", font = ("League Spartan Semibold", 18), fg = "blue", bg = "#FFFACD")
+    contactText = Label(feedbackLabel, text = "CONTACT US", font = ("League Spartan Semibold", 18), fg = "blue", bg = "#f2f2f2")
     contactText.place(x = 484, y = 24)
 
-    helpText = Label(feedbackLabel, text = "How can we help?", fg = "#000", bg = "#FFFACD", font = ("League Spartan Semibold", 16))
+    helpText = Label(feedbackLabel, text = "How can we help?", fg = "#000", bg = "#f2f2f2", font = ("League Spartan Semibold", 16))
     helpText.place(x = 484, y = 62)
 
-    descriptionText = Label(feedbackLabel, text = "To learn more about A-Divison\nFootball League, please fill out the\ncontact form and a member\nof our team will be in touch soon.", fg = "#000", bg = "#FFFACD", font = ("Tahoma", 12), justify = LEFT)
+    descriptionText = Label(feedbackLabel, text = "To learn more about A-Divison\nFootball League, please fill out the\ncontact form and a member\nof our team will be in touch soon.", fg = "#000", bg = "#f2f2f2", font = ("Tahoma", 12), justify = LEFT)
     descriptionText.place(x = 484, y = 100)
 
-    rateText = Label(feedbackLabel, text = "Rate Us •", font = ("League Spartan Medium", 14), bg = "#FFFACD")
-    rateText.place(x = 484, y = 196)
+    rateText = Label(feedbackLabel, text = "Rate Us •", font = ("League Spartan Medium", 14), bg = "#f2f2f2")
+    rateText.place(x = 484, y = 192)
 
-    rateAddon = Label(feedbackLabel, text = "Tell others what you think", bg = "#FFFACD", font = ("Tahoma", 12), fg = "#545454")
-    rateAddon.place(x = 484, y = 230)
+    rateAddon = Label(feedbackLabel, text = "Tell others what you think", bg = "#f2f2f2", font = ("Tahoma", 12), fg = "#545454")
+    rateAddon.place(x = 484, y = 226)
 
     def on_focus(e = None):
         userExp.delete(0, END)
     def out_focus(e = None):
         userExp.get()
 
-    userExp = Entry(feedbackLabel, width = 30, border = 0, bg = "#FFFACD", fg = "#545454", font = ("Tahoma", 12), justify = CENTER)
-    userExp.place(x = 498, y = 324, height = 30)
+    userExp = Entry(feedbackLabel, width = 30, border = 0, bg = "#f2f2f2", fg = "#545454", font = ("Tahoma", 12), justify = CENTER)
+    userExp.place(x = 495, y = 320, height = 30)
 
     userExp.insert(0, "Describe your experience (optional)")
 
@@ -998,14 +1215,14 @@ def feedback_section():
     def handle_rating(rating):
         return rating
 
-    feedback_frame = Frame(feedbackLabel, bg="#FFFACD")
-    feedback_frame.place(x=482, y=260)
+    feedback_frame = Frame(feedbackLabel, bg="#f2f2f2")
+    feedback_frame.place(x=482, y=254)
 
     stars = []
     rating_callback = handle_rating
 
     for i in range(5):
-        star = Label(feedback_frame, text='\u2606', font=('Arial', 24), fg='orange', bg = "#FFFACD")
+        star = Label(feedback_frame, text='\u2606', font=('Arial', 24), fg='orange', bg = "#f2f2f2")
         star.bind('<Enter>', on_star_enter)
         star.bind('<Leave>', on_star_leave)
         star.bind('<Button-1>', on_star_click)
@@ -1016,20 +1233,20 @@ def feedback_section():
     verticalLine = Frame(frameFeedback, width = 2, height = 420, bg = "#545454")
     verticalLine.place(x = 750, y = 172)
 
-    otherRatingsFrame = Frame(frameFeedback, width = 310, bg = "#FFFACD", height = 512)
+    otherRatingsFrame = Frame(frameFeedback, width = 310, bg = "#f2f2f2", height = 512)
     otherRatingsFrame.place(x = 754, y = 128)
 
-    othersRatingText = Label(otherRatingsFrame, text = "WHAT OTHER SAYS?", font = ("League Spartan Semibold", 16), fg = "#f0710a", bg = "#FFFACD")
+    othersRatingText = Label(otherRatingsFrame, text = "WHAT OTHER SAYS?", font = ("League Spartan Semibold", 16), fg = "#f0710a", bg = "#f2f2f2")
     othersRatingText.place(x = 8, y = 10)
 
-    otherFeedsLabel = Label(otherRatingsFrame, image = imagefeedbackUser, bg = "#FFFACD")
+    otherFeedsLabel = Label(otherRatingsFrame, image = imagefeedbackUser, bg = "#f2f2f2")
     otherFeedsLabel.place(x = -2, y = 44)
 
-    textSaugat = Label(otherFeedsLabel, text = "Saugat Shahi", font = ("Tahoma", 10), bg = "#FFFACD")
+    textSaugat = Label(otherFeedsLabel, text = "Saugat Shahi", font = ("Tahoma", 10), bg = "#f2f2f2")
     textSaugat.place(x = 24, y = 8)
 
-    submitButton = Button(feedbackLabel, text = "Submit ", bg = "#FFFACD", border = 0, image = iconSubmit, compound = RIGHT, font = ("Tahoma", 12), command = feedSubmit)
-    submitButton.place(x = 602, y = 388)
+    submitButton = Button(feedbackLabel, text = "Submit ", bg = "#f2f2f2", border = 0, image = iconSubmit, compound = RIGHT, font = ("Tahoma", 12), command = feedSubmit)
+    submitButton.place(x = 598, y = 382)
 
 
     '''
@@ -1042,14 +1259,14 @@ app.state("zoomed")
 app.resizable(False, False)
 app.title("Dashboard")
 
-feedbackImage = Image.open("C:Images\\feedBox.png")
+feedbackImage = Image.open("C:Images\\feedBackOpt.png")
 ImageFeedback = ImageTk.PhotoImage(feedbackImage)
 
 groundImage = Image.open("C:Images\\ground.png")
 imageGround = ImageTk.PhotoImage(groundImage)
 
 logoImage = Image.open("C:Images\\logonp.png")
-resizedLogo = logoImage.resize((140, 140))
+resizedLogo = logoImage.resize((120, 120))
 imageLogo = ImageTk.PhotoImage(resizedLogo)
 
 homeIcon = Image.open("C:Images\\home.png")
@@ -1082,18 +1299,18 @@ iconImport = ImageTk.PhotoImage(importIcon)
 submitIcon = Image.open("C:Images\\next.png")
 iconSubmit = ImageTk.PhotoImage(submitIcon)
 
-userFeedbackImage = Image.open("C:Images\\otherFeeds.png")
+userFeedbackImage = Image.open("C:Images\\otherFeedsOpt.png")
 imagefeedbackUser = ImageTk.PhotoImage(userFeedbackImage)
 
-imagePlayerpos = Image.open("C:Images\\playerPosition.png")
+imagePlayerpos = Image.open("C:Images\\playerPositionOpt.png")
 resizePosimage = imagePlayerpos.resize((260, 150))
 playerposImage = ImageTk.PhotoImage(resizePosimage)
 
-searchentry = Image.open("C:Images\\searchEntry.png")
+searchentry = Image.open("C:Images\\searchEntryOpt.png")
 resizeSearch = searchentry.resize((244, 38))
 entrySearch = ImageTk.PhotoImage(resizeSearch)
 
-searchButton = Image.open("C:Images\\searchButton.png")
+searchButton = Image.open("C:Images\\searchButtonOpt.png")
 resizeSearchButton = searchButton.resize((24, 24))
 buttonSearch = ImageTk.PhotoImage(resizeSearchButton)
 
@@ -1110,64 +1327,160 @@ resizeEntry = dltEntry.resize((240, 40))
 entryDlt = ImageTk.PhotoImage(resizeEntry)
 
 accDltButton= Image.open("C:Images\\buttonDlt.png")
-resizeaccDltButton= accDltButton.resize((100, 50))
+resizeaccDltButton= accDltButton.resize((78, 48))
 dltAccButton= ImageTk.PhotoImage(resizeaccDltButton)
+
+ConDeleteButton= Image.open("C:Images\\cDlt.png")
+resizeConDeleteButton= ConDeleteButton.resize((70, 40))
+buttonConDelete= ImageTk.PhotoImage(resizeConDeleteButton)
+
+CancelDltButton= Image.open("C:Images\\cancelDlt.png")
+resizeCancelDltButton= CancelDltButton.resize((70, 40))
+buttonCancelDlt= ImageTk.PhotoImage(resizeCancelDltButton)
 
 accDltImage= Image.open("C:Images\\deleteAcc.png")
 resizeaccDltImage= accDltImage.resize((60, 60))
 dltAccImage= ImageTk.PhotoImage(resizeaccDltImage)
 
-frameBack= Image.open("C:Images\\frameBack.png")
+frameBack= Image.open("C:Images\\frameBackOpt.png")
 frameBackImage = ImageTk.PhotoImage(frameBack)
 
-live1Back= Image.open("C:Images\\live1.png")
+live1Back= Image.open("C:Images\\live12.png")
 live1BackImage = ImageTk.PhotoImage(live1Back)
 
-live2Back= Image.open("C:Images\\live2.png")
+live2Back= Image.open("C:Images\\live22.png")
 live2BackImage = ImageTk.PhotoImage(live2Back)
 
-scores = Image.open("C:Images\\scores.png")
+scores = Image.open("C:Images\\scoresOpt.png")
 scoresImage = ImageTk.PhotoImage(scores)
+
+Club1Logo = Image.open("C:Images\\club1Logo.png")
+logoClub1 = ImageTk.PhotoImage(Club1Logo)
+
+Club2Logo = Image.open("C:Images\\club2Logo.png")
+logoClub2 = ImageTk.PhotoImage(Club2Logo)
+
+Club3Logo = Image.open("C:Images\\club3Logo.jpg")
+logoClub3 = ImageTk.PhotoImage(Club3Logo)
+
+Club4Logo = Image.open("C:Images\\club4Logo.png")
+logoClub4 = ImageTk.PhotoImage(Club4Logo)
+
+Club5Logo = Image.open("C:Images\\club5Logo.png")
+logoClub5 = ImageTk.PhotoImage(Club5Logo)
+
+Club6Logo = Image.open("C:Images\\club6Logo.png")
+logoClub6 = ImageTk.PhotoImage(Club6Logo)
+
+userLabelImage = Image.open("C:Images\\userLabel.png")
+resizeUserImage = userLabelImage.resize((240, 120))
+imageUserLabel = ImageTk.PhotoImage(resizeUserImage)
+
+userLabelImage1 = Image.open("C:Images\\highlightPos.png")
+resizeUserImage1 = userLabelImage1.resize((240, 120))
+imageUserLabel1 = ImageTk.PhotoImage(resizeUserImage1)
+
+ClubImage1 = Image.open("C:Images\\Club1.png")
+resizeClubImage1 = ClubImage1.resize((260, 120))
+imageClub1 = ImageTk.PhotoImage(resizeClubImage1)
+
+ClubListImage1 = Image.open("C:Images\\Club1List.png")
+resizeClubListImage1 = ClubListImage1.resize((260, 360))
+imageClubList1 = ImageTk.PhotoImage(resizeClubListImage1)
 
 # Styling the speparator
 style = ttk.Style()
 style.configure("Separator.TSeparator", background="black")
 
 #Creating the frames
-leftFrame = Frame(app, width=300, height=700, bg="#FFFACD", border=1)
+leftFrame = Frame(app, width=300, height=700, bg="#f2f2f2", border=1)
 leftFrame.place(x=-4, y=0)
-rightFrame = Frame(app, width=1070, height=700, bg="#FFFACD", border=1)
+rightFrame = Frame(app, width=1070, height=700, bg="#f2f2f2", border=1)
 rightFrame.place(x=298, y=0)
-lowerFrame = Frame(app, width=1366, height=46, bg="#FFFACD")
+lowerFrame = Frame(app, width=1366, height=46, bg="#f2f2f2")
 lowerFrame.place(x=0, y=702)
 
 hoverFrame = Frame(height = 40, width = 3, bg = "red")
 hoverFrame.place(x = 2, y = 212)
 
+def on_enter_userLabel(e):
+    userLabel.config(image = imageUserLabel1, bg= "#f2f2f2")
+def on_leave_userLabel(e):
+    userLabel.config(image = imageUserLabel, bg = "#f2f2f2")
+    
+userLabel = Label(leftFrame, image = imageUserLabel, bg = "#f2f2f2")
+userLabel.bind("<Enter>", on_enter_userLabel)
+userLabel.bind("<Leave>", on_leave_userLabel)
+userLabel.place(x = 27, y = 32)
+
+
 def on_button_click_with_section(func, button):
     func()
     on_button_click(button)
 
-homeButton = Button(leftFrame, text = "   Home", border = 0, cursor = "hand2", width = 408, image = iconHome, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, fg = "red", command=lambda: on_button_click_with_section(home_section, homeButton))
+homeButton = Button(leftFrame, text = "   Home", border = 0, cursor = "hand2", width = 408, image = iconHome, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, fg = "red", command=lambda: on_button_click_with_section(home_section, homeButton))
 homeButton.place(x = -108, y = 209)
 
-liveButton = Button(leftFrame, text = "   Live", border = 0, compound = LEFT, width = 416, cursor = "hand2", image = iconLive, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(live_section, liveButton))
+liveButton = Button(leftFrame, text = "   Live", border = 0, compound = LEFT, width = 416, cursor = "hand2", image = iconLive, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, command=lambda: on_button_click_with_section(live_section, liveButton))
 liveButton.place(x = -118, y = 282)
 
-overviewButton = Button(leftFrame, text = "   Overview", cursor = "hand2", image = iconOverview, compound = LEFT, border = 0, width = 372, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(overview_section, overviewButton))
+overviewButton = Button(leftFrame, text = "   Overview", cursor = "hand2", image = iconOverview, compound = LEFT, border = 0, width = 372, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, command=lambda: on_button_click_with_section(overview_section, overviewButton))
 overviewButton.place(x = -76, y = 348)
 
-matchButton = Button(leftFrame, text = "   Matches", border = 0, cursor = "hand2", width = 390, image = iconMatch, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(matches_section, matchButton))
+matchButton = Button(leftFrame, text = "   Matches", border = 0, cursor = "hand2", width = 390, image = iconMatch, compound = LEFT, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, command=lambda: on_button_click_with_section(matches_section, matchButton))
 matchButton.place(x = -90, y = 414)
 
-standingsButton = Button(leftFrame, text = "   Standings", cursor = "hand2", image = iconStandings, compound=LEFT, border = 0, width = 390, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(standing_section, standingsButton))
+standingsButton = Button(leftFrame, text = "   Standings", cursor = "hand2", image = iconStandings, compound=LEFT, border = 0, width = 390, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, command=lambda: on_button_click_with_section(standing_section, standingsButton))
 standingsButton.place(x = -85, y = 480)
 
-personalizeButton = Button(leftFrame, text = "   Personalization", cursor = "hand2", border = 0, image = iconPersonalize, compound = LEFT, width = 326, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(personalization_section, personalizeButton))
+personalizeButton = Button(leftFrame, text = "   Personalization", cursor = "hand2", border = 0, image = iconPersonalize, compound = LEFT, width = 326, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, command=lambda: on_button_click_with_section(personalization_section, personalizeButton))
 personalizeButton.place(x = -32, y = 546)
 
-feedbackButton = Button(leftFrame, text = "   Feedback & Support", cursor = "hand2", image = iconFeedback, compound = LEFT, border = 0, width = 300, height = 0, font = ("League Spartan", 14), bg = "#FFFACD", justify = LEFT, command=lambda: on_button_click_with_section(feedback_section, feedbackButton))
+feedbackButton = Button(leftFrame, text = "   Feedback & Support", cursor = "hand2", image = iconFeedback, compound = LEFT, border = 0, width = 300, height = 0, font = ("League Spartan", 14), bg = "#f2f2f2", justify = LEFT, command=lambda: on_button_click_with_section(feedback_section, feedbackButton))
 feedbackButton.place(x = 0, y = 612)
+
+photo_references = []
+
+def select_image():
+    file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png")])
+    if file_path:
+        with open(file_path, "rb") as image_file:
+            image = Image.open(file_path)
+            image = resize_image(image, (70, 70))  # Resize the image to 70x70
+            image = make_round_image(image, (70, 70))
+            buffered = BytesIO()
+            image.save(buffered, format="PNG")
+            profilePicture = {
+                'profile': buffered.getvalue()
+            }
+            football_collection.update_one({'phone': user_data['phone']}, {'$set': {'Profile Picture': profilePicture}})
+            
+            display_image(image)
+            
+def resize_image(image, size):
+    _image = image.resize(size, Image.BILINEAR)
+    return _image
+
+def make_round_image(image, size):
+    mask = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0, size[0], size[1]), fill=255)
+    result = Image.new("RGBA", size, (255, 255, 255, 0))
+    result.paste(image, (0, 0), mask)
+    return result
+
+def display_image(image):
+    global img_label
+    photo = ImageTk.PhotoImage(image)
+    img_label = Label(app, image=photo, bg = "#FFF")
+    img_label.place(x = 45, y = 56)
+
+    img_label.image = photo
+    photo_references.append(photo)
+
+
+select_button = Button(app, text="Select Image", command=select_image, bg="#FFF", border = 0)
+select_button.place(x = 140, y = 116)
 
 def on_button_click(button):
     # Reset the hoverFrame position for all buttons

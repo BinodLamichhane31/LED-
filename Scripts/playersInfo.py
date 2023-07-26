@@ -19,13 +19,16 @@ def submit():
         'club': label_entry[3].get(),
         'number': label_entry[4].get(),
         'position': label_entry[5].get(),
-        'link': label_entry[6].get(),
+        'Age': label_entry[6].get(),
+        'Height': label_entry[7].get(),
+        'Weight': label_entry[7].get(),
         'image': encoded_image
     }
     player_collection.insert_one(player_data)
     for entry in label_entry:
         entry.delete(0, 'end')
     messagebox.showinfo('','Successfully stored.')
+
 def picture():
     global encoded_image
     file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png")])
@@ -46,17 +49,19 @@ player_window = Tk()
 player_window.geometry("400x500")
 player_window.config(bg = "#FFFACD")
 label_entry = []
-label_entry.append(label_and_entry(player_window,"Full Name:",30,20,120,20))
-label_entry.append(label_and_entry(player_window,"Date of Birth:",30,50,120,50))
-label_entry.append(label_and_entry(player_window,"Nationality:",30,80,120,80))
-label_entry.append(label_and_entry(player_window,"Present Club:",30,110,120,110))
-label_entry.append(label_and_entry(player_window,"Number:",30,140,120,140))
-label_entry.append(label_and_entry(player_window,"Position:",30,170,120,170))
-label_entry.append(label_and_entry(player_window,"Link:",30,200,120,200))
+label_entry.append(label_and_entry(player_window,"Full Name:",90,20,180,20))
+label_entry.append(label_and_entry(player_window,"Date of Birth:",90,50,180,50))
+label_entry.append(label_and_entry(player_window,"Nationality:",90,80,180,80))
+label_entry.append(label_and_entry(player_window,"Present Club:",90,110,180,110))
+label_entry.append(label_and_entry(player_window,"Number:",90,140,180,140))
+label_entry.append(label_and_entry(player_window,"Position:",90,170,180,170))
+label_entry.append(label_and_entry(player_window,"Age:",90,200,180,200))
+label_entry.append(label_and_entry(player_window,"Height:",90,230,180,230))
+label_entry.append(label_and_entry(player_window,"Weight:",90,260,180,260))
 
 submit_btn = Button(player_window,text='Choose Photo',command=picture, bg = "#FFFACD")
-submit_btn.place(x=70,y=260)
+submit_btn.place(x=130,y= 340)
 submit_btn = Button(player_window,text='Submit',command=submit, bg = "#FFFACD")
-submit_btn.place(x=170,y=260)
+submit_btn.place(x=230,y=340)
 
 player_window.mainloop()
