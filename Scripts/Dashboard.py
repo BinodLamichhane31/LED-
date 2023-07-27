@@ -111,7 +111,7 @@ def home_section():
     try:
         username_text = user_data['fullName']
         username_text_label = Label(app,text=username_text, font=('Nunito', 12, "bold"), bg="#FFF", fg = "#545454", wraplength = 120, justify= LEFT)
-        username_text_label.place(x=138,y=50)
+        username_text_label.place(x=138,y=64)
     except:
         pass
 
@@ -423,8 +423,10 @@ def overview_section():
         def display_players_Club1(name):
             playersName = Label(clubframe, text = name, bg = "#FFF")
             playersName.place(x = 20, y = 40)
-    overviewTeamGUI()
 
+        
+    overviewTeamGUI()
+    
     def overview_selection(select):
         '''
         Display the overview based on the selection from the option.
@@ -555,6 +557,14 @@ def overview_section():
         frameFeedback.destroy()
     except NameError:
         pass
+    def open():
+        try:
+            import FootBot
+        except Exception as e:
+            messagebox.showerror("FOOTBOT", "FootBot is currently out of service!")
+
+    buttonChat = Button(frame_overview, text = "Open FootBot", command=open)
+    buttonChat.place(x = 400, y = 600)
 
 def matches_section():
     '''
@@ -1374,7 +1384,7 @@ def select_image():
             #     'profile': buffered.getvalue()
             # }
             # football_collection.update_one({'phone': user_data['phone']}, {'$set': {'Profile Picture': profilePicture}})
-            # display_image(image)
+            # display_image(image) 
             save_image_to_mongodb(image)
             photo = ImageTk.PhotoImage(image)
             profile_image_label.config(image=photo)
@@ -1416,14 +1426,14 @@ def fetch_image_from_mongodb():
         return Image.open(io.BytesIO(data["profile_image"]))
 
     # If no profile picture is found, return a default image 
-    default_pic = Image.open("Images\\user.png")
+    default_pic = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\show.png")
     default_pic=default_pic.resize((70,70))
     return default_pic
-profile_image_label = Label(app)
-profile_image_label.place(x=42,y=50)   
+profile_image_label = Label(app, bg = "#FFF")
+profile_image_label.place(x=46,y=59)   
 
 select_button = Button(app, text="Select Image", command=select_image, bg="#FFF", border = 0)
-select_button.place(x = 140, y = 116)
+select_button.place(x = 140, y = 106)
 profile_picture = fetch_image_from_mongodb()
 photo = ImageTk.PhotoImage(profile_picture)
 profile_image_label.config(image=photo)
