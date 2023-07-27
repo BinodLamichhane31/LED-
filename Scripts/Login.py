@@ -228,9 +228,6 @@ def login():
     remember_check = Checkbutton(roundImgLabel, text="Remember Me", cursor = "hand2", variable=remember_var, bg = "#fff")
     remember_check.place(x = 128, y = 342)
 
-    forgotPwd = Button(roundImgLabel, text = "Forgot Password?", cursor = "hand2", bg = "#fff", border = 0, fg ="blue")
-    forgotPwd.place(x = 260, y = 344)
-
     show_icon = Image.open("Images\\show.png").resize((20, 20))
     hide_icon = Image.open("Images\\hide.png").resize((20, 20))
 

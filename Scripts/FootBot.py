@@ -1,6 +1,6 @@
 from tkinter import *
 import time
-import sports
+# import sports
 
 teams = ["churchboys", "newroad"]
 current_team = None

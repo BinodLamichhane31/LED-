@@ -9,6 +9,7 @@ import pandas as pd
 from io import BytesIO
 import hashlib, re
 from ButtonCreation import *
+from ImageModule import *
 
 try:
     # Connecting to the database
@@ -951,23 +952,12 @@ def personalization_section():
 
         delete_window.mainloop()
 
-    def setting():
-        setting_window = Toplevel(frame_personalization)
-        setting_window.title('Setting')
-        setting_window.resizable(0,0)
-        setting_window.geometry('250x350')
-        setting_window.config(bg="#f2f2f2")
-        change_font_label = Label(setting_window,text="Change App Font",font=("League Spartan Medium", '12', ''),bg="#f2f2f2")
-        change_font_label.place(x=10,y=15)
 
     personaliztion_button = []
     personaliztion_button.append(create_personalization_btns(frame_personalization,'C:Images\\profile.png', "Profile", 30, 100, profile))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\change.png', "Change Password", 30, 150, change))
     personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\delete.png', "Delete Account", 30, 200, delete))
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\setting.png', "Setting", 30, 250, setting))
-    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\logout.png', "Log Out", 30, 300, log_out))
-
-
+    personaliztion_button.append(create_personalization_btns(frame_personalization, 'C:Images\\logout.png', "Log Out", 30, 250, log_out))
 
     try:
         frameFeedback.destroy()
@@ -1378,33 +1368,11 @@ def select_image():
             image = Image.open(file_path)
             image = resize_image(image, (70, 70))  # Resize the image to 70x70
             image = make_round_image(image, (70, 70))
-            # buffered = BytesIO()
-            # image.save(buffered, format="PNG")
-            # profilePicture = {
-            #     'profile': buffered.getvalue()
-            # }
-            # football_collection.update_one({'phone': user_data['phone']}, {'$set': {'Profile Picture': profilePicture}})
-            # display_image(image) 
             save_image_to_mongodb(image)
             photo = ImageTk.PhotoImage(image)
             profile_image_label.config(image=photo)
             profile_image_label.image = photo
     
-   
-def resize_image(image, size):
-    _image = image.resize(size, Image.BILINEAR)
-    return _image
-
-def make_round_image(image, size):
-    mask = Image.new("L", size, 0)
-    draw = ImageDraw.Draw(mask)
-    draw.ellipse((0, 0, size[0], size[1]), fill=255)
-    result = Image.new("RGBA", size, (255, 255, 255, 0))
-    result.paste(image, (0, 0), mask)
-    return result
-
-
-
 def display_image(image):
     global img_label
     photo = ImageTk.PhotoImage(image)
@@ -1413,22 +1381,8 @@ def display_image(image):
 
     img_label.image = photo
     photo_references.append(photo)
-def save_image_to_mongodb(image):
-    image_byte_array = io.BytesIO()
-    image.save(image_byte_array, format='PNG')
-    image_binary = image_byte_array.getvalue()
-    picture_collection.delete_many({"user_phone":phone,"profile_image": image_binary})  # Clear any existing profile pictures (optional)
-    picture_collection.insert_one({"user_phone":phone,"profile_image": image_binary})
 
-def fetch_image_from_mongodb():
-    data = picture_collection.find_one({"user_phone":phone})
-    if data and "profile_image" in data:
-        return Image.open(io.BytesIO(data["profile_image"]))
 
-    # If no profile picture is found, return a default image 
-    default_pic = Image.open("C:\\Users\\shahi\\Downloads\\MartyrLeague\\Images\\show.png")
-    default_pic=default_pic.resize((70,70))
-    return default_pic
 profile_image_label = Label(app, bg = "#FFF")
 profile_image_label.place(x=46,y=59)   
 
