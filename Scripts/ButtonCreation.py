@@ -26,9 +26,6 @@ def create_personalization_btns(frame_personaliztion, image_path1, text, x, y, c
         per_btn = Button(frame_personaliztion, text="    "+text,cursor='hand2' ,image=personalization_image,height=0, border=0, bg="#f2f2f2",compound=LEFT,width = 326,font=('Tahoma', '12'), anchor='w', command=cmd)
         per_btn.place(x=x, y=y)
         return per_btn
-def create_font_buttons(setting_window,text,text_font,x,y):
-      font_btns = Button(setting_window,text,font=(text_font, '12', ''),height=0, border=0, bg="#f2f2f2")
-      font_btns.place(x=x,y=y)
-      return font_btns
+
 
     
