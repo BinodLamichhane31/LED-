@@ -1,60 +1,63 @@
-from tkinter import *
+import tkinter as tk
 
-root = Tk()
-root.state("zoomed")
+def on_focus_in(event):
+    if event.widget.get() in ("Full Name", "Contact No.", "Email"):
+        event.widget.delete(0, "end")
+    if event.widget.get() in ("New Password", "Confirm New Password"):
+        event.widget.delete(0, "end")
+        event.widget.config(show="●")
 
-frame1 = Frame(root, width=600, height=400, bg="#FFFACD") # assigning a frame named frame1 that can be accessed globally...
+def on_focus_out(event):
+    if event.widget.get() == "":
+        if event.widget == psw_entry or event.widget == confirm_entry:
+            if psw_entry.get() == "New Password":
+                event.widget.config(show="")
+            else:
+                event.widget.config(show="New Password")
 
-def on_enter_home(e): # creating function that will trigger the hover effect when we enter the button...
+            event.widget.insert(0, "New Password" if event.widget == psw_entry else "Confirm New Password")
+        elif event.widget == uname_entry:
+            event.widget.insert(0, "Full Name")
+        elif event.widget == phone_entry:
+            event.widget.insert(0, "Contact No.")
+        elif event.widget == email_entry:
+            event.widget.insert(0, "Email")
 
-    frame1.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()+40)) # placing the widget(button) just below the main button Home..
+root = tk.Tk()
+root.title("Entry Widget Example")
 
-    clear_frame() # clearing the frame before placing the buttons hello and hi...
+# Create entry widgets
+uname_entry = tk.Entry(root, width=30)
+phone_entry = tk.Entry(root, width=30)
+email_entry = tk.Entry(root, width=30)
+psw_entry = tk.Entry(root, width=30, show="●")
+confirm_entry = tk.Entry(root, width=30, show="●")
 
-    create_button(frame1, "hello", 50, 50) # passing the arguments to the parameter...
+# Set default placeholder texts
+uname_entry.insert(0, "Full Name")
+phone_entry.insert(0, "Contact No.")
+email_entry.insert(0, "Email")
+psw_entry.insert(0, "New Password")
+confirm_entry.insert(0, "Confirm New Password")
 
-    create_button(frame1, "hi", 150, 50) # passing the arguments to the parameter...
+# Bind focus events to the entry widgets
+uname_entry.bind("<FocusIn>", on_focus_in)
+phone_entry.bind("<FocusIn>", on_focus_in)
+email_entry.bind("<FocusIn>", on_focus_in)
+psw_entry.bind("<FocusIn>", on_focus_in)
+confirm_entry.bind("<FocusIn>", on_focus_in)
 
-def on_enter_destination(e): # creating function that will trigger the hover effect when we enter the button...
+uname_entry.bind("<FocusOut>", on_focus_out)
+phone_entry.bind("<FocusOut>", on_focus_out)
+email_entry.bind("<FocusOut>", on_focus_out)
+psw_entry.bind("<FocusOut>", on_focus_out)
+confirm_entry.bind("<FocusOut>", on_focus_out)
 
-    frame1.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()+40))  # placing the widget(button) just below the main button destination..
-    frame1.lift()
-
-    clear_frame() # clearing the frame before placing the buttons Bye and See you...
-
-    create_button(frame1, "Bye", 50, 50) # passing the arguments to the parameter...
-
-    create_button(frame1, "See you", 150, 50) # passing the arguments to the parameter...
-
-def on_enter_jpt(e): # creating function that will trigger the hover effect when we enter the button...
-
-    frame1.place(x=e.widget.winfo_x(), y=(e.widget.winfo_y()+40))  # placing the widget(button) just below the main button destination..
-
-    clear_frame()
-
-def on_frame_leave(e):  # function to make the widget forget it's placement whenever we leave the frame...
-    frame1.place_forget() 
-
-def create_button(frame, text, x, y): # creating the sub button function using parameter
-    button = Button(frame, text=text, font=("Tahoma", 14, "bold"), border=0, cursor="hand2", bg = "#FFFACD")
-    button.place(x=x, y=y)
-    return button
-
-def create_main_button(frame, text, x, y, enter_callback):  # creation of main buttons...
-    button = Button(frame, text=text, font=("Tahoma", 14, "bold"), border=0, cursor="hand2")
-    button.place(x=x, y=y)
-    button.bind("<Enter>", enter_callback)
-    frame1.bind("<Leave>", on_frame_leave)
-    return button
-
-def clear_frame(): # Line 12 and 22 are the functionality provided by this function...
-    for widget in frame1.winfo_children(): # fetches the information/name of buttons created in the frames...
-        widget.destroy() # triggering the deletion of buttons that are already in there...
-
-buttons = []
-buttons.append(create_main_button(root, "Home", 592, 16, on_enter_home))
-buttons.append(create_main_button(root, "Destination", 762, 16, on_enter_destination))
-buttons.append(create_main_button(root, "JPT", 762, 420, on_enter_jpt))
+# Pack entry widgets and run the main event loop
+uname_entry.pack(pady=5)
+phone_entry.pack(pady=5)
+email_entry.pack(pady=5)
+psw_entry.pack(pady=5)
+confirm_entry.pack(pady=5)
 
 root.mainloop()
-

@@ -111,7 +111,8 @@ def home_section():
     separator.place(x = 0, y = 64)
     try:
         username_text = user_data['fullName']
-        username_text_label = Label(app,text=username_text, font=('Nunito', 12, "bold"), bg="#FFF", fg = "#545454", wraplength = 120, justify= LEFT)
+        username_text_label = Label(app, font=('Nunito', 12, "bold"), bg="#FFF", fg = "#545454", wraplength = 120, justify= LEFT)
+        username_text_label.config(text=username_text)
         username_text_label.place(x=138,y=64)
     except:
         pass
@@ -726,7 +727,7 @@ def personalization_section():
 
         full_name_label = Label(profile_frame, text="Full Name:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
         full_name_label.place(x=350, y=200)
-
+       
         full_name_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
         full_name_entry.place(x=480, y=200)
 
@@ -1173,6 +1174,7 @@ app = Tk()
 app.geometry("1350x700")
 app.config(bg="Black")
 app.state("zoomed")
+app.iconbitmap('Images\\football.ico')
 app.resizable(False, False)
 app.title("Dashboard")
 

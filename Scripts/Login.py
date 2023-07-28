@@ -15,21 +15,24 @@ try:
 except:
     messagebox.showerror('Error','Database Connection Error')
 
-def on_click_uname(e):
-    uname_entry.delete(0, END)
+def on_focus_in(event):
+    if event.widget.get() in ("Full Name", "Contact No.", "Email"):
+        event.widget.delete(0, "end")
+    if event.widget.get() in ("New Password", "Confirm New Password"):
+        event.widget.delete(0, "end")
+        event.widget.config(show="●")
 
-def on_click_email(e):
-    email_entry.delete(0, END)
-
-def on_click_phone(e):
-    phone_entry.delete(0, END)
-
-def on_click_pwd(e):
-    psw_entry.delete(0, END)
-
-def on_click_cfmPwd(e):
-    confirm_entry.delete(0, END)
-
+def on_focus_out(event):
+    if event.widget.get() == "":
+        if event.widget == psw_entry or event.widget == confirm_entry:
+            event.widget.config(show="●")
+            event.widget.insert(0, "New Password" if event.widget == psw_entry else "Confirm New Password")
+        elif event.widget == uname_entry:
+            event.widget.insert(0, "Full Name")
+        elif event.widget == phone_entry:
+            event.widget.insert(0, "Contact No.")
+        elif event.widget == email_entry:
+            event.widget.insert(0, "Email")
 
 # Function to go back to login page after clicking Sign In button in signup page
 def back_to_login():
@@ -77,7 +80,7 @@ def sign_up():
                 else:
                     hashed_password = hashlib.sha256(password.encode()).hexdigest()
                     football_collection.insert_one({'fullName':uname,'email':email,'phone':phone,'password':hashed_password})
-                    messagebox.showinfo('Registration',"Registration Successful!! \\nYou have to use your phone number as your username.")
+                    messagebox.showinfo('Registration',"Registration Successful!!")
                     # To clear the entry fields 
                     uname_entry.delete(0, 'end')
                     email_entry.delete(0, 'end')
@@ -105,29 +108,34 @@ def sign_up():
 
         uname_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
         uname_entry.insert(0, "Full Name")
-        uname_entry.bind("<FocusIn>", on_click_uname)
+        uname_entry.bind("<FocusIn>", on_focus_in)
+        uname_entry.bind("<FocusOut>", on_focus_out)
         uname_entry.place(x=113, y=171, height = 25)
 
         email_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
         email_entry.insert(0, "Email")
-        email_entry.bind("<FocusIn>", on_click_email)
+        email_entry.bind("<FocusIn>", on_focus_in)
+        email_entry.bind("<FocusOut>", on_focus_out)
         email_entry.place(x=113, y=228, height = 25)
 
         phone_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
         phone_entry.insert(0, "Contact No.")
-        phone_entry.bind("<FocusIn>", on_click_phone)
+        phone_entry.bind("<FocusIn>", on_focus_in)
+        phone_entry.bind("<FocusOut>", on_focus_out)
         phone_entry.place(x=113, y=284, height = 25)
 
         psw_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
         psw_entry.insert(0, "New Password")
-        psw_entry.bind("<FocusIn>", on_click_pwd)
+        psw_entry.bind("<FocusIn>", on_focus_in)
+        psw_entry.bind("<FocusOut>", on_focus_out)   
         psw_entry.place(x=113, y=340, height = 25)
 
         confirm_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
         confirm_entry.insert(0, "Confirm New Password")
-        confirm_entry.bind("<FocusIn>", on_click_cfmPwd)
+        confirm_entry.bind("<FocusIn>", on_focus_in)
+        confirm_entry.bind("<FocusOut>", on_focus_out)
         confirm_entry.place(x=113, y=397, height = 25)
-
+        
         create_button = Button(signupBgRound, image = imageSignup, cursor = "hand2", compound = CENTER, width = 116, border = 0, bg = "#FFF", fg = "#FFF", font = ("League Spartan", 8, "bold"), command=signup_work)
         create_button.place(x=184, y=454, height = 34)
 
@@ -137,6 +145,7 @@ def sign_up():
         signupBgRound_label.place(x=149,y=540)
         log_in_btn = Button(signupBgRound,text="LOGIN", cursor = "hand2", font=('League Spartan SemiBold', '10', ''),bg="#fff",border=0,fg="blue",command=back_to_login)
         log_in_btn.place(x=299,y=534)
+        
 # Function to get the user's data from the database
 def get_login_data(phone):
     global user
@@ -212,7 +221,7 @@ def login():
 
     label_login = Label(roundImgLabel, text="Welcome! Please Login into your Account.", bg="#fff", border=0,
                         font=('League Spartan Medium', '16', 'bold'))
-    label_login.place(x=58, y=40)
+    label_login.place(x=40, y=40)
 
     phone_n_label = Label(entryLabel, text="Phone *", bg="#fff", font=('Tahoma', '12', ''))
     phone_n_label.place(x=12, y=0)
@@ -249,8 +258,6 @@ def login():
 
     app.bind('<Return>', lambda e: login_work())
 
-
-
     right_frame_label = Label(roundImgLabel, text="Don't have an account?", font=('Tahoma', '10'), bg="#fff",border=0)
     right_frame_label.place(x=156, y=520)
 
@@ -265,6 +272,7 @@ app = Tk()
 app.geometry("1350x700")
 app.config(bg="Black")
 app.state("zoomed")
+app.iconbitmap('Images\\football.ico')
 app.resizable(0, 0)
 app.title("Login Page")
 
