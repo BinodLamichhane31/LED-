@@ -6,6 +6,9 @@ from pymongo import MongoClient
 import re, subprocess
 import hashlib
 import time
+import platform
+import geocoder
+import socket
 
 try:
     # Creating MongoClient, connecting to database and collection
@@ -78,8 +81,27 @@ def sign_up():
                     messagebox.showerror('Password Change', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
 
                 else:
+                    location_info = geocoder.ip('me')
+                    ip_address = socket.gethostbyname(socket.gethostname())
+                    location = {
+                              "Latitude": location_info.lat,
+                              "Longitude": location_info.lng,
+                              "City": location_info.city,
+                              "Country": location_info.country
+                              # You can add more location details if needed
+                               }
+                    device_info = {
+                                  "System": platform.system(),
+                                  "Node Name": platform.node(),
+                                  "Release": platform.release(),
+                                  "Version": platform.version(),
+                                  "Machine": platform.machine(),
+                                  "Processor": platform.processor(),
+                                  'location_info': location,
+                                  'IP ADDRESS': ip_address
+                                  }
                     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-                    football_collection.insert_one({'fullName':uname,'email':email,'phone':phone,'password':hashed_password})
+                    football_collection.insert_one({'fullName':uname,'email':email,'phone':phone,'password':hashed_password, 'Location and Devices': device_info})
                     messagebox.showinfo('Registration',"Registration Successful!!")
                     # To clear the entry fields 
                     uname_entry.delete(0, 'end')

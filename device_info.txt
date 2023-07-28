@@ -1,0 +1,9 @@
+Username: example
+Device Information:
+System: Windows
+Node Name: SaugatShahi
+Release: 10
+Version: 10.0.22631
+Machine: AMD64
+Processor: Intel64 Family 6 Model 126 Stepping 5, GenuineIntel
+------------------------------
