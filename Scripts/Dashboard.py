@@ -30,7 +30,7 @@ try:
     user_data = football_collection.find_one({"phone":phone})
 except Exception as e:
     messagebox.showerror('System Error',"There is an error in the system.\nYou may face some problems while using app.\nWe will try to fix it asap.")
-    
+   
 def home_section():
     '''
     Display the honme section.
@@ -559,11 +559,11 @@ def overview_section():
         frameFeedback.destroy()
     except NameError:
         pass
-    def open():
-        try:
+    try:
+        def open():
             import FootBot
-        except Exception as e:
-            messagebox.showerror("FOOTBOT", "FootBot is currently out of service!")
+    except Exception as e:
+        messagebox.showerror("FOOTBOT", "FootBot is currently out of service!")
 
     buttonChat = Button(frame_overview, text = "Open FootBot", command=open)
     buttonChat.place(x = 400, y = 600)
@@ -915,6 +915,7 @@ def personalization_section():
             def confirmDel():
                 football_collection.delete_one({'password': user_data['password']})
                 messagebox.showinfo("Account Deleted", "Your account has been deleted successfully.")
+                app.destroy()
                 import Login
         except Exception as e:
             messagebox.showerror("System Error", "We are working on it.")

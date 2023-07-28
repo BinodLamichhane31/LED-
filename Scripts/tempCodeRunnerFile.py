@@ -1,1 +1,1 @@
-app.iconbitmap('Images\\football.ico')
+device

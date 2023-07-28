@@ -276,7 +276,7 @@ def login():
             rem_ph = r.read().strip()
         phone_n_entry.insert(0,rem_ph)
     except Exception as e:
-        print(str(e))
+        pass
 
     app.bind('<Return>', lambda e: login_work())
 

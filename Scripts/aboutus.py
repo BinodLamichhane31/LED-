@@ -1,6 +1,9 @@
 from tkinter import *
 
 def on_mousewheel(event):
+    """
+    Adjust the vertical scrolling of the canvas widget based on mousewheel movement.
+    """
     canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
 # Create a root frame
@@ -73,6 +76,9 @@ data_desc_label = Label(content_frame, text="Explore a  treasure trove  of histo
 data_desc_label.pack(anchor="w", padx=40)
 
 def goto_login_page():
+    '''
+    Destroys the about us frame i.e. root_frame and opens the login page.
+    '''
     root_frame.destroy()
 
 goto_login_page_button = Button(root_frame,text='x',font=("Default", 12), bg="#FFFACD",relief= SUNKEN,  highlightthickness= 2, border = 0, command=goto_login_page)
@@ -82,6 +88,9 @@ canvas.create_window((0, 0), window=content_frame, anchor="nw")
 
 # Update the scrollable region when the window size changes
 def on_configure(event):
+    '''
+    Adjust the scrollable region
+    '''
     canvas.configure(scrollregion=canvas.bbox("all"))
 
 canvas.bind("<Configure>", on_configure)
