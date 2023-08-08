@@ -10,6 +10,7 @@ from io import BytesIO
 import hashlib, re
 from ButtonCreation import *
 from ImageModule import *
+from datetime import *
 
 try:
     # Connecting to the database
@@ -116,6 +117,9 @@ def home_section():
         username_text_label.place(x=138,y=64)
     except:
         pass
+
+    date_label = Label(leftFrame,text="Date: "+str(date.today()),font=('Nunito', 12, "bold"))
+    date_label.place(x=30,y=7)
 
     try:
         frameFeedback.destroy()
@@ -484,6 +488,12 @@ def overview_section():
                     label_the_details.append(details_label(frame_player,player_data['position'],480,270))
                     label_the_details.append(details_label(frame_player,"Number:",350,300))
                     label_the_details.append(details_label(frame_player,player_data['number'],480,300))
+                    label_the_details.append(details_label(frame_player,player_data['Age'],80,520))
+                    label_the_details.append(details_label(frame_player,player_data['Height'],172,520))
+                    label_the_details.append(details_label(frame_player,player_data['Weight'],260,520))
+
+
+
                     
                     PositionNumberLabel = Label(frame_player, text = player_data['number'], font = ("Oswald", 52, 'bold'), fg = "#545454", bg = "#f2f2f2")
                     PositionNumberLabel.place(x = 40, y = 160)
@@ -505,8 +515,8 @@ def overview_section():
                     playerheightLabel = Label(frame_player, text = "WEIGHT", font = ("Oswald", 10, "bold"), bg = "#f2f2f2", fg = "#545454")
                     playerheightLabel.place(x = 260, y = 548)
 
-                except:
-                    messagebox.showinfo('Message','Player not found')
+                except Exception as e:
+                    messagebox.showinfo('Message','Player not found',str(e))
 
 
 

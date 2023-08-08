@@ -21,7 +21,7 @@ def submit():
         'position': label_entry[5].get(),
         'Age': label_entry[6].get(),
         'Height': label_entry[7].get(),
-        'Weight': label_entry[7].get(),
+        'Weight': label_entry[8].get(),
         'image': encoded_image
     }
     player_collection.insert_one(player_data)
