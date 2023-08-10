@@ -842,10 +842,10 @@ def personalization_section():
             nationalityEntry.config(state = NORMAL)
             update_button.config(state = NORMAL)
             update_button.place_forget()
-            save_button = Button(profile_frame, image = imageSaveButton, font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2",border = 0, command=save_profile)
-            save_button.place(x=448, y=620)
-            cancelButton = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=disable_entry, border = 0)
-            cancelButton.place(x=628, y=620)
+            save_button = Button(profile_frame, image = imageSaveButton, cursor = "hand2", font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2",border = 0, command=save_profile)
+            save_button.place(x=390, y=620)
+            cancelButton = Button(profile_frame, image = imageDeleteButton, cursor = "hand2", bg="#f2f2f2", command=disable_entry, border = 0)
+            cancelButton.place(x=570, y=620)
 
         def save_profile():
             '''
@@ -870,16 +870,15 @@ def personalization_section():
             except:
                 messagebox.showerror("System Error!", "Sorry for the inconvenience. We are working on it.")
 
-        update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=enable_entry, border = 0)
-        update_button.place(x=448, y=620)
+        update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", cursor = "hand2", command=enable_entry, border = 0)
+        update_button.place(x=390, y=620)
 
         def disable_entry():
             profileName.config(state = DISABLED)
             phoneNumEntry.config(state = DISABLED)
             cancelButton.place_forget()
-            save_button.place_forget()
             update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=enable_entry, border = 0)
-            update_button.place(x=448, y=620)
+            update_button.place(x=390, y=620)
 
         profileName.insert(0, user_data['fullName'])
         profileName.config(state = DISABLED)
@@ -1414,12 +1413,17 @@ resizeUserImage = userLabelImage.resize((240, 120))
 imageUserLabel = ImageTk.PhotoImage(resizeUserImage)
 
 editButtonImg = Image.open("C:Images\\editButton.png")
-resizeEditImg = editButtonImg.resize((120, 40))
+resizeEditImg = editButtonImg.resize((100, 30))
 imageEditButton = ImageTk.PhotoImage(resizeEditImg)
 
 saveButtonImg = Image.open("C:Images\\saveButton.png")
-resizesaveImg = saveButtonImg.resize((120, 40))
+resizesaveImg = saveButtonImg.resize((100, 30))
 imageSaveButton = ImageTk.PhotoImage(resizesaveImg)
+
+
+DeleteButtonImg = Image.open("C:Images\\cancelButton.png")
+resizeDeleteImg = DeleteButtonImg.resize((100, 30))
+imageDeleteButton = ImageTk.PhotoImage(resizeDeleteImg)
 
 userLabelImage1 = Image.open("C:Images\\highlightPos.png")
 resizeUserImage1 = userLabelImage1.resize((240, 120))
