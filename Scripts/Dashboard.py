@@ -835,6 +835,11 @@ def personalization_section():
             global cancelButton, save_button
             profileName.config(state = NORMAL)
             phoneNumEntry.config(state = NORMAL)
+            bioEntry.config(state = NORMAL)
+            emailEntry.config(state = NORMAL)
+            addressEntry.config(state = NORMAL)
+            countryEntry.config(state = NORMAL)
+            nationalityEntry.config(state = NORMAL)
             update_button.config(state = NORMAL)
             update_button.place_forget()
             save_button = Button(profile_frame, image = imageSaveButton, font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2",border = 0, command=save_profile)
@@ -849,8 +854,9 @@ def personalization_section():
             try:
                 new_full_name = profileName.get()
                 new_phone_num = phoneNumEntry.get()
+                
 
-                football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num}})
+                football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num,'bio':bioEntry.get(),'email':emailEntry.get(),'address':addressEntry.get(),'country':countryEntry.get(),'nationality':nationalityEntry.get()}})
 
 
                 # Display a success message
@@ -880,6 +886,23 @@ def personalization_section():
 
         phoneNumEntry.insert(0, phone)
         phoneNumEntry.config(state = DISABLED)
+        try:
+            bioEntry.insert(0,user_data['bio'])
+            bioEntry.config(state=DISABLED)
+
+            emailEntry.insert(0,user_data['email'])
+            emailEntry.config(state=DISABLED)
+
+            addressEntry.insert(0,user_data['address'])
+            addressEntry.config(state=DISABLED)
+
+            countryEntry.insert(0,user_data['country'])
+            countryEntry.config(state=DISABLED)
+
+            nationalityEntry.insert(0,user_data['nationality'])
+            nationalityEntry.config(state=DISABLED)
+        except:
+            pass
 
     def log_out():
 
