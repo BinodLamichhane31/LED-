@@ -158,7 +158,7 @@ def live_section():
     treeview1["columns"] = list(df.columns)
     treeview1["show"] = "headings"
     # Define the custom column widths as a list
-    column_widths = [25, 25, 5, 50, 20, 50, 300]  # Add more widths for additional columns
+    column_widths = [40, 40, 5, 50, 20, 50, 300]  # Add more widths for additional columns
     # Create a custom style for the treeview
     style = ttk.Style()
     style.configure('Custom.Treeview', font=('Arial', 12), background='#f2f2f2', foreground='black')  # Set the font and colors for the table
@@ -610,7 +610,7 @@ def matches_section():
     treeview["columns"] = list(df.columns)
     treeview["show"] = "headings"
     # Define the custom column widths as a list
-    column_widths = [30,30,10,200,10,10,10,200]  # Add more widths for additional columns
+    column_widths = [46,46,10,200,10,10,10,200]  # Add more widths for additional columns
     # Create a custom style for the treeview
     style = ttk.Style()
     style.configure('Custom.Treeview', font=('Arial', 12), background='#f2f2f2', foreground='black')  # Set the font and colors for the table
