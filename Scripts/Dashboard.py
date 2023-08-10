@@ -107,7 +107,8 @@ def home_section():
     feedbackButton.config(fg = "black") 
 
     label_home = Label(frame_home,text="HOME •",font=('Nunito', '14', 'bold'),bg='#f2f2f2')
-    label_home.place(x=20,y=16)
+    label_home.place(x=20,y=16) 
+    
     separator = Frame(frame_home, width = 1070, height = 2, bg = "#000")
     separator.place(x = 0, y = 64)
     try:
@@ -118,8 +119,8 @@ def home_section():
     except:
         pass
 
-    date_label = Label(leftFrame,text="Date: "+str(date.today()),font=('Nunito', 12, "bold"))
-    date_label.place(x=30,y=7)
+    date_label = Label(leftFrame,text="Date: "+str(date.today()),font=('Nunito', 12, "bold"), bg = '#f2f2f2')
+    date_label.place(x=30,y=6)
 
     try:
         frameFeedback.destroy()
@@ -516,8 +517,7 @@ def overview_section():
                     playerheightLabel.place(x = 260, y = 548)
 
                 except Exception as e:
-                    messagebox.showinfo('Message','Player not found',str(e))
-
+                    messagebox.showinfo('Message','Player not found'+ str(e))
 
 
             def on_entry_click_1(event):
@@ -557,6 +557,8 @@ def overview_section():
             player_search_button = Button(playerSearchLabel, image = buttonSearch, border = 0,bg="#f2f2f2",command=player_search)
             player_search_button.image_names = buttonSearch
             player_search_button.place(x=206,y=6)
+
+            app.bind('<Return>',lambda e: player_search())
   
     options = ["Team", "Player"]
     selected_option = StringVar(frame_overview)
@@ -717,6 +719,7 @@ def personalization_section():
     separator.place(x = 0, y = 64)
 
     def profile():
+        global profilePersonalizeLabel
         '''
         Display the user's information.
         '''
@@ -726,81 +729,157 @@ def personalization_section():
             '''
             personalization_section()
 
+        profile_picture1 = fetch_image_from_mongodb()
+        pp = profile_picture1.resize((120, 120))
+
         profile_frame = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
         profile_frame.place(x=0, y=0)
 
-        label_profile = Label(profile_frame, text="User Profile", font=('League Spartan Medium', '16', 'bold'), bg="#f2f2f2")
+        entryLabel1 = Label(profile_frame, image = imageClub2, bg = '#f2f2f2')
+        entryLabel1.place(x = 320, y = 180)
+
+        entryLabel2 = Label(profile_frame, image = imageClub2, bg = '#f2f2f2')
+        entryLabel2.place(x = 728, y = 180)
+        
+        entryBio = Label(profile_frame, image = imageClub3, bg = '#f2f2f2')
+        entryBio.place(x = 320, y = 252)
+
+        entryLabel3 = Label(profile_frame, image = imageClub2, bg = '#f2f2f2')
+        entryLabel3.place(x = 320, y = 403)
+
+        entryLabel4 = Label(profile_frame, image = imageClub2, bg = '#f2f2f2')
+        entryLabel4.place(x = 728, y = 403)
+
+        entryLabel5 = Label(profile_frame, image = imageClub2, bg = '#f2f2f2')
+        entryLabel5.place(x = 320, y = 496)
+
+        entryLabel6 = Label(profile_frame, image = imageClub2, bg = '#f2f2f2')
+        entryLabel6.place(x = 728, y = 496)
+
+        profilePersonalizeLabel = Label(profile_frame, bg = "#FFF")
+        profilePersonalizeLabel.place(x=60,y=174)
+
+        labelledFrame1 = Frame(profile_frame, width = 460, height = 2, bg = "#ff6100")
+        labelledFrame1.place(x = 16, y = 132)
+
+        labelledFrameText = Label(profile_frame, text = '  Compulsory Details  ', bg = '#f2f2f2', font = ('Tahoma', 13))
+        labelledFrameText.place(x = 40, y = 118)
+
+        labelledFrame2 = Frame(profile_frame, width = 460, height = 2, bg = "#ff6100")
+        labelledFrame2.place(x = 16, y = 354)
+
+        labelledFrameText1 = Label(profile_frame, text = '  Optional Details  ', bg = '#f2f2f2', font = ('Tahoma', 13))
+        labelledFrameText1.place(x = 44, y = 340)
+
+
+        photo1 = ImageTk.PhotoImage(pp)
+        profilePersonalizeLabel.config(image=photo1, background="#f2f2f2")
+        profilePersonalizeLabel.image = photo1
+
+        label_profile = Label(profile_frame, text="User Profile", font=('Nunito', '14', 'bold'), bg="#f2f2f2")
         label_profile.place(x=10, y=10)
 
         separator = Frame(profile_frame, width = 1070, height = 2, bg = "#000")
         separator.place(x = 0, y = 64)
 
-        full_name_label = Label(profile_frame, text="Full Name:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
-        full_name_label.place(x=350, y=200)
+        full_name_label = Label(profile_frame, text="Full Name:", font=('Tahoma', '12'), bg="#f2f2f2")
+        full_name_label.place(x=230, y=187)
        
-        full_name_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
-        full_name_entry.place(x=480, y=200)
+        profileName = Entry(entryLabel1, font=('Tahoma', '12'), width=21, border = 0, bg="#f2f2f2")
+        profileName.place(x=12, y=7)
 
-        phone_num_label = Label(profile_frame, text="Phone No.:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
-        phone_num_label.place(x=350, y=250)
+        phone_num_label = Label(profile_frame, text="Phone Number:", font=('Tahoma', '12'), bg="#f2f2f2")
+        phone_num_label.place(x=600, y=187)
 
-        phone_num_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
-        phone_num_entry.place(x=480, y=250)
+        phoneNumEntry = Entry(entryLabel2, font=('Tahoma', '12'), width=21, border = 0, bg="#f2f2f2")
+        phoneNumEntry.place(x=12, y=7)
 
-        email_add_label = Label(profile_frame, text="Email:", font=('League Spartan Medium', '14', 'bold'), bg="#f2f2f2")
-        email_add_label.place(x=350, y=300)
+        emailLabels = Label(profile_frame, text="Email ID:", font=('Tahoma', '12'), bg="#f2f2f2")
+        emailLabels.place(x=240, y=412)
 
-        email_add_entry = Entry(profile_frame, font=('League Spartan Medium', '12', 'bold'), width=22)
-        email_add_entry.place(x=480, y=300)
-        back_button = Button(profile_frame,text="Back",font=('League Spartan Medium', '12', 'bold'),bg="#f2f2f2",command=back)
-        back_button.place(x=980, y=70)
+        emailEntry = Entry(entryLabel3, font=('Tahoma', '12'), width=21, border = 0, bg="#f2f2f2")
+        emailEntry.place(x=12, y=7)
+
+        addressLabel = Label(profile_frame, text="Address:", font=('Tahoma', '12'), bg="#f2f2f2")
+        addressLabel.place(x=648, y=412)
+
+        addressEntry = Entry(entryLabel4, font=('Tahoma', '12'), width=21, border = 0, bg="#f2f2f2")
+        addressEntry.place(x=12, y=7)
+
+        countryLabel = Label(profile_frame, text="Country:", font=('Tahoma', '12'), bg="#f2f2f2")
+        countryLabel.place(x=240, y=506)
+
+        countryEntry = Entry(entryLabel5, font=('Tahoma', '12'), width=21, border = 0, bg="#f2f2f2")
+        countryEntry.place(x=12, y=7)
+
+        nationalityLabel = Label(profile_frame, text="Nationality:", font=('Tahoma', '12'), bg="#f2f2f2")
+        nationalityLabel.place(x=634, y=506)
+
+        nationalityEntry = Entry(entryLabel6, font=('Tahoma', '12'), width=21, border = 0, bg="#f2f2f2")
+        nationalityEntry.place(x=12, y=7)
+
+        bioEntry = Entry(entryBio, font=('Tahoma', '12'), width=66, border = 0, bg="#f2f2f2")
+        bioEntry.place(x=14, y=9, height = 30)
+
+        bioEntryLabel = Label(profile_frame, text="Bio:", font=('Tahoma', '12'), bg="#f2f2f2")
+        bioEntryLabel.place(x=248, y=264)
+
+
+        back_button = Button(profile_frame,text="Back",font=('Tahoma', '12', 'bold'),bg="#f2f2f2",command=back)
+        back_button.place(x=980, y=76)
 
         def enable_entry():
             '''
             Enable the entry fields for editing and disable the update button.
             '''
-            full_name_entry.config(state = NORMAL)
-            phone_num_entry.config(state = NORMAL)
-            email_add_entry.config(state = NORMAL)
-            update_button.config(state = DISABLED)
-            save_button = Button(profile_frame, text="Save", font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2", command=save_profile)
-            save_button.place(x=350, y=350)
+            global cancelButton, save_button
+            profileName.config(state = NORMAL)
+            phoneNumEntry.config(state = NORMAL)
+            update_button.config(state = NORMAL)
+            update_button.place_forget()
+            save_button = Button(profile_frame, image = imageSaveButton, font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2",border = 0, command=save_profile)
+            save_button.place(x=448, y=620)
+            cancelButton = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=disable_entry, border = 0)
+            cancelButton.place(x=628, y=620)
 
         def save_profile():
             '''
             Save the updated profile information to the database and disable the entry fields.
             '''
             try:
-                new_full_name = full_name_entry.get()
-                new_phone_num = phone_num_entry.get()
-                new_email_add = email_add_entry.get()
+                new_full_name = profileName.get()
+                new_phone_num = phoneNumEntry.get()
 
-                football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num, 'email': new_email_add}})
+                football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num}})
 
 
                 # Display a success message
                 messagebox.showinfo("Profile Updated", "Your profile has been updated successfully.")
 
                 # Disable the entry fields again
-                full_name_entry.config(state = DISABLED)
-                phone_num_entry.config(state = DISABLED)
-                email_add_entry.config(state = DISABLED)
+                profileName.config(state = DISABLED)
+                phoneNumEntry.config(state = DISABLED)
                 update_button.config(state = NORMAL)
 
             except:
                 messagebox.showerror("System Error!", "Sorry for the inconvenience. We are working on it.")
 
-        update_button = Button(profile_frame, text="Edit", font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2", command=enable_entry)
-        update_button.place(x=350, y=350)
+        update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=enable_entry, border = 0)
+        update_button.place(x=448, y=620)
 
-        full_name_entry.insert(0, user_data['fullName'])
-        full_name_entry.config(state = DISABLED)
+        def disable_entry():
+            profileName.config(state = DISABLED)
+            phoneNumEntry.config(state = DISABLED)
+            cancelButton.place_forget()
+            save_button.place_forget()
+            update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=enable_entry, border = 0)
+            update_button.place(x=448, y=620)
 
-        phone_num_entry.insert(0, phone)
-        phone_num_entry.config(state = DISABLED)
+        profileName.insert(0, user_data['fullName'])
+        profileName.config(state = DISABLED)
 
-        email_add_entry.insert(0, user_data['email'])
-        email_add_entry.config(state = DISABLED)
+        phoneNumEntry.insert(0, phone)
+        phoneNumEntry.config(state = DISABLED)
 
     def log_out():
 
@@ -814,19 +893,19 @@ def personalization_section():
     def change():
         def confirm_change():
             try:
-                if user_data['password'] == hashlib.sha256(current_password_entry.get().encode()).hexdigest():
-                    if new_password_entry.get() == '' or re_password_entry.get() == '':
+                if user_data['password'] == hashlib.sha256(currentPwdEntry.get().encode()).hexdigest():
+                    if newPwdEntry.get() == '' or rePwdEntry.get() == '':
                         messagebox.showinfo('Password Change', 'No fields can be empty.')
-                    elif current_password_entry.get() == new_password_entry.get():
-                        messagebox.showinfo('Password Change', 'You cannot keep the current password as new.')
-                    elif len(new_password_entry.get())<7 or not re.search('[A-Z]',new_password_entry.get()) or not re.search('[0-9]',new_password_entry.get()) or not re.search('[!@#$%]',new_password_entry.get()):
+                    elif currentPwdEntry.get() == newPwdEntry.get():
+                        messagebox.showinfo('Validation Error', "You can't keep your new password same as the previous.")
+                    elif len(newPwdEntry.get())<7 or not re.search('[A-Z]',newPwdEntry.get()) or not re.search('[0-9]',newPwdEntry.get()) or not re.search('[!@#$%]',newPwdEntry.get()):
                         messagebox.showerror('Registration', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
 
-                    elif new_password_entry.get() == re_password_entry.get():
+                    elif newPwdEntry.get() == rePwdEntry.get():
                     # Update the password in the database
-                        new_hash_psw = hashlib.sha256(new_password_entry.get().encode()).hexdigest()
+                        new_hash_psw = hashlib.sha256(newPwdEntry.get().encode()).hexdigest()
                         football_collection.update_one({'password': user_data['password']}, {'$set': {'password': new_hash_psw}})
-                        messagebox.showinfo('Password Change', 'Password updated successfully.')
+                        messagebox.showinfo('Validataion Success', 'Password updated successfully.')
                         password_change_window.destroy()
                         messagebox.showinfo("Login Again", "Login with your new password!")
                         app.destroy()
@@ -835,7 +914,7 @@ def personalization_section():
                     else:
                         messagebox.showerror('Password Change', "Passwords don't match.")
                 else:
-                    messagebox.showerror('Password Change', 'Wrong password')
+                    messagebox.showerror('Change Declined', "Sorry, we can't verify that it's you.")
             except:
                 messagebox.showerror('Account Error', 'Please login to your account')
 
@@ -859,23 +938,23 @@ def personalization_section():
 
         current_password_label = Label(pwdChangeLabel, text='Current Password:', bg="#f2f2f2", font=('Tahoma', '12'))
         current_password_label.place(x=46, y=31)
-        current_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
-        current_password_entry.place(x=48, y=63)
+        currentPwdEntry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
+        currentPwdEntry.place(x=48, y=63)
 
         new_password_label = Label(pwdChangeLabel, text='Enter New Password:', bg="#f2f2f2", font=('Tahoma', '12'))
         new_password_label.place(x=46, y=100)
-        new_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
-        new_password_entry.place(x=48, y=133)
+        newPwdEntry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
+        newPwdEntry.place(x=48, y=133)
 
         re_password_label = Label(pwdChangeLabel, text='Re-enter New Password:', bg="#f2f2f2", font=('Tahoma', '12'))
         re_password_label.place(x=46, y=169)
-        re_password_entry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
-        re_password_entry.place(x=48, y=202)
+        rePwdEntry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
+        rePwdEntry.place(x=48, y=202)
 
         change_btn = Button(pwdChangeLabel, text='Change',width = 94, height = 24, border = 0, image = changePwdButton, compound = CENTER, bg="#f2f2f2", font=('Tahoma', '12'), command=confirm_change)
         change_btn.place(x=90, y=280)
 
-        
+        app.bind('<Return>',lambda e: confirm_change())
 
     def delete():
         '''
@@ -889,7 +968,7 @@ def personalization_section():
             Delete the user account.
             '''
             global deleteConfirmWindow
-            account_delete = hashlib.sha256(delete_password_entry.get().encode()).hexdigest()
+            account_delete = hashlib.sha256(deleteEntry.get().encode()).hexdigest()
             try:
                 if account_delete == user_data['password']:
                     delete_window.destroy()
@@ -918,13 +997,13 @@ def personalization_section():
                     keepacc = Button(deleteConfirmWindow, width = 94, height = 24, image = buttonCancelDlt, compound = CENTER, border = 0, bg = "#f2f2f2", font = ("Arial", 10), fg = "#FFF", command = stopDel)
                     keepacc.place(x = 180, y = 170)
                 else:
-                    messagebox.showerror("Delete Account", "Wrong password.")
+                    messagebox.showerror("Failed","Sorry, We can't verify that the account belongs to you.")
             except Exception as e:
                 messagebox.showerror("Account Error", "Account not found")
         try:
             def confirmDel():
                 football_collection.delete_one({'password': user_data['password']})
-                messagebox.showinfo("Account Deleted", "Your account has been deleted successfully.")
+                messagebox.showinfo("Deletion Success", "Your account has been deleted successfully.")
                 app.destroy()
                 import Login
         except Exception as e:
@@ -952,8 +1031,8 @@ def personalization_section():
         dltEntryLabel = Label(delete_window, image = entryDlt, border = 0, bg = '#f2f2f2')
         dltEntryLabel.place(x = 24, y = 112)
         
-        delete_password_entry = Entry(dltEntryLabel, font=('Tahoma', '12'), width=24, border = 0, bg = "#f2f2f2")
-        delete_password_entry.place(x=12, y=6, height = 26)
+        deleteEntry = Entry(dltEntryLabel, font=('Tahoma', '12'), width=24, border = 0, bg = "#f2f2f2")
+        deleteEntry.place(x=12, y=6, height = 26)
 
         dltEntryText = Label(delete_window, text = "Enter Password: ", bg = "#f2f2f2", font= ("Tahoma", 12))
         dltEntryText.place(x = 32, y = 84)
@@ -1042,11 +1121,14 @@ def feedback_section():
     fnameEntry.place(x=132, y=80, height=26)
 
     def importData():
-        fnameEntry.insert(0, user_data['fullName'])
-        fnameEntry.config(state = DISABLED, disabledbackground = "#f2f2f2", disabledforeground="#000")
+        try:
+            fnameEntry.insert(0, user_data['fullName'])
+            fnameEntry.config(state = DISABLED, disabledbackground = "#f2f2f2", disabledforeground="#000")
 
-        phoneEntry.insert(0, user_data['phone'])
-        phoneEntry.config(state = DISABLED, disabledbackground = "#f2f2f2", disabledforeground="#000")
+            phoneEntry.insert(0, user_data['phone'])
+            phoneEntry.config(state = DISABLED, disabledbackground = "#f2f2f2", disabledforeground="#000")
+        except Exception as e:
+            messagebox.showerror("Account error",'Please login and try again.')
 
 
     importName = Button(feedbackLabel,text = "Import Details  ", image = iconImport, compound = RIGHT, border = 0, bg = "#f2f2f2", font = ("Tahoma", 10), command = importData)
@@ -1177,6 +1259,8 @@ def feedback_section():
     submitButton = Button(feedbackLabel, text = "Submit ", bg = "#f2f2f2", border = 0, image = iconSubmit, compound = RIGHT, font = ("Tahoma", 12), command = feedSubmit)
     submitButton.place(x = 598, y = 382)
 
+    app.bind('<Return>',lambda e: feedSubmit())
+
 
     '''
     Create the application GUI and display the home section by default.
@@ -1306,6 +1390,14 @@ userLabelImage = Image.open("C:Images\\userLabel.png")
 resizeUserImage = userLabelImage.resize((240, 120))
 imageUserLabel = ImageTk.PhotoImage(resizeUserImage)
 
+editButtonImg = Image.open("C:Images\\editButton.png")
+resizeEditImg = editButtonImg.resize((120, 40))
+imageEditButton = ImageTk.PhotoImage(resizeEditImg)
+
+saveButtonImg = Image.open("C:Images\\saveButton.png")
+resizesaveImg = saveButtonImg.resize((120, 40))
+imageSaveButton = ImageTk.PhotoImage(resizesaveImg)
+
 userLabelImage1 = Image.open("C:Images\\highlightPos.png")
 resizeUserImage1 = userLabelImage1.resize((240, 120))
 imageUserLabel1 = ImageTk.PhotoImage(resizeUserImage1)
@@ -1313,6 +1405,15 @@ imageUserLabel1 = ImageTk.PhotoImage(resizeUserImage1)
 ClubImage1 = Image.open("C:Images\\Club1.png")
 resizeClubImage1 = ClubImage1.resize((260, 120))
 imageClub1 = ImageTk.PhotoImage(resizeClubImage1)
+
+
+ClubImage2 = Image.open("C:Images\\Club2.png")
+resizeClubImage2 = ClubImage2.resize((220, 40))
+imageClub2 = ImageTk.PhotoImage(resizeClubImage2)
+
+ClubImage3 = Image.open("C:Images\\Club3.png")
+resizeClubImage3 = ClubImage3.resize((630, 44))
+imageClub3 = ImageTk.PhotoImage(resizeClubImage3)
 
 ClubListImage1 = Image.open("C:Images\\Club1List.png")
 resizeClubListImage1 = ClubListImage1.resize((260, 360))
@@ -1341,7 +1442,7 @@ def on_leave_userLabel(e):
 userLabel = Label(leftFrame, image = imageUserLabel, bg = "#f2f2f2")
 userLabel.bind("<Enter>", on_enter_userLabel)
 userLabel.bind("<Leave>", on_leave_userLabel)
-userLabel.place(x = 27, y = 32)
+userLabel.place(x = 27, y = 42)
 
 
 def on_button_click_with_section(func, button):
@@ -1372,7 +1473,6 @@ feedbackButton.place(x = 0, y = 612)
 photo_references = []
 
 
-
 def select_image():
     global image
     file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png")])
@@ -1385,6 +1485,9 @@ def select_image():
             photo = ImageTk.PhotoImage(image)
             profile_image_label.config(image=photo)
             profile_image_label.image = photo
+            profilePersonalizeLabel.config(image = pp)
+            profile_image_label.image = photo
+            
     
 def display_image(image):
     global img_label
@@ -1397,14 +1500,19 @@ def display_image(image):
 
 
 profile_image_label = Label(app, bg = "#FFF")
-profile_image_label.place(x=46,y=59)   
+profile_image_label.place(x=46,y=68) 
 
 select_button = Button(app, text="Select Image", command=select_image, bg="#FFF", border = 0)
-select_button.place(x = 140, y = 106)
+select_button.place(x = 140, y = 112)
 profile_picture = fetch_image_from_mongodb()
+
+profile_picture1 = fetch_image_from_mongodb()
+pp = profile_picture1.resize((160, 160))
+
 photo = ImageTk.PhotoImage(profile_picture)
 profile_image_label.config(image=photo)
 profile_image_label.image = photo
+
 
 def on_button_click(button):
     # Reset the hoverFrame position for all buttons

@@ -6,9 +6,9 @@ from pymongo import MongoClient
 import re, subprocess
 import hashlib
 import time
-import platform
-import geocoder
-import socket
+# import platform
+# import geocoder
+# import socket
 
 try:
     # Creating MongoClient, connecting to database and collection
@@ -22,20 +22,16 @@ def on_focus_in(event):
     if event.widget.get() in ("Full Name", "Contact No.", "Email"):
         event.widget.delete(0, "end")
     if event.widget.get() in ("New Password", "Confirm New Password"):
-        event.widget.delete(0, "end")
-        event.widget.config(show="●")
+        event.widget.delete(0, END)
 
 def on_focus_out(event):
     if event.widget.get() == "":
-        if event.widget == psw_entry or event.widget == confirm_entry:
-            event.widget.config(show="●")
-            event.widget.insert(0, "New Password" if event.widget == psw_entry else "Confirm New Password")
-        elif event.widget == uname_entry:
+        if event.widget == pwdEntry or event.widget == confirmPwdEntry:
+            event.widget.insert(0, "New Password" if event.widget == pwdEntry else "Confirm New Password")
+        elif event.widget == unameEntry:
             event.widget.insert(0, "Full Name")
-        elif event.widget == phone_entry:
+        elif event.widget == phoneEntry:
             event.widget.insert(0, "Contact No.")
-        elif event.widget == email_entry:
-            event.widget.insert(0, "Email")
 
 # Function to go back to login page after clicking Sign In button in signup page
 def back_to_login():
@@ -55,68 +51,42 @@ def sign_up():
             '''
             global phone, password
             # Getting the  data from entries
-            uname = uname_entry.get()
-            email = email_entry.get()
-            phone = phone_entry.get()
-            password = psw_entry.get()
-            confirm = confirm_entry.get() 
-            try:   
-                # input validation
-                if uname=='' or email =='' or phone =='' or password == '' or confirm == '':
-                    messagebox.showerror("Registration",'No fields can be empty.')
+            uname = unameEntry.get()
+            # email = email_entry.get()
+            phone = phoneEntry.get()
+            password = pwdEntry.get()
+            confirm = confirmPwdEntry.get() 
 
-                elif password!=confirm:
-                    messagebox.showerror('Registration','Password and confirm password are not matching.')
-
-                elif football_collection.find_one({'phone':phone}):
-                    messagebox.showwarning('Registration','This number already exists.')
-
-                elif not re.match(r"[^@]+@[^@]+\.[^@]+",email):
-                    messagebox.showerror('Registration', 'Please give the valid email address.')
-                    
-                elif not re.match(r"^\d{10}$",phone) :
-                    messagebox.showerror('Registration', 'Please give the valid phone number')
-
-                elif len(password)<7 or not re.search('[A-Z]',password) or not re.search('[0-9]',password) or not re.search('[!@#$%]',password):
-                    messagebox.showerror('Password Change', 'Password must be at least 6 characters long and contain at least one uppercase letter, one number, and one special character (!@#$%^&*).')
-
+            if not (uname and phone and password and confirm):
+                messagebox.showerror("Registration Failed", "Please fill out all the required details and try again.")
+            else:
+                # Continue with password validation and other checks
+                if password != confirm:
+                    messagebox.showerror('Registration Failed', "Password didn't match. Please try re-entering the password.")
+                    confirmPwdEntry.delete(0, END)
+                elif football_collection.find_one({'phone': phone}):
+                    messagebox.showwarning('Registration Failed', 'Account with this number already exists. You may want to login.')
+                elif not re.match(r"^\d{10}$", phone):
+                    messagebox.showerror('Registration Failed', 'Please provide a valid 10-digit phone number.')
+                elif len(password) < 7 or not any(char.isupper() for char in password) or \
+                        not any(char.isdigit() for char in password) or \
+                        not any(char in '!@#$%' for char in password):
+                    messagebox.showerror('Password Error', 'Password must be at least 7 characters long and should contain at least one uppercase letter, one number, and one special character (!@#$%).')
                 else:
-                    location_info = geocoder.ip('me')
-                    ip_address = socket.gethostbyname(socket.gethostname())
-                    location = {
-                              "Latitude": location_info.lat,
-                              "Longitude": location_info.lng,
-                              "City": location_info.city,
-                              "Country": location_info.country
-                              # You can add more location details if needed
-                               }
-                    device_info = {
-                                  "System": platform.system(),
-                                  "Node Name": platform.node(),
-                                  "Release": platform.release(),
-                                  "Version": platform.version(),
-                                  "Machine": platform.machine(),
-                                  "Processor": platform.processor(),
-                                  'location_info': location,
-                                  'IP ADDRESS': ip_address
-                                  }
                     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-                    football_collection.insert_one({'fullName':uname,'email':email,'phone':phone,'password':hashed_password, 'Location and Devices': device_info})
-                    messagebox.showinfo('Registration',"Registration Successful!!")
+                    football_collection.insert_one({'fullName':uname,'phone':phone,'password':hashed_password})
+                    messagebox.showinfo('Registration Success',"Account Successfully Registered.")
                     # To clear the entry fields 
-                    uname_entry.delete(0, 'end')
-                    email_entry.delete(0, 'end')
-                    phone_entry.delete(0, 'end')
-                    psw_entry.delete(0, 'end')
-                    confirm_entry.delete(0, 'end')
+                    unameEntry.delete(0, 'end')
+                    # email_entry.delete(0, 'end')
+                    phoneEntry.delete(0, 'end')
+                    pwdEntry.delete(0, 'end')
+                    confirmPwdEntry.delete(0, 'end')
                     signupBgRound.destroy()
                     login()
-            except Exception as e:
-                messagebox.showerror('Registration', 'An error occurred during registration: ' + str(e))
-    
-        global signupBgRound, uname_entry, email_entry, phone_entry, psw_entry, confirm_entry           
+        global signupBgRound, unameEntry, email_entry, phoneEntry, pwdEntry, confirmPwdEntry           
         # GUI elements of the signup page   
-        signupBgRound = Label(image = bgRoundSignup, bg = "#FFFACD")
+        signupBgRound = Label(image = bgRoundSignup, bg = "#f2f2f2")
         signupBgRound.place(x = 780, y = 60)
 
         signin_icon = Image.open("Images\\loginicon.png")
@@ -124,42 +94,37 @@ def sign_up():
         signin_image = ImageTk.PhotoImage(signin_image)
         signin_img_label = Label(signupBgRound,image=signin_image,border=0, bg = "#fff")
         signin_img_label.image = signin_image  
-        signin_img_label.place(x=210,y=90)
+        signin_img_label.place(x=210,y=82)
+
         label_login = Label(signupBgRound, text="Create an Account", bg="#fff",border=0, font=('League Spartan Medium', '16', 'bold'))
-        label_login.place(x=158, y=42)
+        label_login.place(x=158, y=34)
+        
+        unameLabel = Label(signupBgRound, text = "Full Name *", font=('Tahoma', '12', ''), bg = "#FFF", border = 0)
+        unameLabel.place(x=110, y=150)
 
-        uname_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
-        uname_entry.insert(0, "Full Name")
-        uname_entry.bind("<FocusIn>", on_focus_in)
-        uname_entry.bind("<FocusOut>", on_focus_out)
-        uname_entry.place(x=113, y=171, height = 25)
+        unameEntry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        unameEntry.place(x=112, y=178, height = 26)
 
-        email_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
-        email_entry.insert(0, "Email")
-        email_entry.bind("<FocusIn>", on_focus_in)
-        email_entry.bind("<FocusOut>", on_focus_out)
-        email_entry.place(x=113, y=228, height = 25)
+        phoneLabel = Label(signupBgRound, text = "Contact No. *", font=('Tahoma', '12', ''), bg = "#FFF", border = 0)
+        phoneLabel.place(x=110, y=224)
 
-        phone_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
-        phone_entry.insert(0, "Contact No.")
-        phone_entry.bind("<FocusIn>", on_focus_in)
-        phone_entry.bind("<FocusOut>", on_focus_out)
-        phone_entry.place(x=113, y=284, height = 25)
+        phoneEntry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        phoneEntry.place(x=112, y=253, height = 26)
 
-        psw_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
-        psw_entry.insert(0, "New Password")
-        psw_entry.bind("<FocusIn>", on_focus_in)
-        psw_entry.bind("<FocusOut>", on_focus_out)   
-        psw_entry.place(x=113, y=340, height = 25)
+        passwordLabel = Label(signupBgRound, text = "Password *", font=('Tahoma', '12', ''), bg = "#FFF", border = 0)
+        passwordLabel.place(x=110, y=300)
 
-        confirm_entry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
-        confirm_entry.insert(0, "Confirm New Password")
-        confirm_entry.bind("<FocusIn>", on_focus_in)
-        confirm_entry.bind("<FocusOut>", on_focus_out)
-        confirm_entry.place(x=113, y=397, height = 25)
+        pwdEntry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)  
+        pwdEntry.place(x=112, y=328, height = 26)
+
+        cfmPasswordLabel = Label(signupBgRound, text = "Confirm Password *", font=('Tahoma', '12', ''), bg = "#FFF", border = 0)
+        cfmPasswordLabel.place(x=110, y=374)
+
+        confirmPwdEntry =Entry(signupBgRound, font=('Tahoma', '12', ''), width = 28, bg = "#FFF", border = 0)
+        confirmPwdEntry.place(x=112, y=403, height = 26)
         
         create_button = Button(signupBgRound, image = imageSignup, cursor = "hand2", compound = CENTER, width = 116, border = 0, bg = "#FFF", fg = "#FFF", font = ("League Spartan", 8, "bold"), command=signup_work)
-        create_button.place(x=184, y=454, height = 34)
+        create_button.place(x=184, y=454, height = 62)
 
         app.bind('<Return>',lambda e: signup_work())
 
@@ -186,8 +151,8 @@ def login():
     
     def login_work():
         try:
-            phone = phone_n_entry.get()
-            psw = password_entry.get()
+            phone = phoneEntry1.get()
+            psw = passwordEntry.get()
             hashed_psw = hashlib.sha256(psw.encode()).hexdigest()
             user_data = get_login_data(phone)
             remember = remember_var.get()
@@ -206,31 +171,31 @@ def login():
                         file.write(phone)
                     import Dashboard 
                 else:
-                    messagebox.showerror("Login Result", "Login Unsuccessful.")
+                    messagebox.showerror("Login Failed", "Incorrect Password!")
             else:
-                messagebox.showerror("Login Result", "User not found.")
+                messagebox.showerror("Login Failed", "No user account found with this phone number.")
                 
         except Exception as e:
             messagebox.showerror('Login Error', 'An error occurred during login: ' + str(e))
     
     def show_password():
-        password_entry.config(show="")
+        passwordEntry.config(show="")
         show_password_button.config(image=hide_img, command=hide_password)
 
     def hide_password():
-        password_entry.config(show="●")
+        passwordEntry.config(show="●")
         show_password_button.config(image=show_img, command=show_password)
 
     def on_password_focus_in(event):
-        phone = phone_n_entry.get()
+        phone = phoneEntry1.get()
         user_data = get_login_data(phone)
         if user_data:
             stored_psw = user_data['password']
             stored_phone = user_data['phone']
             stored_remember = user_data.get('Save Password', False)
             if stored_phone == phone and stored_remember:
-                password_entry.delete(0, END)
-                password_entry.insert(0, stored_psw)
+                passwordEntry.delete(0, END)
+                passwordEntry.insert(0, stored_psw)
 
     # GUI elements for login page
     global right_frame
@@ -241,23 +206,23 @@ def login():
     login_img_label.image = login_image
     login_img_label.place(x= 216, y=110)
 
-    label_login = Label(roundImgLabel, text="Welcome! Please Login into your Account.", bg="#fff", border=0,
+    label_login = Label(roundImgLabel, text="Welcome! Please Login To Continue.", bg="#fff", border=0,
                         font=('League Spartan Medium', '16', 'bold'))
-    label_login.place(x=40, y=40)
+    label_login.place(x=82, y=40)
 
     phone_n_label = Label(entryLabel, text="Phone *", bg="#fff", font=('Tahoma', '12', ''))
     phone_n_label.place(x=12, y=0)
-    phone_n_entry = Entry(entryLabel, width = 26, border = 0, font=('Tahoma', '12', ''), bg = "#fff")
-    phone_n_entry.place(x=14, y=32, height = 28)
+    phoneEntry1 = Entry(entryLabel, width = 26, border = 0, font=('Tahoma', '12', ''), bg = "#fff")
+    phoneEntry1.place(x=14, y=32, height = 28)
 
     password_label = Label(entryLabel, text="Password *", bg="#fff", font=('Tahoma', '12', ''))
     password_label.place(x=12, y=80)
-    password_entry = Entry(entryLabel, width = 22, border = 0, font=('Tahoma', '12', ''), show="●", bg = "#fff")
-    password_entry.place(x=14, y=112, height = 28)
-    password_entry.bind("<FocusIn>", on_password_focus_in)
+    passwordEntry = Entry(entryLabel, width = 22, border = 0, font=('Tahoma', '12', ''), show="●", bg = "#fff")
+    passwordEntry.place(x=14, y=112, height = 28)
+    passwordEntry.bind("<FocusIn>", on_password_focus_in)
     remember_var = BooleanVar()
     remember_check = Checkbutton(roundImgLabel, text="Remember Me", cursor = "hand2", variable=remember_var, bg = "#fff")
-    remember_check.place(x = 128, y = 342)
+    remember_check.place(x = 128, y = 336)
 
     show_icon = Image.open("Images\\show.png").resize((20, 20))
     hide_icon = Image.open("Images\\hide.png").resize((20, 20))
@@ -269,12 +234,12 @@ def login():
     show_password_button.place(x=222, y=115)
 
     login_button = Button(roundImgLabel, image = imageLogin, cursor = "hand2", border = 0, bg = "#fff", command=login_work)
-    login_button.place(x=196, y=396, height = 32)
+    login_button.place(x=196, y=396, height = 52)
 
     try:
         with open('Scripts\\remember.txt','r') as r:
             rem_ph = r.read().strip()
-        phone_n_entry.insert(0,rem_ph)
+        phoneEntry1.insert(0,rem_ph)
     except Exception as e:
         pass
 
@@ -299,9 +264,9 @@ app.resizable(0, 0)
 app.title("Login Page")
 
 # Creating the frames 
-right_frame = Frame(app, width=1366, height=700, bg="#FFFACD", border=1)
+right_frame = Frame(app, width=1366, height=700, bg="#f2f2f2", border=1)
 right_frame.place(x=0, y=0)
-lower_frame = Frame(app, width=1366, height=46, bg="#FFFACD")
+lower_frame = Frame(app, width=1366, height=46, bg="#f2f2f2")
 lower_frame.place(x=0, y=702)
 
 verticalLine = Frame(right_frame, width = 2, height = 520, bg = "#000")
@@ -310,7 +275,7 @@ verticalLine.place(x = 640, y = 100)
 football_img = Image.open("Images\\logonp.png")
 football_photo = football_img.resize((160,160))
 football_photo1 = ImageTk.PhotoImage(football_photo)
-football_label = Label(right_frame,image=football_photo1,border=0,background = "#FFFACD")
+football_label = Label(right_frame,image=football_photo1,border=0,background = "#f2f2f2")
 football_label.image = football_photo  # Store a reference to the image to prevent it from being garbage collected
 football_label.place(x=562,y=224)
 
@@ -321,7 +286,7 @@ roundBg = Image.open("Images\\roundBg.png")
 resizeBg = roundBg.resize((480, 580))
 bgRound = ImageTk.PhotoImage(resizeBg)
 
-roundImgLabel = Label(right_frame, image = bgRound, bg = "#FFFACD")
+roundImgLabel = Label(right_frame, image = bgRound, bg = "#f2f2f2")
 roundImgLabel.image = bgRound
 roundImgLabel.place(x = 780, y = 60)
 
@@ -332,7 +297,7 @@ bgRoundSignup = ImageTk.PhotoImage(resizeBgSignup)
 kick_png = Image.open("Images\\stadium.png")
 kick_photo = kick_png.resize((380,320))
 kick_photo = ImageTk.PhotoImage(kick_photo)
-kick_label = Label(right_frame,image=kick_photo,border=0,bg="#FFFACD")
+kick_label = Label(right_frame,image=kick_photo,border=0,bg="#f2f2f2")
 kick_label.image = kick_photo  
 kick_label.place(x=66,y=156)
 
@@ -351,24 +316,24 @@ mainHeading = Image.open("Images\\mainHeading.png")
 resizedHeading = mainHeading.resize((400, 80))
 headingMain = ImageTk.PhotoImage(resizedHeading)
 
-mainHeadingLabel = Label(right_frame, image = headingMain, bg ='#FFFACD')
+mainHeadingLabel = Label(right_frame, image = headingMain, bg ='#f2f2f2')
 mainHeadingLabel.place(x = 60, y = 40)
 
-trophyLabel = Label(right_frame, image = imageTrophy, bg = "#FFFACD")
+trophyLabel = Label(right_frame, image = imageTrophy, bg = "#f2f2f2")
 trophyLabel.place(x = 480, y = 30)
 
 entryLabel = Label(roundImgLabel, image = imgEntry, bg = "#fff")
 entryLabel.place(x = 110, y = 180)
 
 
-unleash_label = Label(right_frame,text = 'UNLEASH YOUR FOOTBALL PASSION',font=('League Spartan Medium', '18', 'bold'),bg="#FFFACD")
+unleash_label = Label(right_frame,text = 'UNLEASH YOUR FOOTBALL PASSION',font=('League Spartan Medium', '18', 'bold'),bg="#f2f2f2")
 unleash_label.place(x=60,y=510)
 
-about_us_btn = Button(right_frame,text="About Us 🡢",bg="#FFFACD",border=0, cursor = "hand2", font=('League Spartan Medium', '12', ''),command=about_us)
+about_us_btn = Button(right_frame,text="About Us 🡢",bg="#f2f2f2",border=0, cursor = "hand2", font=('League Spartan Medium', '12', ''),command=about_us)
 about_us_btn.place(x=60,y=570)
 
 
-copyright_label = Label(right_frame, text="Copyright © Martyr's Memorial Inc. All rights reserved.",font=('Tahoma', '10'), bg="#FFFACD")
+copyright_label = Label(right_frame, text="Copyright © Martyr's Memorial Inc. All rights reserved.",font=('Tahoma', '10'), bg="#f2f2f2")
 copyright_label.place(x=58,y=630)
 
 login()
