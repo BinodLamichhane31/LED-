@@ -1,6 +1,6 @@
 # Importing all the required libraries
 from tkinter import *
-from tkinter import ttk,messagebox,Label,PhotoImage, filedialog
+from tkinter import ttk,messagebox,Label, PhotoImage, filedialog
 from PIL import Image, ImageTk, ImageDraw
 from pymongo import MongoClient
 from base64 import *
@@ -54,7 +54,7 @@ def home_section():
     signup_frame_text = Label(frame_signup_back, text = "Your favorite teams in one place", font = ("Nunito", 14, 'bold'), bg = "#FFF", fg = "#000000")
     signup_frame_text.place(x = 36, y = 58)
 
-    connectFacebook = Label(frame_signup_back, text = "Connect with facebook ", image = iconRight, compound = RIGHT, bg = "#FFF", fg = "blue", font = ("Nunito", 12))
+    connectFacebook = Label(frame_signup_back, text = "Connect with facebook ", image = iconRight, cursor = "hand2", compound = RIGHT, bg = "#FFF", fg = "blue", font = ("Nunito", 12))
     connectFacebook.place(x = 36, y = 94)
 
     smallHRule = Frame(frame_signup_back, width = 2, height = 72, bg = "#777070")
@@ -96,7 +96,7 @@ def home_section():
     label_live_match = Label(frame_home, text = "Streaming", font = ("Yu Gothic UI Semibold", 10), bg = "#f2f2f2", fg = "black")
     label_live_match.place(x = 754, y = 84)
 
-    watch_live = Button(frame_home, text = "LIVE", bg = "#f2f2f2", border = 0, width = 5, height = 0, command = playlive, font = ("Yu Gothic UI Semibold", 10), fg = "red")
+    watch_live = Button(frame_home, text = "LIVE", bg = "#f2f2f2", border = 0, width = 5, cursor = "hand2", height = 0, command = playlive, font = ("Yu Gothic UI Semibold", 10), fg = "red")
     watch_live.place(x = 908, y = 84)
     homeButton.config(fg="red", bg = "#f2f2f2")
     liveButton.config(fg = "black")
@@ -728,9 +728,12 @@ def personalization_section():
             Displays the personalozation section when back button is clicked.
             '''
             personalization_section()
-
-        profile_picture1 = fetch_image_from_mongodb()
-        pp = profile_picture1.resize((120, 120))
+        
+        try:
+            profile_picture1 = fetch_image_from_mongodb()
+            pp = profile_picture1.resize((120, 120))
+        except Exception as e:
+            messagebox.showerror('error', e)
 
         profile_frame = Frame(rightFrame, width=1070, height=668, bg="#f2f2f2", border=1)
         profile_frame.place(x=0, y=0)
@@ -825,8 +828,8 @@ def personalization_section():
         bioEntryLabel.place(x=248, y=264)
 
 
-        back_button = Button(profile_frame,text="Back",font=('Tahoma', '12', 'bold'),bg="#f2f2f2",command=back)
-        back_button.place(x=980, y=76)
+        back_button = Button(profile_frame,text="Back",font=('Tahoma', '12'),width = 7, bg="#f2f2f2",cursor = "hand2",command=back)
+        back_button.place(x=960, y=88, height = 26)
 
         def enable_entry():
             '''
@@ -842,8 +845,10 @@ def personalization_section():
             nationalityEntry.config(state = NORMAL)
             update_button.config(state = NORMAL)
             update_button.place_forget()
+
             save_button = Button(profile_frame, image = imageSaveButton, cursor = "hand2", font=('League Spartan Medium', '12', 'bold'), bg="#f2f2f2",border = 0, command=save_profile)
             save_button.place(x=390, y=620)
+            app.bind('<Return>',lambda e: save_profile())
             cancelButton = Button(profile_frame, image = imageDeleteButton, cursor = "hand2", bg="#f2f2f2", command=disable_entry, border = 0)
             cancelButton.place(x=570, y=620)
 
@@ -856,8 +861,11 @@ def personalization_section():
                 new_phone_num = phoneNumEntry.get()
                 
 
-                football_collection.update_one({'password': user_data['password']}, {'$set': {'fullName': new_full_name, 'phone': new_phone_num,'bio':bioEntry.get(),'email':emailEntry.get(),'address':addressEntry.get(),'country':countryEntry.get(),'nationality':nationalityEntry.get()}})
-
+                football_collection.update_one({'password': user_data['password']}, 
+                                               {'$set': {'fullName': new_full_name, 'phone': new_phone_num,
+                                                         'bio':bioEntry.get(),'email':emailEntry.get(),
+                                                         'address':addressEntry.get(),'country':countryEntry.get(),
+                                                         'nationality':nationalityEntry.get()}})
 
                 # Display a success message
                 messagebox.showinfo("Profile Updated", "Your profile has been updated successfully.")
@@ -865,6 +873,11 @@ def personalization_section():
                 # Disable the entry fields again
                 profileName.config(state = DISABLED)
                 phoneNumEntry.config(state = DISABLED)
+                bioEntry.config(state = DISABLED)
+                emailEntry.config(state = DISABLED)
+                addressEntry.config(state = DISABLED)
+                countryEntry.config(state = DISABLED)
+                nationalityEntry.config(state = DISABLED)
                 update_button.config(state = NORMAL)
 
             except:
@@ -877,7 +890,7 @@ def personalization_section():
             profileName.config(state = DISABLED)
             phoneNumEntry.config(state = DISABLED)
             cancelButton.place_forget()
-            update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", command=enable_entry, border = 0)
+            update_button = Button(profile_frame, image = imageEditButton, bg="#f2f2f2", cursor = "hand2", command=enable_entry, border = 0)
             update_button.place(x=390, y=620)
 
         profileName.insert(0, user_data['fullName'])
@@ -932,7 +945,6 @@ def personalization_section():
                         messagebox.showinfo("Login Again", "Login with your new password!")
                         app.destroy()
                         import Login
-                        home_section()
                     else:
                         messagebox.showerror('Password Change', "Passwords don't match.")
                 else:
@@ -959,6 +971,7 @@ def personalization_section():
         pwdChangeLabel.place(x = 0, y = 0)
 
         current_password_label = Label(pwdChangeLabel, text='Current Password:', bg="#f2f2f2", font=('Tahoma', '12'))
+        
         current_password_label.place(x=46, y=31)
         currentPwdEntry = Entry(pwdChangeLabel, font=('Tahoma', '12'), border = 0, bg = "#f2f2f2")
         currentPwdEntry.place(x=48, y=63)
@@ -1512,8 +1525,6 @@ def select_image():
             photo = ImageTk.PhotoImage(image)
             profile_image_label.config(image=photo)
             profile_image_label.image = photo
-            profilePersonalizeLabel.config(image = pp)
-            profile_image_label.image = photo
             
     
 def display_image(image):
@@ -1529,7 +1540,7 @@ def display_image(image):
 profile_image_label = Label(app, bg = "#FFF")
 profile_image_label.place(x=46,y=68) 
 
-select_button = Button(app, text="Select Image", command=select_image, bg="#FFF", border = 0)
+select_button = Button(app, text="Select Image", command=select_image, cursor = "hand2", bg="#FFF", border = 0)
 select_button.place(x = 140, y = 112)
 profile_picture = fetch_image_from_mongodb()
 

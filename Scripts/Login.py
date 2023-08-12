@@ -1,4 +1,3 @@
-#Importing the libraries
 from tkinter import *
 from PIL import Image,ImageTk
 from tkinter import messagebox
@@ -6,9 +5,6 @@ from pymongo import MongoClient
 import re, subprocess
 import hashlib
 import time
-# import platform
-# import geocoder
-# import socket
 
 try:
     # Creating MongoClient, connecting to database and collection
@@ -33,7 +29,7 @@ def on_focus_out(event):
         elif event.widget == phoneEntry:
             event.widget.insert(0, "Contact No.")
 
-# Function to go back to login page after clicking Sign In button in signup page
+
 def back_to_login():
     '''
     Destroy the signup frame and display the login section.
